@@ -49,4 +49,20 @@ class Order extends Model
     {
         return $this->belongsTo(User::class, 'driver_id');
     }
+
+    /**
+     * Get the ratings for the order.
+     */
+    public function ratings(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    /**
+     * Get the buyer's rating for the order.
+     */
+    public function buyerRating(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Rating::class)->where('rater_id', $this->buyer_id);
+    }
 }

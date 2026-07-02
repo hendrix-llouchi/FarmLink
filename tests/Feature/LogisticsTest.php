@@ -159,4 +159,47 @@ class LogisticsTest extends TestCase
         $this->order->refresh();
         $this->assertNull($this->order->driver_id);
     }
+
+    public function test_driver_can_complete_delivery_successfully()
+    {
+        // First driver accepts delivery, setting status to processing
+        $this->order->update([
+            'driver_id' => $this->driver->id,
+            'status' => 'processing',
+        ]);
+
+        $response = $this->actingAs($this->driver)
+            ->post("/driver/orders/{$this->order->id}/complete");
+
+        $response->assertRedirect();
+        
+        $this->order->refresh();
+        $this->assertEquals('delivered', $this->order->status);
+    }
+
+    public function test_non_assigned_driver_cannot_complete_delivery()
+    {
+        // Assigned to first driver
+        $this->order->update([
+            'driver_id' => $this->driver->id,
+            'status' => 'processing',
+        ]);
+
+        // Create another driver
+        $driver2 = User::create([
+            'name' => 'Yaw Driver',
+            'phone_number' => '0247778888',
+            'password' => bcrypt('password'),
+            'role' => 'driver',
+            'location' => 'Tarkwa Station',
+        ]);
+
+        $response = $this->actingAs($driver2)
+            ->post("/driver/orders/{$this->order->id}/complete");
+
+        $response->assertSessionHasErrors('order');
+        
+        $this->order->refresh();
+        $this->assertEquals('processing', $this->order->status);
+    }
 }
