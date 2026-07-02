@@ -309,6 +309,10 @@ export default {
 </script>
 
 <style scoped>
+* {
+  box-sizing: border-box;
+}
+
 .browse-wrapper {
   min-height: 100vh;
   background-color: #F7F8F5;
@@ -399,7 +403,8 @@ export default {
 
 .search-input-wrapper {
   position: relative;
-  flex: 1;
+  flex: 1.5;
+  min-width: 0;
 }
 
 .search-icon {
@@ -426,12 +431,13 @@ export default {
   display: flex;
   gap: 8px;
   width: 100%;
+  min-width: 0;
 }
 
 @media (min-width: 768px) {
   .selects-row {
     width: auto;
-    flex: 1;
+    flex: 2;
   }
 }
 
@@ -444,6 +450,7 @@ export default {
   flex: 1;
   background-color: #FFFFFF;
   outline: none;
+  min-width: 0;
 }
 
 .filter-input-location {
@@ -454,6 +461,7 @@ export default {
   font-size: 14px;
   flex: 1;
   outline: none;
+  min-width: 0;
 }
 
 .btn-clear {
