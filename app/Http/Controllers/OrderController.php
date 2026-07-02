@@ -69,4 +69,52 @@ class OrderController extends Controller
 
         return redirect()->route('buyer.orders.index')->with('message', 'Order placed successfully!');
     }
+
+    /**
+     * Display a listing of pending orders that need a driver.
+     */
+    public function driverIndex()
+    {
+        $orders = Order::whereNull('driver_id')
+            ->where('status', 'pending')
+            ->with(['buyer', 'product.user'])
+            ->latest()
+            ->get();
+
+        return Inertia::render('DriverDashboard', [
+            'orders' => $orders
+        ]);
+    }
+
+    /**
+     * Accept a pending delivery.
+     */
+    public function acceptDelivery(Request $request, $id)
+    {
+        try {
+            DB::transaction(function () use ($id) {
+                // Lock the order for update to prevent concurrent assignment
+                $order = Order::lockForUpdate()->findOrFail($id);
+
+                if ($order->driver_id !== null) {
+                    throw ValidationException::withMessages([
+                        'driver_id' => ['This delivery has already been accepted by another driver.']
+                    ]);
+                }
+
+                $order->update([
+                    'driver_id' => auth()->id(),
+                    'status' => 'processing',
+                ]);
+            });
+        } catch (ValidationException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            throw ValidationException::withMessages([
+                'order' => ['Failed to accept delivery: ' . $e->getMessage()]
+            ]);
+        }
+
+        return redirect()->route('driver.dashboard')->with('message', 'Delivery accepted successfully!');
+    }
 }

@@ -26,6 +26,8 @@ Route::get('/', function () {
             return redirect()->route('farmer.dashboard');
         } elseif ($role === 'buyer') {
             return redirect()->route('buyer.browse');
+        } elseif ($role === 'driver') {
+            return redirect()->route('driver.dashboard');
         }
     }
     return Inertia::render('Welcome');
@@ -52,5 +54,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/buyer/browse', [ProductController::class, 'buyerBrowse'])->name('buyer.browse');
         Route::post('/buyer/orders', [OrderController::class, 'store'])->name('buyer.orders.store');
         Route::get('/buyer/orders', [OrderController::class, 'index'])->name('buyer.orders.index');
+    });
+
+    // Driver Routes
+    Route::middleware('role:driver')->group(function () {
+        Route::get('/driver/dashboard', [OrderController::class, 'driverIndex'])->name('driver.dashboard');
+        Route::post('/driver/orders/{id}/accept', [OrderController::class, 'acceptDelivery'])->name('driver.orders.accept');
     });
 });
