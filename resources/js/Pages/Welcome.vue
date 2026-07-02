@@ -89,11 +89,11 @@ export default {
 
 .welcome-card {
   width: 100%;
-  max-width: 400px;
+  max-width: 448px;
   background-color: #FFFFFF;
   border: 1px solid #E0E0DA;
   border-radius: 12px;
-  padding: 32px 24px;
+  padding: 24px;
   text-align: center;
   box-shadow: 0 1px 2px rgba(0,0,0,0.06);
 }
