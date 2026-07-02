@@ -17,6 +17,7 @@ use Inertia\Inertia;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
 
 Route::get('/', function () {
     if (auth()->check()) {
@@ -49,5 +50,7 @@ Route::middleware('auth')->group(function () {
     // Buyer Routes
     Route::middleware('role:buyer')->group(function () {
         Route::get('/buyer/browse', [ProductController::class, 'buyerBrowse'])->name('buyer.browse');
+        Route::post('/buyer/orders', [OrderController::class, 'store'])->name('buyer.orders.store');
+        Route::get('/buyer/orders', [OrderController::class, 'index'])->name('buyer.orders.index');
     });
 });
