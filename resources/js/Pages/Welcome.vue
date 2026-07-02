@@ -9,32 +9,69 @@
       </div>
       <p class="subtitle">Connecting Western Region smallholders directly to vegetable buyers and transport providers.</p>
       
-      <div class="status-box">
-        <div class="status-indicator"></div>
-        <p class="status-text">Scaffolding Setup Successful</p>
+      <!-- Flash Message -->
+      <div v-if="$page.props.flash?.message" class="flash-box">
+        <p class="flash-text">{{ $page.props.flash.message }}</p>
       </div>
 
-      <div class="specs">
-        <div class="spec-item">
-          <span class="spec-label">Backend</span>
-          <span class="spec-val">Laravel 10.x</span>
+      <!-- Authenticated State -->
+      <div v-if="$page.props.auth?.user" class="auth-state">
+        <div class="user-profile">
+          <div class="avatar-circle">
+            {{ $page.props.auth.user.name.charAt(0).toUpperCase() }}
+          </div>
+          <h2 class="user-name">{{ $page.props.auth.user.name }}</h2>
+          <span class="user-role-badge">{{ formatRole($page.props.auth.user.role) }}</span>
         </div>
-        <div class="spec-item">
-          <span class="spec-label">Frontend</span>
-          <span class="spec-val">Vue 3 (Inertia.js)</span>
+
+        <div class="user-details">
+          <div class="detail-item">
+            <span class="detail-label">Phone</span>
+            <span class="detail-val">{{ $page.props.auth.user.phone_number }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Location</span>
+            <span class="detail-val">{{ $page.props.auth.user.location }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Rating</span>
+            <span class="detail-val">⭐ {{ Number($page.props.auth.user.average_rating).toFixed(2) }}</span>
+          </div>
         </div>
-        <div class="spec-item">
-          <span class="spec-label">Environment</span>
-          <span class="spec-val">PHP 8.1.25 / Local MySQL</span>
+
+        <Link href="/logout" method="post" as="button" class="logout-btn">
+          Log Out
+        </Link>
+      </div>
+
+      <!-- Guest State -->
+      <div v-else class="guest-state">
+        <div class="action-buttons">
+          <Link href="/login" class="btn-primary">Log In</Link>
+          <Link href="/register" class="btn-secondary">Create Account</Link>
         </div>
       </div>
+
+
     </main>
   </div>
 </template>
 
 <script>
+import { Link } from '@inertiajs/vue3';
+
 export default {
-  name: 'Welcome'
+  name: 'Welcome',
+  components: {
+    Link
+  },
+  methods: {
+    formatRole(role) {
+      if (!role) return '';
+      if (role === 'driver') return 'Transport Provider';
+      return role.charAt(0).toUpperCase() + role.slice(1);
+    }
+  }
 }
 </script>
 
@@ -65,7 +102,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .logo-icon {
@@ -85,55 +122,157 @@ export default {
   color: #6B6B63;
   line-height: 1.5;
   margin-top: 0;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
-.status-box {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+.flash-box {
   background-color: #E8F5E9;
   border-radius: 8px;
-  padding: 8px 16px;
-  margin-bottom: 28px;
+  padding: 8px 12px;
+  margin-bottom: 20px;
 }
 
-.status-indicator {
-  width: 8px;
-  height: 8px;
-  background-color: #2E7D32;
-  border-radius: 50%;
-}
-
-.status-text {
+.flash-text {
   font-size: 14px;
   font-weight: 500;
   color: #2E7D32;
   margin: 0;
 }
 
-.specs {
+.guest-state {
+  margin-bottom: 28px;
+}
+
+.action-buttons {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  border-top: 1px solid #E0E0DA;
-  padding-top: 20px;
-  text-align: left;
 }
 
-.spec-item {
+.btn-primary, .btn-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  color: #FFFFFF;
+  background-color: #2E7D32;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #1B5E20;
+}
+
+.btn-secondary {
+  color: #2E7D32;
+  background-color: #FFFFFF;
+  border: 1px solid #2E7D32;
+}
+
+.btn-secondary:hover {
+  background-color: #F7F8F5;
+  color: #1B5E20;
+  border-color: #1B5E20;
+}
+
+.auth-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 28px;
+  background-color: #F7F8F5;
+  border-radius: 12px;
+  padding: 20px 16px;
+  border: 1px solid #E0E0DA;
+}
+
+.user-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatar-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #2E7D32;
+  color: #FFFFFF;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.user-name {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0;
+  color: #1A1A1A;
+}
+
+.user-role-badge {
+  font-size: 12px;
+  font-weight: 500;
+  color: #2E7D32;
+  background-color: #E8F5E9;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.user-details {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid #E0E0DA;
+  padding-top: 12px;
+}
+
+.detail-item {
   display: flex;
   justify-content: space-between;
   font-size: 14px;
 }
 
-.spec-label {
+.detail-label {
   color: #6B6B63;
-  font-weight: 400;
 }
 
-.spec-val {
+.detail-val {
   color: #1A1A1A;
   font-weight: 500;
 }
+
+.logout-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #C62828;
+  background-color: #FFFFFF;
+  border: 1px solid #C62828;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #FFEBEE;
+}
+
 </style>
