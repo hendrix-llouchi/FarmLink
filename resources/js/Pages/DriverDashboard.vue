@@ -24,6 +24,88 @@
           <p>{{ $page.props.flash.message }}</p>
         </div>
 
+        <!-- Active Trips Section -->
+        <div class="active-trips-section mb-10">
+          <div class="section-header mb-4">
+            <h2 class="section-title text-xl font-medium text-gray-800" style="font-weight: 500; font-size: 20px; margin: 0 0 4px 0;">Active Trips</h2>
+            <p class="section-subtitle text-sm text-gray-500" style="color: #6B6B63; font-size: 14px; margin: 0;">Your current delivery tasks. Complete these to drop off produce.</p>
+          </div>
+
+          <div v-if="activeTrips.length === 0" class="empty-state-active" style="background-color: #FFFFFF; border: 1px solid #E0E0DA; border-radius: 12px; padding: 24px; text-align: center; box-shadow: 0 1px 2px rgba(0,0,0,0.06); margin-bottom: 24px;">
+            <div style="font-size: 32px; margin-bottom: 8px;">📍</div>
+            <h3 style="font-size: 15px; font-weight: 500; margin: 0 0 4px 0; color: #1A1A1A;">No Active Trips</h3>
+            <p style="font-size: 13px; color: #6B6B63; margin: 0;">Accept an available job below to begin a delivery transit.</p>
+          </div>
+
+          <div v-else class="jobs-grid mb-8" style="margin-bottom: 32px;">
+            <div v-for="order in activeTrips" :key="order.id" class="job-card border-active">
+              <!-- Header Row: ID and Cost -->
+              <div class="job-card-header">
+                <div class="job-header-left">
+                  <span class="job-id">Trip #{{ order.id }}</span>
+                  <span class="active-badge">Active</span>
+                </div>
+                <div class="job-payout" v-if="order.estimated_transport_cost">
+                  <span class="payout-label">Payout:</span>
+                  <span class="payout-value">GH₵ {{ Number(order.estimated_transport_cost).toFixed(2) }}</span>
+                </div>
+                <div class="job-payout-est" v-else>
+                  <span class="payout-label">Order Value:</span>
+                  <span class="payout-value">GH₵ {{ Number(order.total_price).toFixed(2) }}</span>
+                </div>
+              </div>
+
+              <!-- Body: Pickup and Destination -->
+              <div class="job-card-body">
+                <!-- Pickup -->
+                <div class="location-step">
+                  <div class="step-indicator">
+                    <div class="dot pickup-dot"></div>
+                    <div class="line"></div>
+                  </div>
+                  <div class="step-content">
+                    <span class="step-label">Pickup Location (Farmer)</span>
+                    <h3 class="location-name">{{ order.product?.user?.location || 'Takoradi Market' }}</h3>
+                    <p class="party-name">{{ order.product?.user?.name || 'Local Farmer' }}</p>
+                  </div>
+                </div>
+
+                <!-- Destination -->
+                <div class="location-step">
+                  <div class="step-indicator">
+                    <div class="dot dropoff-dot"></div>
+                  </div>
+                  <div class="step-content">
+                    <span class="step-label">Delivery Destination (Buyer)</span>
+                    <h3 class="location-name">{{ order.buyer?.location || 'Tarkwa Center' }}</h3>
+                    <p class="party-name">{{ order.buyer?.name || 'Local Buyer' }}</p>
+                  </div>
+                </div>
+
+                <!-- Cargo Details -->
+                <div class="cargo-details">
+                  <span class="cargo-label">Produce Cargo:</span>
+                  <span class="cargo-value">{{ order.quantity_ordered }}x {{ order.product?.name || 'Produce' }}</span>
+                </div>
+              </div>
+
+              <!-- Action Button -->
+              <div class="job-card-actions">
+                <button 
+                  @click="completeJob(order.id)" 
+                  :disabled="processingId === order.id"
+                  class="btn-complete"
+                >
+                  <span v-if="processingId === order.id">Updating...</span>
+                  <span v-else>Mark as Delivered</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height: 1px; background-color: #E0E0DA; margin-bottom: 32px; width: 100%;"></div>
+
         <div class="page-header">
           <div>
             <h1 class="page-title">Available Deliveries</h1>
@@ -142,6 +224,10 @@ export default {
     orders: {
       type: Array,
       required: true
+    },
+    activeTrips: {
+      type: Array,
+      required: true
     }
   },
   setup() {
@@ -156,9 +242,19 @@ export default {
       });
     };
 
+    const completeJob = (orderId) => {
+      processingId.value = orderId;
+      router.post(`/driver/orders/${orderId}/complete`, {}, {
+        onFinish: () => {
+          processingId.value = null;
+        }
+      });
+    };
+
     return {
       processingId,
-      acceptJob
+      acceptJob,
+      completeJob
     };
   }
 }
@@ -538,5 +634,56 @@ export default {
   .hide-desktop {
     display: none !important;
   }
+}
+
+/* Active Trips Custom Styling */
+.active-trips-section {
+  margin-bottom: 40px;
+}
+
+.border-active {
+  border: 1.5px solid #2E7D32 !important;
+  box-shadow: 0 2px 4px rgba(46, 125, 50, 0.08) !important;
+}
+
+.job-header-left {
+  display: flex;
+  align-items: center;
+}
+
+.active-badge {
+  font-size: 11px;
+  font-weight: 500;
+  color: #2E7D32;
+  background-color: #E8F5E9;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-left: 8px;
+  text-transform: uppercase;
+}
+
+.btn-complete {
+  width: 100%;
+  height: 44px; /* Generous tap target */
+  background-color: #2E7D32;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-complete:hover:not(:disabled) {
+  background-color: #1B5E20;
+}
+
+.btn-complete:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 </style>

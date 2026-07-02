@@ -54,11 +54,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/buyer/browse', [ProductController::class, 'buyerBrowse'])->name('buyer.browse');
         Route::post('/buyer/orders', [OrderController::class, 'store'])->name('buyer.orders.store');
         Route::get('/buyer/orders', [OrderController::class, 'index'])->name('buyer.orders.index');
+        Route::post('/buyer/orders/{id}/rate', [OrderController::class, 'rateOrder'])->name('buyer.orders.rate');
     });
 
     // Driver Routes
     Route::middleware('role:driver')->group(function () {
         Route::get('/driver/dashboard', [OrderController::class, 'driverIndex'])->name('driver.dashboard');
         Route::post('/driver/orders/{id}/accept', [OrderController::class, 'acceptDelivery'])->name('driver.orders.accept');
+        Route::post('/driver/orders/{id}/complete', [OrderController::class, 'completeDelivery'])->name('driver.orders.complete');
     });
 });

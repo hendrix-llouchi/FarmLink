@@ -85,6 +85,21 @@
               </div>
             </div>
 
+            <!-- Action Row: Rate Order -->
+            <div v-if="order.status === 'delivered'" class="order-actions-row">
+              <div v-if="order.buyer_rating" class="rating-display">
+                <span class="rating-stars">⭐ Rated: {{ order.buyer_rating.score }}/5</span>
+                <span class="rating-comment" v-if="order.buyer_rating.comment">"{{ order.buyer_rating.comment }}"</span>
+              </div>
+              <button 
+                v-else 
+                @click="openRateModal(order)"
+                class="btn-rate-order"
+              >
+                Rate Order
+              </button>
+            </div>
+
             <!-- Subtext: Order Date -->
             <div class="order-date-row">
               Ordered on {{ formatDate(order.created_at) }}
@@ -93,6 +108,53 @@
         </div>
       </div>
     </main>
+
+    <!-- Rating Modal -->
+    <div v-if="isModalOpen" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 class="modal-title">Rate Order #{{ selectedOrder?.id }}</h2>
+          <button @click="closeRateModal" class="btn-close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-instructions">Rate your experience with <strong>{{ selectedOrder?.product?.user?.name }}</strong>:</p>
+          
+          <!-- Star selection -->
+          <div class="stars-rating-container">
+            <button 
+              v-for="star in 5" 
+              :key="star" 
+              type="button"
+              @click="ratingForm.score = star" 
+              class="star-btn"
+              :class="{ active: star <= ratingForm.score }"
+            >
+              ★
+            </button>
+          </div>
+          <span v-if="errors.score" class="form-error" style="text-align: center; display: block;">{{ errors.score }}</span>
+
+          <!-- Optional comment -->
+          <div class="form-group">
+            <label for="comment-input" class="form-label">Review Comment (Optional)</label>
+            <textarea 
+              id="comment-input" 
+              v-model="ratingForm.comment" 
+              placeholder="Tell us about the quality of the produce or delivery..."
+              class="form-textarea"
+              rows="3"
+            ></textarea>
+            <span v-if="errors.comment" class="form-error">{{ errors.comment }}</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button @click="closeRateModal" class="btn-secondary" :disabled="isSubmitting">Cancel</button>
+          <button @click="submitRating" class="btn-submit" :disabled="isSubmitting || !ratingForm.score">
+            {{ isSubmitting ? 'Submitting...' : 'Submit Feedback' }}
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- Mobile Bottom Navigation (Design Brief requirement) -->
     <nav class="mobile-nav hide-desktop">
@@ -125,7 +187,8 @@
 </template>
 
 <script>
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
+import { ref, reactive } from 'vue';
 
 export default {
   name: 'MyOrders',
@@ -139,6 +202,19 @@ export default {
     }
   },
   setup() {
+    const isModalOpen = ref(false);
+    const selectedOrder = ref(null);
+    const isSubmitting = ref(false);
+    const errors = reactive({
+      score: null,
+      comment: null
+    });
+
+    const ratingForm = reactive({
+      score: 0,
+      comment: ''
+    });
+
     const formatDate = (dateString) => {
       if (!dateString) return '';
       const date = new Date(dateString);
@@ -155,9 +231,55 @@ export default {
       return status.charAt(0).toUpperCase() + status.slice(1);
     };
 
+    const openRateModal = (order) => {
+      selectedOrder.value = order;
+      ratingForm.score = 0;
+      ratingForm.comment = '';
+      errors.score = null;
+      errors.comment = null;
+      isModalOpen.value = true;
+    };
+
+    const closeRateModal = () => {
+      isModalOpen.value = false;
+      selectedOrder.value = null;
+    };
+
+    const submitRating = () => {
+      if (!ratingForm.score) {
+        errors.score = 'Please select a rating score.';
+        return;
+      }
+
+      isSubmitting.value = true;
+      router.post(`/buyer/orders/${selectedOrder.value.id}/rate`, {
+        score: ratingForm.score,
+        comment: ratingForm.comment
+      }, {
+        onSuccess: () => {
+          closeRateModal();
+        },
+        onError: (err) => {
+          errors.score = err.score || null;
+          errors.comment = err.comment || err.order || null;
+        },
+        onFinish: () => {
+          isSubmitting.value = false;
+        }
+      });
+    };
+
     return {
       formatDate,
-      formatStatus
+      formatStatus,
+      isModalOpen,
+      selectedOrder,
+      ratingForm,
+      isSubmitting,
+      errors,
+      openRateModal,
+      closeRateModal,
+      submitRating
     };
   }
 }
@@ -566,5 +688,216 @@ export default {
   .hide-desktop {
     display: none !important;
   }
+}
+
+/* Modal overlay backdrop */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 16px;
+}
+
+/* Modal Card */
+.modal-card {
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #E0E0DA;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #1A1A1A;
+  margin: 0;
+}
+
+.btn-close-modal {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #6B6B63;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.modal-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal-instructions {
+  font-size: 14px;
+  color: #6B6B63;
+  margin: 0;
+}
+
+/* Stars rating */
+.stars-rating-container {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  padding: 8px 0;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  font-size: 36px;
+  color: #E0E0DA;
+  cursor: pointer;
+  transition: color 0.15s ease;
+  padding: 4px;
+}
+
+.star-btn.active {
+  color: #FFB300; /* Amber star color */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1A1A1A;
+}
+
+.form-textarea {
+  width: 100%;
+  border: 1px solid #E0E0DA;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+}
+
+.form-textarea:focus {
+  border-color: #2E7D32;
+}
+
+.form-error {
+  font-size: 12px;
+  color: #C62828;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px;
+  border-top: 1px solid #E0E0DA;
+  background-color: #F7F8F5;
+}
+
+.btn-secondary {
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid #E0E0DA;
+  border-radius: 8px;
+  background-color: #FFFFFF;
+  color: #1A1A1A;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-submit {
+  height: 44px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #2E7D32;
+  color: #FFFFFF;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background-color: #1B5E20;
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Order action row inside card */
+.order-actions-row {
+  margin-top: 16px;
+  border-top: 1px solid #E0E0DA;
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-rate-order {
+  width: 100%;
+  height: 44px; /* Generous tap target */
+  background-color: #2E7D32;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-rate-order:hover {
+  background-color: #1B5E20;
+}
+
+.rating-display {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background-color: #F7F8F5;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #E0E0DA;
+}
+
+.rating-stars {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2E7D32;
+}
+
+.rating-comment {
+  font-size: 13px;
+  color: #6B6B63;
+  font-style: italic;
 }
 </style>
