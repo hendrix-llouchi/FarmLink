@@ -21,8 +21,12 @@
 
 ## 2. Layout principles
 
-- **Mobile-first, always.** Design and build the phone-width layout first, then expand to tablet/desktop. Most real users (farmers, small buyers) will use this on a phone browser.
-- **Bottom nav on mobile** for the 3–4 main sections per role (e.g. Buyer: Browse, Orders, Notifications, Profile)
+- **Mobile-First, Globally Scaled:** Design layout structures natively for mobile breakpoints first, but immediately use Tailwind container bounds (`max-w-*`) and responsive breakpoints (`md:`, `lg:`) to prevent stretching on desktop monitors.
+- **Maximum Width Enforcements:**
+  - **Auth Screens (Login/Register):** Constrain cards using `max-w-md` (max 448px) and center them using `flex items-center justify-center`.
+  - **Dashboard Panels:** Use `max-w-6xl mx-auto px-4`. Stacks into a single column on mobile, but scales into a split multi-column layout on desktop using `grid grid-cols-1 md:grid-cols-3 gap-6`.
+  - **Marketplace Browsing Cards:** Use `max-w-7xl mx-auto px-4`. Render a responsive grid structure using `grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4`.
+- **Bottom Navigation on Mobile:** Set a floating fixed bottom nav layout container for mobile views, but switch to a clean top navbar header component using `md:block hidden` utility classes when viewed on desktop screens.
 - **Generous tap targets** — minimum 44px height on buttons and list rows
 - **Plain language labels** — no jargon, no icons-only navigation without text labels underneath
 - Reference pattern: structure product grids and filters the way Jumia or Tonaton do — familiar layout reduces cognitive load for judges and real users alike. Do not copy their visual style, just the structural pattern (grid of cards, filter bar above, sort dropdown).
