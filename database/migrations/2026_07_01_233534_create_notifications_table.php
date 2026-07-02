@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('phone_number')->unique();
-            $table->string('password');
-            $table->enum('role', ['farmer', 'buyer', 'driver']);
-            $table->string('location');
-            $table->decimal('average_rating', 3, 2)->default(0.00);
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('message');
+            $table->enum('type', ['order_update', 'transport_update', 'new_listing']);
+            $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('notifications');
     }
 };
