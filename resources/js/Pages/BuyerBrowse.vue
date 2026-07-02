@@ -11,6 +11,8 @@
         </div>
         <div class="user-greeting">
           <span class="greeting-text">Buyer Portal</span>
+          <Link href="/buyer/browse" class="header-nav-link active">Browse</Link>
+          <Link href="/buyer/orders" class="header-nav-link">My Orders</Link>
           <Link href="/logout" method="post" as="button" class="logout-link-btn">Log Out</Link>
         </div>
       </div>
@@ -178,11 +180,17 @@
                   min="1" 
                   :max="selectedProduct.quantity" 
                   class="qty-input"
+                  :disabled="processing"
                 />
               </div>
+
+              <!-- Error Display -->
+              <div v-if="errorMessage" class="error-message">
+                {{ errorMessage }}
+              </div>
               
-              <button @click="placeMockOrder" class="btn-confirm-order">
-                Confirm Order (GH₵ {{ Number(selectedProduct.price * orderQuantity).toFixed(2) }})
+              <button @click="placeOrder" class="btn-confirm-order" :disabled="processing || selectedProduct.quantity <= 0">
+                {{ processing ? 'Placing Order...' : `Confirm Order (GH₵ ${Number(selectedProduct.price * orderQuantity).toFixed(2)})` }}
               </button>
             </div>
           </div>
@@ -198,12 +206,12 @@
         </svg>
         <span class="nav-label">Browse</span>
       </Link>
-      <a href="#" class="nav-item disabled">
+      <Link href="/buyer/orders" class="nav-item">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
         </svg>
         <span class="nav-label">Orders</span>
-      </a>
+      </Link>
       <a href="#" class="nav-item disabled">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>
@@ -246,6 +254,8 @@ export default {
 
     const selectedProduct = ref(null);
     const orderQuantity = ref(1);
+    const errorMessage = ref('');
+    const processing = ref(false);
 
     let searchTimeout = null;
 
@@ -280,15 +290,36 @@ export default {
     const openProductModal = (product) => {
       selectedProduct.value = product;
       orderQuantity.value = 1;
+      errorMessage.value = '';
+      processing.value = false;
     };
 
     const closeProductModal = () => {
       selectedProduct.value = null;
+      errorMessage.value = '';
+      processing.value = false;
     };
 
-    const placeMockOrder = () => {
-      alert(`Order placement confirmation is successfully connected to the frontend! Ordered ${orderQuantity.value}x ${selectedProduct.value.name} for a total of GH₵ ${(selectedProduct.value.price * orderQuantity.value).toFixed(2)}.`);
-      closeProductModal();
+    const placeOrder = () => {
+      errorMessage.value = '';
+      processing.value = true;
+      router.post('/buyer/orders', {
+        product_id: selectedProduct.value.id,
+        quantity_ordered: orderQuantity.value
+      }, {
+        onSuccess: () => {
+          processing.value = false;
+          closeProductModal();
+        },
+        onError: (errors) => {
+          processing.value = false;
+          if (errors.quantity_ordered) {
+            errorMessage.value = errors.quantity_ordered;
+          } else {
+            errorMessage.value = 'Failed to place order. Please check availability and try again.';
+          }
+        }
+      });
     };
 
     return {
@@ -297,12 +328,14 @@ export default {
       location,
       selectedProduct,
       orderQuantity,
+      errorMessage,
+      processing,
       applyFilters,
       debounceSearch,
       clearFilters,
       openProductModal,
       closeProductModal,
-      placeMockOrder
+      placeOrder
     };
   }
 }
@@ -357,6 +390,26 @@ export default {
   gap: 12px;
 }
 
+.header-nav-link {
+  font-size: 14px;
+  font-weight: 500;
+  color: #6B6B63;
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.header-nav-link:hover {
+  color: #2E7D32;
+  background-color: #F7F8F5;
+}
+
+.header-nav-link.active {
+  color: #2E7D32;
+  background-color: #E8F5E9;
+}
+
 .greeting-text {
   font-size: 14px;
   color: #6B6B63;
@@ -364,6 +417,18 @@ export default {
   background-color: #E8F5E9;
   padding: 4px 8px;
   border-radius: 6px;
+}
+
+.error-message {
+  color: #C62828;
+  font-size: 13px;
+  background-color: #FFEBEE;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #FFCDD2;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  text-align: left;
 }
 
 .logout-link-btn {

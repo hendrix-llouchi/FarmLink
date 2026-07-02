@@ -51,5 +51,13 @@ class User extends Authenticatable
     public function products(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Product::class);
+     }
+
+    /**
+     * Get the orders placed by the user (as a buyer).
+     */
+    public function orders(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Order::class, 'buyer_id');
     }
 }
