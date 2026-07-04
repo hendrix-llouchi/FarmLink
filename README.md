@@ -1,66 +1,163 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🌾 FarmLink
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> A localized farmer-to-buyer marketplace for the Western Region of Ghana (Takoradi / Tarkwa area), built with Laravel 10 + Inertia.js + Vue 3.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Overview
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+FarmLink connects **farmers**, **buyers**, and **drivers** in a single monolithic web application. Farmers list produce, buyers place orders, and drivers accept and complete deliveries — all tracked through a unified order lifecycle.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Tech Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+| Layer | Technology |
+|---|---|
+| Backend | Laravel 10 (PHP 8.1) |
+| Frontend | Vue 3 + Inertia.js |
+| Bundler | Vite 4 |
+| Database | MySQL |
+| Auth | Laravel Session Auth (phone number identifier) |
+| Icons | Lucide / Tabler outline icons (inline SVG) |
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Roles
 
-## Laravel Sponsors
+| Role | Capabilities |
+|---|---|
+| **Farmer** | List produce, view dashboard with own products |
+| **Buyer** | Browse marketplace, place orders, view order history, rate delivered orders |
+| **Driver** | View pending delivery jobs, accept jobs, mark deliveries as completed |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+---
 
-### Premium Partners
+## Modules Implemented
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+### ✅ Module 1 — Authentication
+- Phone-number-based registration and login (no email)
+- Role selection at registration: `farmer`, `buyer`, `driver`
+- Session-based authentication with role middleware guard
+- Redirect-by-role on login (each role lands on their own dashboard)
 
-## Contributing
+### ✅ Module 2 — Marketplace Core
+- Farmer dashboard: list products with name, category, price, quantity
+- Buyer browse page: view all available products with stock filtering
+- `ProductController` with farmer-only `store` and buyer-only `buyerBrowse`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### ✅ Module 3 — Order Flow
+- Buyers place orders directly from the browse page
+- Stock is decremented atomically inside a DB transaction (race-condition safe)
+- `MyOrders` page shows the buyer their full order history with statuses
 
-## Code of Conduct
+### ✅ Module 4 — Delivery & Feedback
+- **Driver Dashboard**: shows available pending jobs + active trips
+- Drivers accept a delivery job → order status changes to `processing`
+- Drivers mark a job as delivered → order status changes to `delivered`
+- **Buyer rating**: after delivery, buyer can submit a 1–5 star rating + comment
+- Rating is saved to the `ratings` table; farmer's `average_rating` is recalculated
+- Duplicate rating prevention per order
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## Database Schema (Key Tables)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```
+users           — id, name, phone_number, password, role, location, average_rating
+products        — id, user_id (farmer), name, category, price, quantity, unit
+orders          — id, buyer_id, product_id, driver_id, quantity_ordered, total_price, status
+ratings         — id, order_id, rater_id, ratee_id, score, comment
+```
+
+**Order status lifecycle:**
+```
+pending → processing → delivered
+```
+
+---
+
+## Local Setup
+
+### Prerequisites
+- PHP 8.1+, Composer
+- Node.js 18+, npm
+- MySQL
+
+### Install
+
+```bash
+git clone https://github.com/hendrix-llouchi/FarmLink.git
+cd FarmLink
+
+composer install
+npm install
+
+cp .env.example .env
+php artisan key:generate
+```
+
+Configure your `.env` database credentials, then:
+
+```bash
+php artisan migrate --seed
+```
+
+### Run
+
+```bash
+# Terminal 1 — Laravel backend
+php artisan serve
+
+# Terminal 2 — Vite frontend
+npm run dev
+```
+
+Visit [http://127.0.0.1:8000](http://127.0.0.1:8000)
+
+---
+
+## Seeded Test Accounts
+
+| Role | Name | Phone | Password |
+|---|---|---|---|
+| Farmer | Kojo Mensah | `0244111222` | `password` |
+| Farmer | Abena Asante | `0244333444` | `password` |
+| Buyer | Yaw Boateng | `0201234567` | `password` |
+| Buyer | Efua Darko | `0209876543` | `password` |
+| Driver | Emmanuel Mensah | `0244555666` | `password` |
+
+---
+
+## Route Map
+
+| Method | URI | Role | Action |
+|---|---|---|---|
+| GET | `/` | any | Role-based redirect |
+| GET/POST | `/login` | guest | Login |
+| GET/POST | `/register` | guest | Register |
+| GET | `/farmer/dashboard` | farmer | View own products |
+| POST | `/farmer/products` | farmer | List a product |
+| GET | `/buyer/browse` | buyer | Browse marketplace |
+| POST | `/buyer/orders` | buyer | Place an order |
+| GET | `/buyer/orders` | buyer | View order history |
+| POST | `/buyer/orders/{id}/rate` | buyer | Submit rating |
+| GET | `/driver/dashboard` | driver | View available jobs + active trips |
+| POST | `/driver/orders/{id}/accept` | driver | Accept a delivery |
+| POST | `/driver/orders/{id}/complete` | driver | Mark as delivered |
+
+---
+
+## Design System
+
+- **Primary accent:** `#2E7D32` (green)
+- **Background:** `#F7F8F5` (warm off-white)
+- **Typography:** System font stack (`-apple-system`, `Segoe UI`, `Roboto`)
+- **Layout:** Mobile-first, max-width containers (`max-w-6xl`) to prevent desktop stretching
+- **Icons:** Tabler / Lucide outline SVG (no icon font dependencies)
+
+---
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Private project — Western Region of Ghana localized marketplace.
