@@ -46,6 +46,9 @@ class OrderTest extends TestCase
             ->post('/buyer/orders', [
                 'product_id' => $product->id,
                 'quantity_ordered' => 20,
+                'payment_network' => 'MTN',
+                'payment_number' => '0541112222',
+                'payment_pin' => '1234',
             ]);
 
         // Check redirect to index
@@ -61,6 +64,7 @@ class OrderTest extends TestCase
             'quantity_ordered' => 20,
             'total_price' => 110.00,
             'status' => 'pending',
+            'payment_status' => 'escrow_held',
         ]);
     }
 
@@ -95,6 +99,9 @@ class OrderTest extends TestCase
             ->post('/buyer/orders', [
                 'product_id' => $product->id,
                 'quantity_ordered' => 11,
+                'payment_network' => 'MTN',
+                'payment_number' => '0541112222',
+                'payment_pin' => '1234',
             ]);
 
         // Should redirect back to /buyer/browse
@@ -131,6 +138,9 @@ class OrderTest extends TestCase
             ->post('/buyer/orders', [
                 'product_id' => $product->id,
                 'quantity_ordered' => 2,
+                'payment_network' => 'MTN',
+                'payment_number' => '0541112222',
+                'payment_pin' => '1234',
             ]);
 
         $response->assertStatus(403);
