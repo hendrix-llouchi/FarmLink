@@ -24,6 +24,7 @@ class Order extends Model
         'status',
         'transport_requested',
         'estimated_transport_cost',
+        'payment_status',
     ];
 
     /**

@@ -40,6 +40,13 @@ class ProductController extends Controller
             ->where('orders.status', 'delivered')
             ->count();
 
+        // Calculate total revenue (only summing orders where payment_status is 'released')
+        $totalRevenue = DB::table('orders')
+            ->join('products', 'orders.product_id', '=', 'products.id')
+            ->where('products.user_id', $farmerId)
+            ->where('orders.payment_status', 'released')
+            ->sum('orders.total_price');
+
         return Inertia::render('FarmerDashboard', [
             'products' => $products,
             'metrics' => [
@@ -47,6 +54,7 @@ class ProductController extends Controller
                 'pending_orders' => $pendingOrders,
                 'completed_deliveries' => $completedDeliveries,
                 'average_rating' => (float) auth()->user()->average_rating,
+                'total_revenue' => (float) $totalRevenue,
             ]
         ]);
     }

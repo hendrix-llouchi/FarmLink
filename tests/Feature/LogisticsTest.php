@@ -172,9 +172,9 @@ class LogisticsTest extends TestCase
             ->post("/driver/orders/{$this->order->id}/complete");
 
         $response->assertRedirect();
-        
         $this->order->refresh();
         $this->assertEquals('delivered', $this->order->status);
+        $this->assertEquals('released', $this->order->payment_status);
     }
 
     public function test_non_assigned_driver_cannot_complete_delivery()
@@ -203,3 +203,6 @@ class LogisticsTest extends TestCase
         $this->assertEquals('processing', $this->order->status);
     }
 }
+
+
+
