@@ -170,28 +170,121 @@
             </div>
 
             <!-- Quantity select and checkout actions -->
+            <!-- Step-based Checkout Actions & Payment -->
             <div class="order-form">
-              <div class="quantity-control">
-                <label for="order-qty">Quantity</label>
-                <input 
-                  id="order-qty" 
-                  v-model.number="orderQuantity" 
-                  type="number" 
-                  min="1" 
-                  :max="selectedProduct.quantity" 
-                  class="qty-input"
-                  :disabled="processing"
-                />
+              <!-- STEP 1: QUANTITY SELECTION -->
+              <div v-if="checkoutStep === 1">
+                <div class="quantity-control">
+                  <label for="order-qty">Quantity</label>
+                  <input 
+                    id="order-qty" 
+                    v-model.number="orderQuantity" 
+                    type="number" 
+                    min="1" 
+                    :max="selectedProduct.quantity" 
+                    class="qty-input"
+                    :disabled="processing"
+                  />
+                </div>
+
+                <!-- Error Display -->
+                <div v-if="errorMessage" class="error-message">
+                  {{ errorMessage }}
+                </div>
+                
+                <button 
+                  @click="checkoutStep = 2" 
+                  class="btn-confirm-order" 
+                  :disabled="processing || selectedProduct.quantity <= 0 || orderQuantity < 1 || orderQuantity > selectedProduct.quantity"
+                >
+                  Proceed to Pay (GH₵ {{ Number(selectedProduct.price * orderQuantity).toFixed(2) }})
+                </button>
               </div>
 
-              <!-- Error Display -->
-              <div v-if="errorMessage" class="error-message">
-                {{ errorMessage }}
+              <!-- STEP 2: MOBILE MONEY PAYMENT FORM -->
+              <div v-else-if="checkoutStep === 2 && !paymentProcessing && !paymentSuccess">
+                <div class="payment-header-momo">
+                  <span class="momo-title">Mobile Money Escrow Payment</span>
+                  <span class="momo-subtitle">Funds are held securely in escrow until delivery is complete.</span>
+                </div>
+
+                <!-- Network Selection -->
+                <div class="form-group-momo">
+                  <label class="momo-label">Select Mobile Network</label>
+                  <div class="momo-networks-grid">
+                    <label class="network-option" :class="{ active: paymentNetwork === 'MTN' }">
+                      <input type="radio" value="MTN" v-model="paymentNetwork" class="hidden-radio" />
+                      <div class="network-logo mtn-logo"></div>
+                      <span class="network-name">MTN MoMo</span>
+                    </label>
+                    <label class="network-option" :class="{ active: paymentNetwork === 'Telecel' }">
+                      <input type="radio" value="Telecel" v-model="paymentNetwork" class="hidden-radio" />
+                      <div class="network-logo telecel-logo"></div>
+                      <span class="network-name">Telecel Cash</span>
+                    </label>
+                  </div>
+                </div>
+
+                <!-- MoMo Number -->
+                <div class="form-group-momo">
+                  <label for="momo-number" class="momo-label">Momo Number</label>
+                  <input 
+                    id="momo-number"
+                    type="text" 
+                    v-model="paymentNumber"
+                    placeholder="e.g. 0541234567" 
+                    maxlength="10"
+                    class="momo-input"
+                  />
+                </div>
+
+                <!-- 4-digit PIN -->
+                <div class="form-group-momo">
+                  <label for="momo-pin" class="momo-label">4-Digit PIN</label>
+                  <input 
+                    id="momo-pin"
+                    type="password" 
+                    v-model="paymentPin"
+                    placeholder="••••" 
+                    maxlength="4"
+                    class="momo-input font-mono"
+                  />
+                </div>
+
+                <!-- Error Display -->
+                <div v-if="errorMessage" class="error-message">
+                  {{ errorMessage }}
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="momo-actions">
+                  <button @click="checkoutStep = 1; errorMessage = ''" class="btn-momo-back">
+                    Back
+                  </button>
+                  <button @click="startMomoPayment" class="btn-momo-pay">
+                    Pay GH₵ {{ Number(selectedProduct.price * orderQuantity).toFixed(2) }}
+                  </button>
+                </div>
               </div>
-              
-              <button @click="placeOrder" class="btn-confirm-order" :disabled="processing || selectedProduct.quantity <= 0">
-                {{ processing ? 'Placing Order...' : `Confirm Order (GH₵ ${Number(selectedProduct.price * orderQuantity).toFixed(2)})` }}
-              </button>
+
+              <!-- SIMULATED PROCESSING STATE -->
+              <div v-else-if="paymentProcessing" class="momo-status-container">
+                <div class="spinner-momo"></div>
+                <h3 class="momo-status-title">Authorizing Transaction...</h3>
+                <p class="momo-status-desc">Simulating Mobile Money request. Please check your device for a prompt.</p>
+              </div>
+
+              <!-- SUCCESS TRANSACTION CONFIRMATION -->
+              <div v-else-if="paymentSuccess" class="momo-status-container">
+                <div class="success-icon-momo">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
+                <h3 class="momo-status-title text-success">Payment Approved</h3>
+                <p class="momo-status-desc">GH₵ {{ Number(selectedProduct.price * orderQuantity).toFixed(2) }} held in Escrow.</p>
+                <p class="momo-status-redirect">Redirecting to your orders...</p>
+              </div>
             </div>
           </div>
         </div>
@@ -257,6 +350,14 @@ export default {
     const errorMessage = ref('');
     const processing = ref(false);
 
+    // MoMo state variables
+    const checkoutStep = ref(1);
+    const paymentNetwork = ref('MTN');
+    const paymentNumber = ref('');
+    const paymentPin = ref('');
+    const paymentProcessing = ref(false);
+    const paymentSuccess = ref(false);
+
     let searchTimeout = null;
 
     const applyFilters = () => {
@@ -292,31 +393,90 @@ export default {
       orderQuantity.value = 1;
       errorMessage.value = '';
       processing.value = false;
+      checkoutStep.value = 1;
+      paymentNetwork.value = 'MTN';
+      paymentNumber.value = '';
+      paymentPin.value = '';
+      paymentProcessing.value = false;
+      paymentSuccess.value = false;
+      document.body.style.overflow = 'hidden';
     };
 
     const closeProductModal = () => {
       selectedProduct.value = null;
       errorMessage.value = '';
       processing.value = false;
+      checkoutStep.value = 1;
+      paymentNetwork.value = 'MTN';
+      paymentNumber.value = '';
+      paymentPin.value = '';
+      paymentProcessing.value = false;
+      paymentSuccess.value = false;
+      document.body.style.overflow = '';
+    };
+
+    const startMomoPayment = () => {
+      errorMessage.value = '';
+      
+      // Client-side validations
+      if (!paymentNetwork.value) {
+        errorMessage.value = 'Please select a Mobile Money network.';
+        return;
+      }
+      if (!paymentNumber.value || !/^[0-9]{10}$/.test(paymentNumber.value)) {
+        errorMessage.value = 'Please enter a valid 10-digit Momo Number.';
+        return;
+      }
+      if (!paymentPin.value || !/^[0-9]{4}$/.test(paymentPin.value)) {
+        errorMessage.value = 'Please enter a valid 4-digit PIN.';
+        return;
+      }
+
+      paymentProcessing.value = true;
+      processing.value = true;
+
+      // Simulate 2-second processing delay
+      setTimeout(() => {
+        paymentProcessing.value = false;
+        paymentSuccess.value = true;
+
+        // Show successful transaction confirmation for 1.5 seconds, then call placeOrder
+        setTimeout(() => {
+          placeOrder();
+        }, 1500);
+      }, 2000);
     };
 
     const placeOrder = () => {
-      errorMessage.value = '';
-      processing.value = true;
       router.post('/buyer/orders', {
         product_id: selectedProduct.value.id,
-        quantity_ordered: orderQuantity.value
+        quantity_ordered: orderQuantity.value,
+        payment_network: paymentNetwork.value,
+        payment_number: paymentNumber.value,
+        payment_pin: paymentPin.value
       }, {
         onSuccess: () => {
+          document.body.style.overflow = '';
           processing.value = false;
           closeProductModal();
         },
         onError: (errors) => {
           processing.value = false;
-          if (errors.quantity_ordered) {
+          paymentSuccess.value = false;
+          // Go back to payment step to show errors if there's any validation errors
+          checkoutStep.value = 2;
+          
+          if (errors.payment_network) {
+            errorMessage.value = errors.payment_network;
+          } else if (errors.payment_number) {
+            errorMessage.value = errors.payment_number;
+          } else if (errors.payment_pin) {
+            errorMessage.value = errors.payment_pin;
+          } else if (errors.quantity_ordered) {
             errorMessage.value = errors.quantity_ordered;
+            checkoutStep.value = 1; // Quantity issue, go back to step 1
           } else {
-            errorMessage.value = 'Failed to place order. Please check availability and try again.';
+            errorMessage.value = 'Payment validation failed. Please check your details.';
           }
         }
       });
@@ -330,11 +490,18 @@ export default {
       orderQuantity,
       errorMessage,
       processing,
+      checkoutStep,
+      paymentNetwork,
+      paymentNumber,
+      paymentPin,
+      paymentProcessing,
+      paymentSuccess,
       applyFilters,
       debounceSearch,
       clearFilters,
       openProductModal,
       closeProductModal,
+      startMomoPayment,
       placeOrder
     };
   }
@@ -748,11 +915,13 @@ export default {
   align-items: flex-end;
   justify-content: center;
   z-index: 100;
+  overflow-y: auto;
 }
 
 @media (min-width: 768px) {
   .modal-overlay {
     align-items: center;
+    padding: 24px;
   }
 }
 
@@ -764,12 +933,16 @@ export default {
   position: relative;
   box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
   animation: slide-up 0.2s ease-out;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (min-width: 768px) {
   .modal-card {
     border-radius: 12px;
     animation: zoom-in 0.2s ease-out;
+    max-height: 85vh;
   }
 }
 
@@ -801,6 +974,8 @@ export default {
 
 .modal-body {
   padding: 16px;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .modal-image-wrapper {
@@ -1011,5 +1186,244 @@ export default {
   .hide-desktop {
     display: none !important;
   }
+}
+
+/* Mobile Money Escrow Styles */
+.payment-header-momo {
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.momo-title {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1A1A1A;
+}
+
+.momo-subtitle {
+  display: block;
+  font-size: 11px;
+  color: #6B6B63;
+  line-height: 1.4;
+  margin-top: 4px;
+}
+
+.form-group-momo {
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.momo-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #1A1A1A;
+  margin-bottom: 6px;
+}
+
+.momo-networks-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.network-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid #E0E0DA;
+  border-radius: 8px;
+  padding: 12px 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #FFFFFF;
+}
+
+.network-option:hover {
+  border-color: #2E7D32;
+}
+
+.network-option.active {
+  border-color: #2E7D32;
+  background-color: #F1F8F2;
+}
+
+.hidden-radio {
+  display: none;
+}
+
+.network-logo {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+}
+
+.mtn-logo {
+  background-color: #FFCC00;
+  position: relative;
+}
+
+.mtn-logo::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border-radius: 50%;
+  border: 2px solid #003399;
+}
+
+.telecel-logo {
+  background-color: #E60000;
+  position: relative;
+}
+
+.telecel-logo::after {
+  content: 't';
+  color: #FFFFFF;
+  font-family: sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.network-name {
+  font-size: 11px;
+  font-weight: 500;
+  color: #1A1A1A;
+}
+
+.momo-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid #E0E0DA;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  background-color: #FFFFFF;
+  color: #1A1A1A;
+}
+
+.momo-input:focus {
+  border-color: #2E7D32;
+}
+
+.momo-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.btn-momo-back {
+  flex: 1;
+  height: 44px;
+  border: 1px solid #E0E0DA;
+  background-color: #FFFFFF;
+  color: #1A1A1A;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btn-momo-back:hover {
+  background-color: #F7F8F5;
+}
+
+.btn-momo-pay {
+  flex: 2;
+  height: 44px;
+  border: none;
+  background-color: #2E7D32;
+  color: #FFFFFF;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btn-momo-pay:hover {
+  background-color: #1B5E20;
+}
+
+.momo-status-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 12px;
+  text-align: center;
+}
+
+.spinner-momo {
+  width: 44px;
+  height: 44px;
+  border: 4px solid #E8F5E9;
+  border-top: 4px solid #2E7D32;
+  border-radius: 50%;
+  animation: spin-momo 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin-momo {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.success-icon-momo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #E8F5E9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.momo-status-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1A1A1A;
+  margin-bottom: 6px;
+}
+
+.momo-status-desc {
+  font-size: 12px;
+  color: #6B6B63;
+  max-width: 220px;
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+.momo-status-redirect {
+  font-size: 11px;
+  color: #2E7D32;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+.text-success {
+  color: #2E7D32 !important;
+}
+
+.font-mono {
+  font-family: monospace !important;
+  letter-spacing: 0.2em;
 }
 </style>
