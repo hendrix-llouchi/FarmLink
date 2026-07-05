@@ -35,6 +35,9 @@ class OrderController extends Controller
         $request->validate([
             'product_id' => ['required', 'exists:products,id'],
             'quantity_ordered' => ['required', 'integer', 'min:1'],
+            'payment_network' => ['required', 'string', 'in:MTN,Telecel'],
+            'payment_number' => ['required', 'string', 'regex:/^[0-9]{10}$/'],
+            'payment_pin' => ['required', 'string', 'regex:/^[0-9]{4}$/'],
         ]);
 
         try {
@@ -58,6 +61,7 @@ class OrderController extends Controller
                     'quantity_ordered' => $request->quantity_ordered,
                     'total_price' => $product->price * $request->quantity_ordered,
                     'status' => 'pending',
+                    'payment_status' => 'escrow_held',
                 ]);
             });
         } catch (ValidationException $e) {
@@ -148,7 +152,8 @@ class OrderController extends Controller
                 }
 
                 $order->update([
-                    'status' => 'delivered'
+                    'status' => 'delivered',
+                    'payment_status' => 'released',
                 ]);
             });
         } catch (ValidationException $e) {
