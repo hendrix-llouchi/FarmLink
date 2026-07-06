@@ -25,8 +25,8 @@ The frontend is currently undergoing a full visual redesign. These rules are STR
   - New pure-presentation Vue components (no emits to backend, no API calls)
   - `resources/css/` files
 - **Branch Per Phase:** Each redesign phase lives on its own git branch:
-  - `redesign/phase-1-auth` — Login, Register, Role Selection, Location Setup
-  - `redesign/phase-2-farmer` — Farmer Dashboard & screens
+  - `redesign/phase-1-auth` — Login, Register, Role Selection, Location Setup ✅ MERGED
+  - `redesign/phase-2-farmer` — Farmer Dashboard & screens ⬅ CURRENT NEXT
   - `redesign/phase-3-buyer` — Buyer Marketplace & screens
   - `redesign/phase-4-transporter` — Transporter Portal
   - `redesign/phase-5-shared` — Settings, Notifications, Admin
@@ -99,3 +99,62 @@ All reusable presentation components live in `resources/js/Components/UI/`:
 - `AppBadge.vue` — Status chips
 
 These components must be used across all screens — do not re-implement button or input styles inline.
+
+## 6. Redesign Progress Tracker
+
+### ✅ Phase 1 — Auth (MERGED into main, PR #21)
+**Branch:** `redesign/phase-1-auth`
+| File | Status |
+|---|---|
+| `resources/js/Pages/Auth/Login.vue` | ✅ Redesigned — split-screen hero + form |
+| `resources/js/Pages/Auth/Register.vue` | ✅ Redesigned — split-screen, 3-section form, color-coded role cards |
+| `resources/js/Pages/Auth/ForgotPassword.vue` | ✅ New — centered card, blob bg, 6-digit code flow |
+| `resources/js/Pages/Auth/ResetPassword.vue` | ✅ New — phone + token + new password |
+| `resources/css/design-tokens.css` | ✅ Created — full CSS variable system |
+| `resources/css/app.css` | ✅ Updated — Inter font, base resets |
+| `resources/views/app.blade.php` | ✅ Updated — CSS via Vite, Inter font |
+| `app/Http/Controllers/AuthController.php` | ✅ Updated — forgot/reset password methods added |
+| `database/migrations/2026_07_06_000000_add_reset_token_to_users_table.php` | ✅ Migrated |
+| `routes/web.php` | ✅ Updated — forgot/reset routes added |
+
+### ⏳ Phase 2 — Farmer Dashboard (NOT STARTED)
+**Branch to create:** `redesign/phase-2-farmer`
+**Target files to redesign:**
+| File | Screen | Notes |
+|---|---|---|
+| `resources/js/Pages/Farmer/Dashboard.vue` | Farmer Dashboard | Main screen — sidebar nav, stats cards, product listings, recent orders |
+| `resources/js/Pages/Farmer/Products.vue` or inline | Post Produce / My Listings | Form to list produce + active listings table |
+
+**Key design requirements for Phase 2:**
+- Left sidebar navigation (desktop), bottom nav (mobile) — see Section 4 Nav Layout
+- Dashboard stats cards: total listings, pending orders, total revenue, avg rating
+- Product listing cards with status badges (Available / Sold / Pending)
+- Primary accent: `var(--color-primary)` — farmer role = green
+- All props/logic from Inertia must be preserved exactly
+
+### ⏳ Phase 3 — Buyer Marketplace (NOT STARTED)
+**Branch to create:** `redesign/phase-3-buyer`
+- `resources/js/Pages/Buyer/Browse.vue` — marketplace grid
+- `resources/js/Pages/Buyer/Orders.vue` — order history & tracking
+- Primary accent: `var(--color-secondary)` — buyer role = orange
+
+### ⏳ Phase 4 — Transporter Portal (NOT STARTED)
+**Branch to create:** `redesign/phase-4-transporter`
+- `resources/js/Pages/Driver/Dashboard.vue` — available jobs + active delivery
+- Primary accent: `var(--color-tertiary)` — transporter role = teal
+
+### ⏳ Phase 5 — Shared Screens (NOT STARTED)
+**Branch to create:** `redesign/phase-5-shared`
+- Settings / Profile, Notifications, Admin panel
+
+## 7. Running the Project Locally
+```bash
+# Terminal 1 — Frontend (Vite)
+npm run dev
+
+# Terminal 2 — Backend (Laravel)
+php artisan serve
+
+# Database — Start MySQL via XAMPP Control Panel manually
+# Then visit: http://127.0.0.1:8000
+```
