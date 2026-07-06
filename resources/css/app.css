@@ -1,0 +1,117 @@
+/* =============================================================
+   FarmLink — Global Stylesheet
+   ============================================================= */
+
+/* 1. Google Fonts — Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* 2. Design Tokens */
+@import './design-tokens.css';
+
+/* =============================================================
+   3. Reset & Base
+   ============================================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-base);
+  color: var(--color-neutral-900);
+  background-color: var(--color-bg-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =============================================================
+   4. Typography Utilities
+   ============================================================= */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--color-neutral-900);
+}
+
+h1 { font-size: var(--font-size-3xl); }
+h2 { font-size: var(--font-size-2xl); }
+h3 { font-size: var(--font-size-xl); }
+h4 { font-size: var(--font-size-lg); }
+h5 { font-size: var(--font-size-md); }
+h6 { font-size: var(--font-size-base); }
+
+p {
+  color: var(--color-neutral-700);
+  line-height: var(--line-height-relaxed);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+/* =============================================================
+   5. Form Baseline
+   ============================================================= */
+input, textarea, select, button {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+}
+
+/* =============================================================
+   6. Image & Media
+   ============================================================= */
+img, video {
+  display: block;
+  max-width: 100%;
+}
+
+/* =============================================================
+   7. Scrollbar Styling (Webkit)
+   ============================================================= */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-neutral-100);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-neutral-300);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neutral-400);
+}
+
+/* =============================================================
+   8. Selection
+   ============================================================= */
+::selection {
+  background-color: var(--color-primary-lighter);
+  color: var(--color-primary-hover);
+}
