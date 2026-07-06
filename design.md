@@ -1,79 +1,160 @@
-# Design Brief — Farmer-to-Buyer Marketplace
+# Design Brief — FarmLink Agri-Tech Modern
 
-## 1. Visual identity
+> **Status:** Active Redesign — Updated 2026-07-06
+> **Source:** Stitch "Agri-Tech Modern" palette
+> **Supersedes:** All previous design notes in this file
 
-- **Palette**: earth/agriculture green as primary, not generic SaaS blue.
-- Primary: `#2E7D32` (green 700) — buttons, active states, links
-- Primary dark: `#1B5E20` — headers, emphasis text
-- Background: `#F7F8F5` (warm off-white, not stark white)
-- Card surface: `#FFFFFF`
-- Border: `#E0E0DA`
-- Text primary: `#1A1A1A`
-- Text secondary: `#6B6B63`
-- Status colors: success `#2E7D32`, warning `#B8860B` (amber, for pending), danger `#C62828` (for cancelled/failed)
-- **Typography**: one sans-serif family throughout (system font stack is fine — Inter or similar if available). No serif, no decorative fonts.
-- Headings: 500 weight only
-- Body: 400 weight only
-- Never use more than two font weights on a screen
-- **Corners**: `8px` radius on buttons and inputs, `12px` on cards
-- **Shadows**: none, or a single flat `0 1px 2px rgba(0,0,0,0.06)` on cards only — no glow, no gradients
-- **Icons**: one consistent icon set (Tabler or Lucide, outline style only) — do not mix icon sets
+---
 
-## 2. Layout principles
+## 1. Visual Identity
 
-- **Mobile-First, Globally Scaled:** Design layout structures natively for mobile breakpoints first, but immediately use Tailwind container bounds (`max-w-*`) and responsive breakpoints (`md:`, `lg:`) to prevent stretching on desktop monitors.
-- **Maximum Width Enforcements:**
-  - **Auth Screens (Login/Register):** Constrain cards using `max-w-md` (max 448px) and center them using `flex items-center justify-center`.
-  - **Dashboard Panels:** Use `max-w-6xl mx-auto px-4`. Stacks into a single column on mobile, but scales into a split multi-column layout on desktop using `grid grid-cols-1 md:grid-cols-3 gap-6`.
-  - **Marketplace Browsing Cards:** Use `max-w-7xl mx-auto px-4`. Render a responsive grid structure using `grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4`.
-- **Bottom Navigation on Mobile:** Set a floating fixed bottom nav layout container for mobile views, but switch to a clean top navbar header component using `md:block hidden` utility classes when viewed on desktop screens.
-- **Generous tap targets** — minimum 44px height on buttons and list rows
-- **Plain language labels** — no jargon, no icons-only navigation without text labels underneath
-- Reference pattern: structure product grids and filters the way Jumia or Tonaton do — familiar layout reduces cognitive load for judges and real users alike. Do not copy their visual style, just the structural pattern (grid of cards, filter bar above, sort dropdown).
+### Color Palette
+All values are defined as CSS variables in `resources/css/design-tokens.css`. **Never hardcode hex values in Vue components.**
 
-## 3. Screen-by-screen notes
+| Role | Variable | Value |
+|---|---|---|
+| Primary | `--color-primary` | `#2D6A4F` |
+| Primary Hover | `--color-primary-hover` | `#1B4332` |
+| Primary Light | `--color-primary-light` | `#52B788` |
+| Primary Lighter | `--color-primary-lighter` | `#B7E4C7` |
+| Secondary | `--color-secondary` | `#F4A261` |
+| Secondary Dark | `--color-secondary-dark` | `#8B4513` |
+| Tertiary | `--color-tertiary` | `#2A9D8F` |
+| Tertiary Light | `--color-tertiary-light` | `#76C9C0` |
+| Page Background | `--color-bg-page` | `#F8F9FA` |
+| Card Surface | `--color-bg-card` | `#FFFFFF` |
+| Border | `--color-border` | `#E9ECEF` |
+| Input Border | `--color-border-input` | `#CED4DA` |
+| Body Text | `--color-neutral-900` | `#212529` |
+| Subtext | `--color-neutral-500` | `#6C757D` |
+| Danger | `--color-danger` | `#DC3545` |
 
-### Auth (register/login)
-- Single column, centered card on mobile, max-width 400px
-- Role selector (Farmer / Buyer / Driver) as three large tappable cards, not a dropdown — makes the role choice visible and intentional
-- Phone number as the primary login field (not email)
+### Typography
+- **Font Family:** Inter (Google Fonts) — weights 400, 500, 600, 700
+- **Headline:** Inter 700, 24–32px
+- **Body:** Inter 400, 14–16px
+- **Label:** Inter 500, 12–13px
+- **Caption:** Inter 400, 11–12px
+- Import: `@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap')`
 
-### Farmer dashboard
-- Top: 3–4 metric cards in a row (active listings, pending orders, completed deliveries, average rating)
-- Below: list of own produce listings, each with photo thumbnail, name, price, quantity remaining
-- Prominent "+ Add listing" button, always reachable
+### Corners & Shadows
+- Cards: `border-radius: 12px`, shadow: `0 2px 12px rgba(0,0,0,0.08)`
+- Buttons & Inputs: `border-radius: 8px`
+- Pills / Chips: `border-radius: 999px`
+- FABs / Icon buttons: `border-radius: 50%`
 
-### Produce listing form
-- Photo upload first (drag/tap to upload), since it's the highest-impact field for buyer trust
-- Then name, category (dropdown), quantity, price — in that order
-- Live preview of the card as it will appear to buyers, if time allows
+### Gradients
+Gradients **are** used — specifically:
+- Auth hero panel overlay: `linear-gradient(160deg, rgba(27,67,50,0.82), rgba(45,106,79,0.70), rgba(42,157,143,0.45))`
+- Glassmorphism elements: `backdrop-filter: blur(12px)` with semi-transparent borders
 
-### Buyer browse/search
-- Filter bar pinned near top: category, location, price range
-- Grid of product cards (2 columns mobile, 3–4 desktop): photo, name, price, farmer name + star rating, distance/location tag
-- Tapping a card opens a detail view with "Place order" as the one clear primary action
+### Icon Library
+- **Lucide Vue** outline icons only
+- Do not mix icon libraries
+- Icon stroke-width: `1.8–2`
 
-### Order tracking
-- Simple horizontal status stepper: Pending → Processing → In transit → Delivered
-- Use the status colors defined above, not five different colors per stage
-- Notification bell icon in header, badge count for unread
+---
 
-### Transport/driver view
-- List of available delivery requests as cards: pickup location, drop-off location, estimated cost, distance
-- Single "Accept" button per card
-- Once accepted, same status stepper as buyer sees, with an update-status control for the driver only
+## 2. Layout & Navigation
 
-### Ratings
-- Simple 1–5 star input, optional short text field, shown only after an order reaches "Delivered"
-- Display average rating as a rounded number + star icon everywhere a user's name appears (farmer card, driver card)
+### Breakpoints
+| Breakpoint | Navigation Pattern |
+|---|---|
+| Mobile `< 768px` | Bottom navigation bar (4–5 icon tabs, 64px tall) |
+| Tablet `768px – 1024px` | Collapsible icon-only sidebar (64px wide) |
+| Desktop `> 1024px` | Full left sidebar (icons + labels, 220px wide) |
 
-## 4. What to avoid
+### Layout Principles
+- **Mobile-first:** Build for `< 768px` first, then scale up
+- **No stretching:** Use `max-width` containers on all panels
+- **44px tap targets:** Minimum height for all interactive elements
+- Auth screens: Centered card on mobile, split-screen (hero + form) on desktop
+- Dashboard screens: Sidebar + main content area on desktop, full-width on mobile
 
-- No gradients, no neon accents, no dark hero sections — keep it plain and legible
-- No more than one accent color used for calls-to-action per screen
-- No carousels or hidden tabs for content that should just be visible (judges have limited time to click around)
-- Don't design desktop-first and shrink down — build mobile layouts natively
+### Auth Layout (Desktop)
+- Left panel: Full-height hero image with gradient overlay + glassmorphism stat bar
+- Right panel: Scrollable form area, max-width `420–520px`
 
-## 5. One-line summary to paste as a system instruction
+---
 
-> "Build all UI mobile-first using a green (#2E7D32) and warm off-white (#F7F8F5) palette, 8–12px rounded corners, no gradients or shadows beyond a subtle card border, one sans-serif font at weights 400/500 only, and Tabler or Lucide outline icons throughout. Reference Jumia/Tonaton's card-grid-plus-filter-bar structure for marketplace screens."
+## 3. Component Standards
+
+### Buttons
+| Variant | Background | Text | Border |
+|---|---|---|---|
+| Primary | `var(--color-primary)` | White | None |
+| Secondary | Transparent | `var(--color-primary)` | `1.5px solid var(--color-primary)` |
+| Inverted | White | Dark | None |
+| Outlined | Transparent | Neutral | `1.5px solid var(--color-border-input)` |
+| Danger | `var(--color-danger)` | White | None |
+
+All buttons: `border-radius: 8px`, `height: 44px`, `font-weight: 600`
+Hover: subtle `translateY(-1px)` + shadow lift
+
+### Inputs
+- Height: `44px`
+- Border: `1.5px solid var(--color-border-input)`
+- Focus ring: `box-shadow: 0 0 0 3px var(--color-primary-subtle)`
+- Background: `var(--color-neutral-50)` default, `white` on focus
+- Icon inset left: standard pattern for all key fields
+
+### Cards
+- Background: `var(--color-white)`
+- Border: `1px solid var(--color-border)` or shadow only
+- Radius: `12px`
+- Shadow: `0 2px 12px rgba(0,0,0,0.08)`
+
+### Status Badges / Chips
+- Pill shape (`border-radius: 999px`)
+- Pending: secondary color
+- Active / Delivered: primary color
+- In Transit: tertiary color
+- Cancelled / Rejected: danger color
+
+---
+
+## 4. Screen-by-Screen Notes
+
+### Auth Screens (Phase 1 — current branch: `redesign/phase-1-auth`)
+- **Login:** Split-screen. Left = hero farmland image with overlay + stats. Right = form with phone + password.
+- **Register (Basic Info):** Same split-screen. Left = community tagline. Right = name/phone/email/password form.
+- **Role Selection:** Full-screen. Three large tappable role cards (Farmer 🌾 / Buyer 🛒 / Transporter 🚚). Orange highlight on selected.
+- **Location Setup:** Region + district dropdowns + "Find my location" button. Map-style visual.
+
+### Farmer Dashboard (Phase 2 — `redesign/phase-2-farmer`)
+- Sidebar navigation (desktop), bottom nav (mobile)
+- Metric cards row: Revenue, Active Listings, Orders, Rating
+- Produce grid with photo thumbnails, price, stock
+- Floating "Post Produce" primary action button
+
+### Buyer Marketplace (Phase 3 — `redesign/phase-3-buyer`)
+- Category filter bar pinned near top
+- Product grid: 2 cols mobile → 3–4 cols desktop
+- Cards: photo, name, price, farmer name, location tag, "Buy Now" button
+- Order detail view with horizontal progress stepper
+
+### Transporter Portal (Phase 4 — `redesign/phase-4-transporter`)
+- Available delivery jobs as cards
+- Active trip info with map placeholder
+- Status update control (transporter-only)
+
+### Shared Screens (Phase 5 — `redesign/phase-5-shared`)
+- Settings / Profile
+- Notifications
+- Admin panel (if applicable)
+
+---
+
+## 5. What to Avoid
+- ❌ Hardcoded hex color values in Vue components — use CSS variables only
+- ❌ Mixing icon libraries — Lucide only
+- ❌ Touching JavaScript logic during redesign — template and CSS only
+- ❌ Merging any redesign branch into `main` without explicit user approval
+- ❌ Installing new npm/composer packages during redesign phase
+- ❌ Desktop-first layout — always mobile-first then scale up
+
+---
+
+## 6. System Instruction (One-liner)
+
+> "Build all FarmLink UI using the Agri-Tech Modern design system: Inter font, `#2D6A4F` primary green, `#F4A261` secondary orange, `#2A9D8F` tertiary teal, `8–12px` rounded corners, subtle card shadows, Lucide outline icons, and a bottom-nav-on-mobile / sidebar-on-desktop navigation pattern. All CSS values must reference CSS custom properties from `resources/css/design-tokens.css`."
