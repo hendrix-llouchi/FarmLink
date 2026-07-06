@@ -1,52 +1,34 @@
 <template>
-  <div class="fp-root">
-
-    <!-- Background decoration -->
+  <div class="rp-root">
     <div class="bg-blob bg-blob-1" />
     <div class="bg-blob bg-blob-2" />
 
-    <div class="fp-card">
+    <div class="rp-card">
 
-      <!-- Back to login -->
-      <Link href="/login" class="back-link">
+      <!-- Back link -->
+      <Link href="/forgot-password" class="back-link">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
         </svg>
-        Back to Login
+        Back
       </Link>
 
       <!-- Icon -->
       <div class="icon-wrap">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
-          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-          <circle cx="12" cy="16" r="1" fill="currentColor"/>
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
         </svg>
       </div>
 
       <!-- Header -->
-      <div class="fp-header">
-        <h1 class="fp-title">Forgot Password?</h1>
-        <p class="fp-subtitle">
-          Enter the phone number linked to your FarmLink account and we'll send you a reset code.
-        </p>
+      <div class="rp-header">
+        <h1 class="rp-title">Reset Password</h1>
+        <p class="rp-subtitle">Enter the 6-digit code you received and choose a new password.</p>
       </div>
 
-      <!-- Success state -->
-      <div v-if="status" class="success-banner">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:1px;">
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-          <polyline points="22 4 12 14.01 9 11.01"/>
-        </svg>
-        <div>
-          <p style="margin:0; font-weight:600;">{{ status }}</p>
-          <Link href="/reset-password" class="reset-link">Enter your reset code →</Link>
-        </div>
-      </div>
+      <form @submit.prevent="submit" class="rp-form" novalidate>
 
-      <!-- Form -->
-      <form v-if="!status" @submit.prevent="submit" class="fp-form" novalidate>
-
+        <!-- Phone Number -->
         <div class="field-group">
           <label for="phone_number" class="field-label">Phone Number</label>
           <div class="input-wrapper" :class="{ 'has-error': form.errors.phone_number }">
@@ -61,32 +43,89 @@
               placeholder="e.g. 054 XXX XXXX"
               :class="{ 'input-error': form.errors.phone_number }"
               required
-              autofocus
             />
           </div>
           <span v-if="form.errors.phone_number" class="error-text">{{ form.errors.phone_number }}</span>
         </div>
 
-        <button
-          type="submit"
-          class="btn-primary"
-          :disabled="form.processing"
-        >
+        <!-- Reset Code -->
+        <div class="field-group">
+          <label for="token" class="field-label">6-Digit Reset Code</label>
+          <div class="input-wrapper" :class="{ 'has-error': form.errors.token }">
+            <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              <circle cx="12" cy="16" r="1" fill="currentColor"/>
+            </svg>
+            <input
+              id="token"
+              v-model="form.token"
+              type="text"
+              inputmode="numeric"
+              maxlength="6"
+              class="field-input token-input"
+              placeholder="000000"
+              :class="{ 'input-error': form.errors.token }"
+              required
+            />
+          </div>
+          <span v-if="form.errors.token" class="error-text">{{ form.errors.token }}</span>
+        </div>
+
+        <!-- New Password -->
+        <div class="field-group">
+          <label for="password" class="field-label">New Password</label>
+          <div class="input-wrapper" :class="{ 'has-error': form.errors.password }">
+            <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input
+              id="password"
+              v-model="form.password"
+              type="password"
+              class="field-input"
+              placeholder="Min. 6 characters"
+              :class="{ 'input-error': form.errors.password }"
+              required
+            />
+          </div>
+          <span v-if="form.errors.password" class="error-text">{{ form.errors.password }}</span>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="field-group">
+          <label for="password_confirmation" class="field-label">Confirm New Password</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <input
+              id="password_confirmation"
+              v-model="form.password_confirmation"
+              type="password"
+              class="field-input"
+              placeholder="Repeat new password"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="btn-primary" :disabled="form.processing">
           <svg v-if="form.processing" class="spinner-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
           </svg>
-          {{ form.processing ? 'Sending...' : 'Send Reset Code' }}
+          {{ form.processing ? 'Resetting...' : 'Reset Password' }}
         </button>
 
       </form>
 
-      <!-- Footer -->
-      <div class="fp-footer">
-        <span>Remember your password?</span>
+      <p class="footer-cta">
+        Remember your password?
         <Link href="/login" class="cta-link">Log In</Link>
-      </div>
+      </p>
 
-      <!-- Branding -->
       <Link href="/" class="brand">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="m12 3-1.912 5.886a1 1 0 0 1-.95.686H2.929l4.908 3.566a1 1 0 0 1 .364 1.122L6.29 20.147l4.907-3.565a1 1 0 0 1 1.604 0l4.907 3.565-1.91-5.887a1 1 0 0 1 .364-1.122l4.908-3.566h-6.21a1 1 0 0 1-.95-.686z"/>
@@ -102,33 +141,35 @@
 import { useForm, Link } from '@inertiajs/vue3';
 
 export default {
-  name: 'ForgotPassword',
-  components: {
-    Link
-  },
+  name: 'ResetPassword',
+  components: { Link },
   props: {
-    status: String,
+    phone: {
+      type: String,
+      default: '',
+    },
   },
-  setup() {
+  setup(props) {
     const form = useForm({
-      phone_number: '',
+      phone_number:          props.phone,
+      token:                 '',
+      password:              '',
+      password_confirmation: '',
     });
 
     const submit = () => {
-      form.post('/forgot-password');
+      form.post('/reset-password', {
+        onFinish: () => form.reset('password', 'password_confirmation'),
+      });
     };
 
-    return {
-      form,
-      submit
-    };
+    return { form, submit };
   }
 }
 </script>
 
 <style scoped>
-/* ── Root ────────────────────────────────────────────────── */
-.fp-root {
+.rp-root {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -140,33 +181,27 @@ export default {
   overflow: hidden;
 }
 
-/* Background blobs */
 .bg-blob {
   position: absolute;
   border-radius: var(--radius-full);
   filter: blur(80px);
-  opacity: 0.12;
+  opacity: 0.10;
   pointer-events: none;
 }
 
 .bg-blob-1 {
-  width: 500px;
-  height: 500px;
-  background: var(--color-primary);
-  top: -180px;
-  right: -150px;
+  width: 500px; height: 500px;
+  background: var(--color-tertiary);
+  top: -180px; left: -150px;
 }
 
 .bg-blob-2 {
-  width: 400px;
-  height: 400px;
-  background: var(--color-secondary);
-  bottom: -150px;
-  left: -120px;
+  width: 400px; height: 400px;
+  background: var(--color-primary);
+  bottom: -150px; right: -120px;
 }
 
-/* ── Card ────────────────────────────────────────────────── */
-.fp-card {
+.rp-card {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -174,14 +209,13 @@ export default {
   background-color: var(--color-white);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
-  padding: var(--space-8) var(--space-8);
+  padding: var(--space-8);
   box-shadow: var(--shadow-md);
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
 }
 
-/* Back link */
 .back-link {
   display: inline-flex;
   align-items: center;
@@ -194,65 +228,36 @@ export default {
   width: fit-content;
   margin-bottom: calc(-1 * var(--space-2));
 }
-
 .back-link:hover { color: var(--color-primary); }
 
-/* Icon */
 .icon-wrap {
-  width: 60px;
-  height: 60px;
+  width: 60px; height: 60px;
   border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, var(--color-primary-subtle), var(--color-primary-lighter));
+  background: linear-gradient(135deg, var(--color-tertiary-subtle), var(--color-tertiary-light));
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-primary);
+  color: var(--color-tertiary);
   margin-bottom: calc(-1 * var(--space-2));
 }
 
-/* Header */
-.fp-header { display: flex; flex-direction: column; gap: var(--space-2); }
+.rp-header { display: flex; flex-direction: column; gap: var(--space-2); }
 
-.fp-title {
+.rp-title {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-neutral-900);
   margin: 0;
 }
 
-.fp-subtitle {
+.rp-subtitle {
   font-size: var(--font-size-sm);
   color: var(--color-neutral-500);
   line-height: var(--line-height-relaxed);
   margin: 0;
 }
 
-/* Success banner */
-.success-banner {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-3);
-  background-color: var(--color-primary-subtle);
-  border: 1px solid var(--color-primary-lighter);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4);
-  color: var(--color-primary-hover);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-relaxed);
-}
-
-.success-banner svg { flex-shrink: 0; margin-top: 1px; }
-
-.reset-link {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-primary-hover);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-/* Form */
-.fp-form { display: flex; flex-direction: column; gap: var(--space-4); }
+.rp-form { display: flex; flex-direction: column; gap: var(--space-4); }
 
 .field-group { display: flex; flex-direction: column; gap: var(--space-2); }
 
@@ -262,11 +267,7 @@ export default {
   color: var(--color-neutral-900);
 }
 
-.input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
+.input-wrapper { position: relative; display: flex; align-items: center; }
 
 .input-icon {
   position: absolute;
@@ -299,16 +300,17 @@ export default {
 .has-error .field-input,
 .field-input.input-error { border-color: var(--color-danger); }
 
-.has-error .field-input:focus {
-  box-shadow: 0 0 0 3px var(--color-danger-light);
+/* Token input: bigger, monospace feel */
+.token-input {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.25em;
+  text-align: center;
+  padding-left: var(--space-4);
 }
 
-.error-text {
-  font-size: var(--font-size-xs);
-  color: var(--color-danger);
-}
+.error-text { font-size: var(--font-size-xs); color: var(--color-danger); }
 
-/* Button */
 .btn-primary {
   display: flex;
   align-items: center;
@@ -325,37 +327,21 @@ export default {
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+  margin-top: var(--space-2);
 }
-
 .btn-primary:hover:not(:disabled) {
   background-color: var(--color-primary-hover);
   box-shadow: var(--shadow-sm);
   transform: translateY(-1px);
 }
-
-.btn-primary:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: none;
-}
-
-.btn-primary:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
+.btn-primary:active:not(:disabled) { transform: translateY(0); box-shadow: none; }
+.btn-primary:disabled { opacity: 0.65; cursor: not-allowed; }
 
 .spinner-icon { animation: spin 0.8s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-/* Footer */
-.fp-footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-1);
+.footer-cta {
+  text-align: center;
   font-size: var(--font-size-sm);
   color: var(--color-neutral-500);
 }
@@ -364,11 +350,11 @@ export default {
   font-weight: var(--font-weight-semibold);
   color: var(--color-primary);
   text-decoration: none;
+  margin-left: var(--space-1);
   transition: color var(--transition-fast);
 }
 .cta-link:hover { color: var(--color-primary-hover); }
 
-/* Branding */
 .brand {
   display: flex;
   align-items: center;
@@ -380,9 +366,8 @@ export default {
   text-decoration: none;
   padding-top: var(--space-2);
   border-top: 1px solid var(--color-border);
-  transition: color var(--transition-fast);
   margin-top: var(--space-2);
+  transition: color var(--transition-fast);
 }
-
 .brand:hover { color: var(--color-primary); }
 </style>

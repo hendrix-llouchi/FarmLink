@@ -24,6 +24,8 @@ class User extends Authenticatable
         'role',
         'location',
         'average_rating',
+        'reset_token',
+        'reset_token_expires_at',
     ];
 
     /**
@@ -42,7 +44,8 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'password' => 'hashed',
+        'password'                => 'hashed',
+        'reset_token_expires_at'  => 'datetime',
     ];
 
     /**
