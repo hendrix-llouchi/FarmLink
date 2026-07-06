@@ -59,6 +59,14 @@ FarmLink connects **farmers**, **buyers**, and **drivers** in a single monolithi
 - Rating is saved to the `ratings` table; farmer's `average_rating` is recalculated
 - Duplicate rating prevention per order
 
+### ✅ Module 5 — Mobile Money & Escrow
+- **MoMo Checkout Form**: buyers select a network (MTN / Telecel), enter their MoMo number and 4-digit PIN before an order is placed
+- **2-second authorization simulation**: a spinner plays to mimic real MoMo network authorization, followed by a confirmation prompt
+- **Escrow hold**: on successful checkout, `payment_status` is set to `escrow_held` — funds are considered locked until delivery
+- **Automatic escrow release**: when a driver marks a delivery as complete, `payment_status` transitions to `released` automatically
+- **Farmer revenue card**: the Farmer Dashboard now shows a **Total Revenue** metric card displaying only earnings from `released` orders (i.e. confirmed deliveries)
+- **Scroll UX fix**: background page scroll is locked while the checkout modal is open; modal content scrolls internally on large viewports
+
 ---
 
 ## Database Schema (Key Tables)
@@ -66,13 +74,18 @@ FarmLink connects **farmers**, **buyers**, and **drivers** in a single monolithi
 ```
 users           — id, name, phone_number, password, role, location, average_rating
 products        — id, user_id (farmer), name, category, price, quantity, unit
-orders          — id, buyer_id, product_id, driver_id, quantity_ordered, total_price, status
+orders          — id, buyer_id, product_id, driver_id, quantity_ordered, total_price, status, payment_status
 ratings         — id, order_id, rater_id, ratee_id, score, comment
 ```
 
 **Order status lifecycle:**
 ```
 pending → processing → delivered
+```
+
+**Payment status lifecycle (Module 5):**
+```
+unpaid → escrow_held → released
 ```
 
 ---
@@ -121,11 +134,11 @@ Visit [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
 | Role | Name | Phone | Password |
 |---|---|---|---|
-| Farmer | Kojo Mensah | `0244111222` | `password` |
-| Farmer | Abena Asante | `0244333444` | `password` |
-| Buyer | Yaw Boateng | `0201234567` | `password` |
-| Buyer | Efua Darko | `0209876543` | `password` |
-| Driver | Emmanuel Mensah | `0244555666` | `password` |
+| Farmer | Kojo Mensah | `0244111222` | `password123` |
+| Farmer | Kwesi Appiah | `0244222333` | `password123` |
+| Buyer | Yaw Boateng | `0244333444` | `password123` |
+| Driver | Emmanuel Mensah | `0244555666` | `password123` |
+| Driver | Kofi Ansah | `0244666777` | `password123` |
 
 ---
 
@@ -144,7 +157,7 @@ Visit [http://127.0.0.1:8000](http://127.0.0.1:8000)
 | POST | `/buyer/orders/{id}/rate` | buyer | Submit rating |
 | GET | `/driver/dashboard` | driver | View available jobs + active trips |
 | POST | `/driver/orders/{id}/accept` | driver | Accept a delivery |
-| POST | `/driver/orders/{id}/complete` | driver | Mark as delivered |
+| POST | `/driver/orders/{id}/complete` | driver | Mark as delivered (triggers escrow release) |
 
 ---
 
