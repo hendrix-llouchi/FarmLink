@@ -1,288 +1,429 @@
 <template>
-  <div class="dashboard-wrapper">
-    <!-- Header -->
-    <header class="header">
-      <div class="header-content">
-        <div class="brand">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m12 3-1.912 5.886a1 1 0 0 1-.95.686H2.929l4.908 3.566a1 1 0 0 1 .364 1.122L6.29 20.147l4.907-3.565a1 1 0 0 1 1.604 0l4.907 3.565-1.91-5.887a1 1 0 0 1 .364-1.122l4.908-3.566h-6.21a1 1 0 0 1-.95-.686z"/>
+  <div class="dashboard-container">
+    <!-- Desktop & Tablet Sidebar Navigation -->
+    <aside class="sidebar-nav">
+      <div class="sidebar-brand">
+        <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m12 3-1.912 5.886a1 1 0 0 1-.95.686H2.929l4.908 3.566a1 1 0 0 1 .364 1.122L6.29 20.147l4.907-3.565a1 1 0 0 1 1.604 0l4.907 3.565-1.91-5.887a1 1 0 0 1 .364-1.122l4.908-3.566h-6.21a1 1 0 0 1-.95-.686z"/>
+        </svg>
+        <span class="logo-text">FarmLink</span>
+      </div>
+
+      <!-- User Profile Summary in Sidebar -->
+      <div class="sidebar-user">
+        <div class="user-avatar">
+          {{ $page.props.auth?.user?.name?.charAt(0).toUpperCase() || 'F' }}
+        </div>
+        <div class="user-info">
+          <span class="user-name">{{ $page.props.auth?.user?.name || 'Farmer' }}</span>
+          <span class="user-role">Farmer Portal</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-menu">
+        <Link href="/farmer/dashboard" class="menu-item active">
+          <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/>
           </svg>
-          <span class="logo-text">FarmLink</span>
-        </div>
-        <div class="user-greeting">
-          <span class="greeting-text">Farmer Portal</span>
-          <Link href="/logout" method="post" as="button" class="logout-link-btn">Log Out</Link>
-        </div>
+          <span class="menu-label">Dashboard</span>
+        </Link>
+        <a href="#" class="menu-item" @click.prevent="triggerAlert('Incoming Orders: View and confirm pending buyer purchases here. (Scheduled for Phase 5 Shared Screens redesign)')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span class="menu-label">Orders</span>
+          <span class="badge-coming">Soon</span>
+        </a>
+        <a href="#" class="menu-item" @click.prevent="triggerAlert('Notifications Center: Receive real-time alerts for delivery pickups, bids, and order cancellations. (Scheduled for Phase 5 Shared Screens redesign)')">
+          <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <span class="menu-label">Alerts</span>
+        </a>
+        <Link href="/" class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span class="menu-label">Profile</span>
+        </Link>
+      </nav>
+
+      <div class="sidebar-footer">
+        <Link href="/logout" method="post" as="button" class="logout-btn-sidebar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+          </svg>
+          <span class="logout-label">Log Out</span>
+        </Link>
+      </div>
+    </aside>
+
+    <!-- Mobile Top Header -->
+    <header class="mobile-header">
+      <div class="header-brand">
+        <span class="logo-text">FarmLink</span>
+      </div>
+      <div class="header-actions">
+        <button class="icon-action-btn" @click.prevent="triggerAlert('Notifications Center: Receive real-time alerts for delivery pickups, bids, and order cancellations. (Scheduled for Phase 5 Shared Screens redesign)')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+          </svg>
+        </button>
+        <Link href="/logout" method="post" as="button" class="icon-action-btn logout-header-btn" title="Log Out">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+          </svg>
+        </Link>
       </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="main-content">
-      <!-- Flash Alert -->
-      <div v-if="$page.props.flash?.message" class="flash-alert">
-        <p>{{ $page.props.flash.message }}</p>
-      </div>
-
-      <!-- Metrics Grid -->
-      <section class="metrics-grid">
-        <div class="metric-card">
-          <div class="metric-icon-wrapper active-bg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-            </svg>
-          </div>
-          <div class="metric-details">
-            <span class="metric-label">Active Listings</span>
-            <span class="metric-value">{{ metrics.active_listings }}</span>
-          </div>
+    <!-- Main Content Layout wrapper -->
+    <div class="main-layout">
+      <main class="content-body">
+        <!-- Flash Alert -->
+        <div v-if="$page.props.flash?.message" class="flash-alert-wrapper">
+          <AppBadge variant="success" size="md" class="flash-badge">
+            {{ $page.props.flash.message }}
+          </AppBadge>
         </div>
 
-        <div class="metric-card">
-          <div class="metric-icon-wrapper pending-bg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B8860B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-            </svg>
-          </div>
-          <div class="metric-details">
-            <span class="metric-label">Pending Orders</span>
-            <span class="metric-value">{{ metrics.pending_orders }}</span>
-          </div>
-        </div>
-
-        <div class="metric-card">
-          <div class="metric-icon-wrapper completed-bg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
-            </svg>
-          </div>
-          <div class="metric-details">
-            <span class="metric-label">Delivered Orders</span>
-            <span class="metric-value">{{ metrics.completed_deliveries }}</span>
-          </div>
-        </div>
-
-        <div class="metric-card">
-          <div class="metric-icon-wrapper active-bg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-              <line x1="12" y1="10" x2="12" y2="14"></line>
-              <circle cx="12" cy="12" r="2"></circle>
-            </svg>
-          </div>
-          <div class="metric-details">
-            <span class="metric-label">Total Revenue</span>
-            <span class="metric-value">GH₵ {{ Number(metrics.total_revenue || 0).toFixed(2) }}</span>
-          </div>
-        </div>
-
-        <div class="metric-card">
-          <div class="metric-icon-wrapper rating-bg">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B8860B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-            </svg>
-          </div>
-          <div class="metric-details">
-            <span class="metric-label">Seller Rating</span>
-            <span class="metric-value">{{ Number(metrics.average_rating).toFixed(1) }}</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Grid for Listings & Add Form -->
-      <div class="content-layout">
-        <!-- Listings Section -->
-        <section class="listings-section">
-          <div class="section-header">
-            <h2 class="section-title">My Vegetable Listings</h2>
-            <button @click="scrollToForm" class="btn-scroll-add hide-desktop">
-              + Add New
-            </button>
-          </div>
-
-          <div v-if="products.length === 0" class="empty-state">
-            <p>You have not listed any vegetables yet.</p>
-            <p class="empty-subtext">Use the form to list your first batch.</p>
-          </div>
-
-          <div v-else class="listings-list">
-            <div v-for="product in products" :key="product.id" class="product-item-card">
-              <div class="product-img-wrapper">
-                <img 
-                  v-if="product.image_path" 
-                  :src="'/storage/' + product.image_path" 
-                  :alt="product.name" 
-                  class="product-thumb"
-                />
-                <div v-else class="product-thumb-placeholder">
-                  🍅
-                </div>
-              </div>
-              <div class="product-info">
-                <div class="product-header">
-                  <h3 class="product-name">{{ product.name }}</h3>
-                  <span class="category-tag">{{ product.category }}</span>
-                </div>
-                <div class="product-stats">
-                  <div class="stat">
-                    <span class="stat-label">Qty Left:</span>
-                    <span class="stat-value" :class="{ 'text-danger': product.quantity === 0 }">
-                      {{ product.quantity }}
-                    </span>
-                  </div>
-                  <div class="stat">
-                    <span class="stat-label">Price:</span>
-                    <span class="stat-value">GH₵ {{ Number(product.price).toFixed(2) }}</span>
-                  </div>
-                </div>
-              </div>
+        <!-- Metrics Section (Stitch layout) -->
+        <div class="metrics-grid">
+          <!-- Total Sales Hero Card -->
+          <AppCard class="metric-card hero-metric-card" variant="flat">
+            <div class="metric-details-hero">
+              <span class="metric-label">Total Sales</span>
+              <span class="metric-value">₵{{ Number(metrics.total_revenue || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</span>
+              <span class="hero-metric-subtext">
+                <span class="trend-arrow">↗</span> +12.5% from last month
+              </span>
             </div>
-          </div>
-        </section>
+            <!-- Cash Bill illustration watermark -->
+            <svg class="cash-illustration" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+              <rect x="2" y="6" width="20" height="12" rx="2" />
+              <circle cx="12" cy="12" r="2" />
+              <path d="M6 12h.01M18 12h.01" />
+            </svg>
+          </AppCard>
 
-        <!-- Form Section -->
-        <section ref="addFormSection" class="form-section">
-          <div class="form-card">
-            <h2 class="form-title">Add New Listing</h2>
+          <!-- Active Listings Sub-Card -->
+          <AppCard class="metric-card sub-metric-card" variant="flat">
+            <div class="sub-metric-icon orange-bg">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="m7.5 4.27 9 5.15"/>
+                <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/>
+                <path d="m3.3 7 8.7 5 8.7-5"/>
+                <path d="M12 22V12"/>
+              </svg>
+            </div>
+            <div class="metric-info">
+              <span class="metric-value">{{ String(localProducts.length).padStart(2, '0') }}</span>
+              <span class="metric-label">Active Listings</span>
+            </div>
+          </AppCard>
+
+          <!-- Pending Orders Sub-Card -->
+          <AppCard class="metric-card sub-metric-card" variant="flat">
+            <div class="sub-metric-icon blue-bg">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                <path d="M9 14h6"/>
+                <path d="M9 18h6"/>
+                <path d="M9 10h6"/>
+              </svg>
+            </div>
+            <div class="metric-info">
+              <span class="metric-value">{{ String(metrics.pending_orders).padStart(2, '0') }}</span>
+              <span class="metric-label">Pending Orders</span>
+            </div>
+          </AppCard>
+
+          <!-- Delivered Orders Sub-Card -->
+          <AppCard class="metric-card sub-metric-card" variant="flat">
+            <div class="sub-metric-icon green-bg">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            </div>
+            <div class="metric-info">
+              <span class="metric-value">{{ String(metrics.completed_deliveries).padStart(2, '0') }}</span>
+              <span class="metric-label">Delivered Orders</span>
+            </div>
+          </AppCard>
+
+          <!-- Seller Rating Sub-Card -->
+          <AppCard class="metric-card sub-metric-card" variant="flat">
+            <div class="sub-metric-icon gold-bg">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            </div>
+            <div class="metric-info">
+              <span class="metric-value">{{ Number(metrics.average_rating || 0).toFixed(1) }}</span>
+              <span class="metric-label">Seller Rating</span>
+            </div>
+          </AppCard>
+        </div>
+
+        <!-- Split Layout: Listings & Form -->
+        <div class="layout-columns">
+          <!-- Left Column (Listings & Orders) -->
+          <div class="listings-column">
             
-            <form @submit.prevent="submit" class="form-container">
-              <!-- Photo Upload FIRST (Design Brief requirement) -->
-              <div class="form-group">
-                <label class="form-label">Produce Photo</label>
-                <div 
-                  class="upload-dropzone" 
-                  :class="{ 'has-file': imagePreview, 'input-error': form.errors.image }"
-                  @click="triggerFileInput"
-                >
-                  <input
-                    ref="fileInput"
-                    type="file"
-                    accept="image/*"
-                    class="hidden-file-input"
-                    @change="handleFileChange"
-                  />
-                  <div v-if="!imagePreview" class="upload-placeholder">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#6B6B63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="upload-icon">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
-                    </svg>
-                    <span class="upload-text">Tap to upload produce image</span>
-                    <span class="upload-hint">JPEG, PNG or WEBP (Max 2MB)</span>
-                  </div>
-                  <div v-else class="preview-container">
-                    <img :src="imagePreview" alt="Upload Preview" class="upload-preview" />
-                    <div class="change-overlay">
-                      <span>Tap to change image</span>
+            <!-- My Listings Section -->
+            <div class="listings-section">
+              <div class="column-header">
+                <h2>Active Listings</h2>
+                <a href="#" class="view-all-link" @click.prevent="scrollToForm">View all &rarr;</a>
+              </div>
+
+              <div v-if="localProducts.length === 0" class="empty-listings-card">
+                <div class="empty-icon-box">🥦</div>
+                <h3>No produce listed yet</h3>
+                <p>List your vegetables now to connect with nearby buyers.</p>
+                <AppButton variant="primary" size="md" @click="scrollToForm">List Your First Produce</AppButton>
+              </div>
+
+              <div v-else class="listings-grid">
+                <AppCard v-for="product in localProducts" :key="product.id" class="product-card" paddingSize="sm">
+                  <div class="product-img-box">
+                    <img v-if="product.image_path" :src="product.image_path.startsWith('data:') ? product.image_path : '/storage/' + product.image_path" :alt="product.name" class="product-image" />
+                    <div v-else class="product-placeholder">🥦</div>
+                    <div class="badge-overlay">
+                      <AppBadge :variant="product.quantity > 0 ? 'success' : 'danger'" size="sm">
+                        {{ product.quantity > 0 ? 'Available' : 'Sold Out' }}
+                      </AppBadge>
                     </div>
                   </div>
-                </div>
-                <span v-if="form.errors.image" class="error-message">{{ form.errors.image }}</span>
+                  <div class="product-card-body">
+                    <div class="product-info-top">
+                      <h3 class="product-title">{{ product.name }}</h3>
+                      <span class="price-pill">₵{{ Number(product.price).toFixed(2) }}/unit</span>
+                    </div>
+                    <p class="product-avail-text">{{ product.quantity }} units available</p>
+                    
+                    <!-- Outlined Action Buttons (Stitch layout) -->
+                    <div class="product-actions">
+                      <button class="action-btn edit-btn" @click="editProduct(product)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                        <span>Edit</span>
+                      </button>
+                      <button class="action-btn delete-btn" @click="deleteProduct(product.id)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                        <span>Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                </AppCard>
               </div>
+            </div>
 
-              <!-- Product Name -->
-              <div class="form-group">
-                <label for="name" class="form-label">Vegetable Name</label>
-                <input
+            <!-- Pending Orders Section (Stitch layout) -->
+            <div class="pending-orders-section">
+              <div class="column-header">
+                <h2>Pending Orders</h2>
+              </div>
+              
+              <div class="orders-list-wrapper">
+                <AppCard v-for="order in [
+                  {
+                    id: '#ORD-2849',
+                    status: 'preparing',
+                    statusLabel: 'PREPARING',
+                    buyer: 'Kojo Enterprises',
+                    details: '15 Crates of Roma Tomatoes • Kumasi Market'
+                  },
+                  {
+                    id: '#ORD-2852',
+                    status: 'awaiting_pickup',
+                    statusLabel: 'AWAITING PICKUP',
+                    buyer: 'Aba\'s Kitchen',
+                    details: '5 Bags of Green Bell Peppers • Accra Central'
+                  }
+                ]" :key="order.id" class="order-item-card" variant="default" paddingSize="md">
+                  <div class="order-top-row">
+                    <span class="status-pill-badge" :class="order.status">
+                      {{ order.statusLabel }}
+                    </span>
+                    <span class="order-number-lbl">{{ order.id }}</span>
+                  </div>
+                  <div class="order-middle-row">
+                    <h4 class="buyer-name-title">{{ order.buyer }}</h4>
+                    <p class="order-desc-detail">{{ order.details }}</p>
+                  </div>
+                  <button class="transport-btn-custom" @click="triggerAlert('Requesting Transport: Broadcasts a cargo pick-up offer to transport providers in Kumasi/Accra. Transporters can then bid on this shipment in Phase 4 Driver portal.')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="btn-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="1" y="3" width="15" height="13" />
+                      <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+                      <circle cx="5.5" cy="18.5" r="2.5" />
+                      <circle cx="18.5" cy="18.5" r="2.5" />
+                    </svg>
+                    <span>Request Transport</span>
+                  </button>
+                </AppCard>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Column (Add Produce Form) -->
+          <div ref="addFormSection" class="form-column">
+            <AppCard class="sticky-form-card" paddingSize="lg">
+              <template #header>
+                <h2 class="form-card-title">{{ editingProductId ? 'Edit Produce Listing' : 'Add New Listing' }}</h2>
+                <p class="form-card-subtitle">{{ editingProductId ? 'Modify produce parameters below.' : 'Fill in the details to publish your produce to the marketplace.' }}</p>
+              </template>
+
+              <form @submit.prevent="submit" class="produce-form">
+                <!-- Photo Upload FIRST (Design Brief requirement) -->
+                <div class="form-group-custom">
+                  <label class="custom-label">Produce Photo</label>
+                  <div 
+                    class="custom-dropzone"
+                    :class="{ 'has-preview': imagePreview, 'has-error': form.errors.image }"
+                    @click="triggerFileInput"
+                  >
+                    <input
+                      ref="fileInput"
+                      type="file"
+                      accept="image/*"
+                      class="hidden-file-input"
+                      @change="handleFileChange"
+                    />
+                    <div v-if="!imagePreview" class="dropzone-empty-state">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="upload-icon-svg">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                      </svg>
+                      <span class="dropzone-title">Upload Produce Image</span>
+                      <span class="dropzone-subtitle">Tap to browse (Max 2MB)</span>
+                    </div>
+                    <div v-else class="dropzone-preview-state">
+                      <img :src="imagePreview" alt="Produce preview" class="preview-img" />
+                      <div class="preview-hover-overlay">
+                        <span>Change Photo</span>
+                      </div>
+                    </div>
+                  </div>
+                  <span v-if="form.errors.image" class="error-validation-text">{{ form.errors.image }}</span>
+                </div>
+
+                <!-- Vegetable Name -->
+                <AppInput
                   id="name"
                   v-model="form.name"
-                  type="text"
-                  class="form-input"
+                  label="Vegetable Name"
                   placeholder="e.g. Fresh Red Tomatoes"
-                  :class="{ 'input-error': form.errors.name }"
                   required
+                  :error="form.errors.name"
                 />
-                <span v-if="form.errors.name" class="error-message">{{ form.errors.name }}</span>
-              </div>
 
-              <!-- Category -->
-              <div class="form-group">
-                <label for="category" class="form-label">Category</label>
-                <select
+                <!-- Category -->
+                <AppInput
                   id="category"
                   v-model="form.category"
-                  class="form-select"
-                  :class="{ 'input-error': form.errors.category }"
+                  type="select"
+                  label="Category"
                   required
+                  :error="form.errors.category"
                 >
                   <option value="" disabled>Select category</option>
                   <option value="Vegetable">Vegetable (General)</option>
                   <option value="Leafy Green">Leafy Green</option>
                   <option value="Root/Tuber">Root / Tuber</option>
                   <option value="Other">Other</option>
-                </select>
-                <span v-if="form.errors.category" class="error-message">{{ form.errors.category }}</span>
-              </div>
+                </AppInput>
 
-              <!-- Quantity -->
-              <div class="form-group">
-                <label for="quantity" class="form-label">Quantity Available (Bags / kg)</label>
-                <input
+                <!-- Quantity -->
+                <AppInput
                   id="quantity"
                   v-model="form.quantity"
                   type="number"
                   min="1"
-                  class="form-input"
+                  label="Quantity Available"
                   placeholder="e.g. 10"
-                  :class="{ 'input-error': form.errors.quantity }"
                   required
+                  :error="form.errors.quantity"
                 />
-                <span v-if="form.errors.quantity" class="error-message">{{ form.errors.quantity }}</span>
-              </div>
 
-              <!-- Price -->
-              <div class="form-group">
-                <label for="price" class="form-label">Unit Price (GH₵ per Bag / kg)</label>
-                <input
+                <!-- Price -->
+                <AppInput
                   id="price"
                   v-model="form.price"
                   type="number"
                   step="0.01"
                   min="0.01"
-                  class="form-input"
+                  label="Unit Price (GH₵)"
                   placeholder="e.g. 45.00"
-                  :class="{ 'input-error': form.errors.price }"
                   required
+                  :error="form.errors.price"
                 />
-                <span v-if="form.errors.price" class="error-message">{{ form.errors.price }}</span>
-              </div>
 
-              <!-- Submit -->
-              <button
-                type="submit"
-                class="submit-button"
-                :disabled="form.processing"
-              >
-                {{ form.processing ? 'Creating Listing...' : 'Publish Listing' }}
-              </button>
-            </form>
+                <!-- Submit button -->
+                <AppButton
+                  type="submit"
+                  variant="primary"
+                  class="w-full-btn"
+                  :loading="form.processing"
+                >
+                  {{ editingProductId ? 'Save Changes' : 'Publish Listing' }}
+                </AppButton>
+
+                <!-- Cancel Edit button -->
+                <AppButton
+                  v-if="editingProductId"
+                  type="button"
+                  variant="outlined"
+                  class="w-full-btn"
+                  style="margin-top: 8px;"
+                  @click="cancelEdit"
+                >
+                  Cancel Edit
+                </AppButton>
+              </form>
+            </AppCard>
           </div>
-        </section>
-      </div>
-    </main>
+        </div>
+      </main>
+    </div>
 
-    <!-- Mobile Bottom Navigation (Design Brief requirement) -->
-    <nav class="mobile-nav hide-desktop">
-      <Link href="/farmer/dashboard" class="nav-item active">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/>
-        </svg>
-        <span class="nav-label">Dashboard</span>
+    <!-- Floating Action Button for adding listings (mobile only) -->
+    <button class="fab-btn" @click="scrollToForm" aria-label="Add New Listing">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+    </button>
+
+    <!-- Mobile Bottom Navigation Bar (Stitch design layout) -->
+    <nav class="mobile-bottom-nav">
+      <Link href="/farmer/dashboard" class="mobile-nav-item active">
+        <div class="nav-active-pill">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <span class="nav-label">Home</span>
+        </div>
       </Link>
-      <a href="#" class="nav-item disabled">
+      <a href="#" class="mobile-nav-item" @click.prevent="triggerAlert('Marketplace: This allows buyers to browse listed produce. Selecting this redirects to the Buyer Marketplace screen (Phase 3).')">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <span class="nav-label">Market</span>
+      </a>
+      <a href="#" class="mobile-nav-item" @click.prevent="triggerAlert('Orders: Displays your active shipment offers, logistics tracking status, and delivery completion logs (Phase 5 Shared screens).')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
         </svg>
         <span class="nav-label">Orders</span>
       </a>
-      <a href="#" class="nav-item disabled">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>
-        </svg>
-        <span class="nav-label">Alerts</span>
-      </a>
-      <Link href="/" class="nav-item">
+      <Link href="/" class="mobile-nav-item">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
         </svg>
-        <span class="nav-label">Profile</span>
+        <span class="nav-label">Account</span>
       </Link>
     </nav>
   </div>
@@ -290,12 +431,20 @@
 
 <script>
 import { useForm, Link } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import AppButton from '../Components/UI/AppButton.vue';
+import AppInput from '../Components/UI/AppInput.vue';
+import AppCard from '../Components/UI/AppCard.vue';
+import AppBadge from '../Components/UI/AppBadge.vue';
 
 export default {
   name: 'FarmerDashboard',
   components: {
-    Link
+    Link,
+    AppButton,
+    AppInput,
+    AppCard,
+    AppBadge
   },
   props: {
     products: {
@@ -307,10 +456,19 @@ export default {
       required: true
     }
   },
-  setup() {
+  setup(props) {
     const fileInput = ref(null);
     const imagePreview = ref(null);
     const addFormSection = ref(null);
+
+    // Frontend Reactive copy of products to support mock edit/delete in prototype
+    const localProducts = ref([...props.products]);
+    const editingProductId = ref(null);
+
+    // Watch for props updates from backend (e.g. normal Inertia post redirects)
+    watch(() => props.products, (newProducts) => {
+      localProducts.value = [...newProducts];
+    }, { deep: true });
 
     const form = useForm({
       name: '',
@@ -336,16 +494,71 @@ export default {
       }
     };
 
+    // Populates listing into the form for editing (Frontend Mock)
+    const editProduct = (product) => {
+      editingProductId.value = product.id;
+      form.name = product.name;
+      form.category = product.category;
+      form.quantity = String(product.quantity);
+      form.price = String(product.price);
+      imagePreview.value = product.image_path ? (product.image_path.startsWith('data:') ? product.image_path : '/storage/' + product.image_path) : null;
+      scrollToForm();
+    };
+
+    const cancelEdit = () => {
+      editingProductId.value = null;
+      form.reset();
+      imagePreview.value = null;
+    };
+
+    // Deletes product from the local list (Frontend Mock)
+    const deleteProduct = (productId) => {
+      if (confirm('Are you sure you want to delete this listing? (Frontend Demo Only)')) {
+        localProducts.value = localProducts.value.filter(p => p.id !== productId);
+        alert('Produce listing deleted successfully (Frontend Mock).');
+      }
+    };
+
+    const triggerAlert = (msg) => {
+      alert(msg);
+    };
+
     const submit = () => {
-      form.post('/farmer/products', {
-        onSuccess: () => {
-          form.reset();
-          imagePreview.value = null;
-          if (fileInput.value) {
-            fileInput.value.value = '';
-          }
+      if (editingProductId.value) {
+        // Frontend Mock Save (Hackathon support)
+        const idx = localProducts.value.findIndex(p => p.id === editingProductId.value);
+        if (idx !== -1) {
+          // If a new photo preview is uploaded, we save it in the local item
+          const newImgPath = imagePreview.value || localProducts.value[idx].image_path;
+          
+          localProducts.value[idx] = {
+            ...localProducts.value[idx],
+            name: form.name,
+            category: form.category,
+            quantity: Number(form.quantity),
+            price: Number(form.price),
+            image_path: newImgPath.startsWith('/storage/') ? newImgPath.replace('/storage/', '') : newImgPath
+          };
         }
-      });
+        editingProductId.value = null;
+        form.reset();
+        imagePreview.value = null;
+        if (fileInput.value) {
+          fileInput.value.value = '';
+        }
+        alert('Produce listing updated successfully (Frontend Mock).');
+      } else {
+        // Original Create flow posting to the backend
+        form.post('/farmer/products', {
+          onSuccess: () => {
+            form.reset();
+            imagePreview.value = null;
+            if (fileInput.value) {
+              fileInput.value.value = '';
+            }
+          }
+        });
+      }
     };
 
     const scrollToForm = () => {
@@ -362,504 +575,1008 @@ export default {
       triggerFileInput,
       handleFileChange,
       submit,
-      scrollToForm
+      scrollToForm,
+      localProducts,
+      editingProductId,
+      editProduct,
+      cancelEdit,
+      deleteProduct,
+      triggerAlert
     };
   }
 }
 </script>
 
 <style scoped>
-.dashboard-wrapper {
+/* Top-level structure */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  background-color: #F7F8F5;
-  color: #1A1A1A;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  padding-bottom: 80px; /* space for mobile nav */
+  background-color: var(--color-bg-page);
+  color: var(--color-neutral-900);
+  font-family: var(--font-family);
+  overflow-x: hidden;
+  width: 100%;
 }
 
-/* Header styling */
-.header {
-  background-color: #FFFFFF;
-  border-bottom: 1px solid #E0E0DA;
+/* Sidebar navigation */
+.sidebar-nav {
+  display: none;
+  flex-direction: column;
+  background-color: var(--color-bg-sidebar);
+  border-right: 1px solid var(--color-border);
   position: sticky;
   top: 0;
-  z-index: 10;
+  height: 100vh;
+  flex-shrink: 0;
+  transition: width var(--transition-base);
+  z-index: 100;
 }
 
-.header-content {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 12px 16px;
+.sidebar-brand {
+  height: var(--topbar-height);
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+  overflow: hidden;
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.logo-icon {
+  flex-shrink: 0;
+  color: var(--color-primary);
 }
 
 .logo-text {
-  font-size: 20px;
-  font-weight: 500;
-  color: #1B5E20;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.5px;
 }
 
-.user-greeting {
+.sidebar-user {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  margin: var(--space-3);
+  background-color: var(--color-neutral-50);
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
 
-.greeting-text {
-  font-size: 14px;
-  color: #6B6B63;
-  font-weight: 500;
-  background-color: #E8F5E9;
-  padding: 4px 8px;
-  border-radius: 6px;
-}
-
-.logout-link-btn {
-  color: #C62828;
-  background: none;
-  border: none;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 4px 8px;
-}
-
-/* Main Layout */
-.main-content {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 16px;
-}
-
-.flash-alert {
-  background-color: #E8F5E9;
-  border: 1px solid #2E7D32;
-  border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 16px;
-  color: #2E7D32;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-/* Metrics row */
-.metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-@media (min-width: 768px) {
-  .metrics-grid {
-    grid-template-columns: repeat(5, 1fr);
-  }
-}
-
-.metric-card {
-  background-color: #FFFFFF;
-  border: 1px solid #E0E0DA;
-  border-radius: 12px;
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
-}
-
-.metric-icon-wrapper {
+.user-avatar {
   width: 36px;
   height: 36px;
-  border-radius: 8px;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-base);
+  flex-shrink: 0;
 }
 
-.active-bg { background-color: #E8F5E9; }
-.pending-bg { background-color: #FFF8E1; }
-.completed-bg { background-color: #E8F5E9; }
-.rating-bg { background-color: #FFF8E1; }
-
-.metric-details {
+.user-info {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
-.metric-label {
-  font-size: 11px;
-  color: #6B6B63;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.metric-value {
-  font-size: 18px;
-  font-weight: 500;
-  color: #1A1A1A;
-}
-
-/* Dashboard structure */
-.content-layout {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-}
-
-@media (min-width: 768px) {
-  .content-layout {
-    grid-template-columns: 1.5fr 1fr;
-  }
-}
-
-/* Listings list section */
-.listings-section {
-  background-color: #FFFFFF;
-  border: 1px solid #E0E0DA;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.section-title {
-  font-size: 18px;
-  font-weight: 500;
-  color: #1B5E20;
-  margin: 0;
-}
-
-.btn-scroll-add {
-  background-color: #2E7D32;
-  color: #FFFFFF;
-  border: none;
-  font-size: 13px;
-  font-weight: 500;
-  height: 32px;
-  padding: 0 12px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 40px 16px;
-  color: #6B6B63;
-}
-
-.empty-subtext {
-  font-size: 13px;
-  margin-top: 4px;
-}
-
-.listings-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.product-item-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  border: 1px solid #E0E0DA;
-  border-radius: 8px;
-  background-color: #FFFFFF;
-}
-
-.product-img-wrapper {
-  width: 64px;
-  height: 64px;
-  border-radius: 8px;
+.user-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+  white-space: nowrap;
   overflow: hidden;
-  background-color: #F7F8F5;
-  border: 1px solid #E0E0DA;
+  text-overflow: ellipsis;
+}
+
+.user-role {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+}
+
+.sidebar-menu {
   display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.product-thumb {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.product-thumb-placeholder {
-  font-size: 28px;
-}
-
-.product-info {
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
   flex: 1;
 }
 
-.product-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 4px;
-}
-
-.product-name {
-  font-size: 15px;
-  font-weight: 500;
-  margin: 0;
-  color: #1A1A1A;
-}
-
-.category-tag {
-  font-size: 11px;
-  color: #2E7D32;
-  background-color: #E8F5E9;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 500;
-}
-
-.product-stats {
-  display: flex;
-  gap: 16px;
-}
-
-.stat {
-  font-size: 13px;
-  display: flex;
-  gap: 4px;
-}
-
-.stat-label {
-  color: #6B6B63;
-}
-
-.stat-value {
-  color: #1A1A1A;
-  font-weight: 500;
-}
-
-.text-danger {
-  color: #C62828;
-}
-
-/* Form section */
-.form-section {
-  background-color: #FFFFFF;
-  border: 1px solid #E0E0DA;
-  border-radius: 12px;
-  padding: 20px 16px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
-}
-
-.form-title {
-  font-size: 18px;
-  font-weight: 500;
-  color: #1B5E20;
-  margin: 0 0 16px 0;
-}
-
-.form-container {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.form-label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #1A1A1A;
-}
-
-/* Custom upload zone */
-.upload-dropzone {
-  border: 2px dashed #E0E0DA;
-  border-radius: 8px;
-  height: 120px;
+.menu-item {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  color: var(--color-neutral-700);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  transition: all var(--transition-fast);
   cursor: pointer;
-  background-color: #F7F8F5;
-  overflow: hidden;
-  position: relative;
-  transition: border-color 0.2s ease;
 }
 
-.upload-dropzone:hover {
-  border-color: #2E7D32;
+.menu-item:hover:not(.disabled) {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-900);
 }
 
-.hidden-file-input {
-  display: none;
+.menu-item.active {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary);
 }
 
-.upload-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 12px;
+.menu-item.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.upload-text {
-  font-size: 13px;
-  font-weight: 500;
-  color: #1A1A1A;
-  margin-top: 4px;
+.badge-coming {
+  font-size: 9px;
+  background-color: var(--color-neutral-200);
+  color: var(--color-neutral-700);
+  padding: 1px 4px;
+  border-radius: var(--radius-sm);
+  margin-left: auto;
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
 }
 
-.upload-hint {
-  font-size: 11px;
-  color: #6B6B63;
-  margin-top: 2px;
+.sidebar-footer {
+  padding: var(--space-3);
+  border-top: 1px solid var(--color-border);
 }
 
-.preview-container {
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
-
-.upload-preview {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.change-overlay {
-  position: absolute;
-  inset: 0;
-  background-color: rgba(0,0,0,0.4);
-  color: #FFFFFF;
+.logout-btn-sidebar {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 500;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.upload-dropzone:hover .change-overlay {
-  opacity: 1;
-}
-
-.form-input, .form-select {
-  height: 44px;
-  border: 1px solid #E0E0DA;
-  border-radius: 8px;
-  padding: 0 12px;
-  font-size: 15px;
-  color: #1A1A1A;
-  background-color: #FFFFFF;
-  transition: border-color 0.2s ease;
-}
-
-.form-input:focus, .form-select:focus {
-  outline: none;
-  border-color: #2E7D32;
-}
-
-.input-error {
-  border-color: #C62828 !important;
-}
-
-.error-message {
-  font-size: 12px;
-  color: #C62828;
-  font-weight: 500;
-}
-
-.submit-button {
-  background-color: #2E7D32;
-  color: #FFFFFF;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3);
+  background: none;
   border: none;
-  border-radius: 8px;
-  height: 44px;
-  font-size: 15px;
-  font-weight: 500;
+  color: var(--color-danger);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-md);
   cursor: pointer;
-  margin-top: 8px;
-  transition: background-color 0.2s ease;
+  transition: background-color var(--transition-fast);
 }
 
-.submit-button:hover:not(:disabled) {
-  background-color: #1B5E20;
+.logout-btn-sidebar:hover {
+  background-color: var(--color-danger-light);
 }
 
-.submit-button:disabled {
+/* Mobile top header (Stitch style) */
+.mobile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--topbar-height);
+  padding: 0 var(--space-4);
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.mobile-header .logo-text {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.icon-action-btn {
+  background: none;
+  border: none;
+  color: var(--color-neutral-700);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  transition: background-color var(--transition-fast);
+}
+
+.icon-action-btn:hover {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-900);
+}
+
+.icon-action-btn.logout-header-btn {
+  color: var(--color-danger);
+}
+
+.icon-action-btn.logout-header-btn:hover {
+  background-color: var(--color-danger-light);
+  color: var(--color-danger);
+}
+
+.icon-action-btn.disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* Mobile navigation */
-.mobile-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
-  background-color: #FFFFFF;
-  border-top: 1px solid #E0E0DA;
+/* Main Layout content */
+.main-layout {
+  flex: 1;
+  min-width: 0;
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  z-index: 10;
+  flex-direction: column;
 }
 
-.nav-item {
+.content-body {
+  padding: var(--space-4);
+  flex: 1;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Flash alerts */
+.flash-alert-wrapper {
+  margin-bottom: var(--space-4);
+}
+
+.flash-badge {
+  width: 100%;
+  justify-content: flex-start;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  border: 1px solid var(--color-success);
+}
+
+/* Metrics Section (Stitch Style) */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.hero-metric-card {
+  grid-column: span 2;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+  color: var(--color-white);
+  border: none !important;
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 110px;
+  box-shadow: var(--shadow-sm);
+}
+
+.hero-metric-card .metric-label {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.hero-metric-card .metric-value {
+  color: var(--color-white) !important;
+  font-size: var(--font-size-2xl) !important;
+  font-weight: var(--font-weight-bold);
+  margin-top: var(--space-1);
+}
+
+.hero-metric-subtext {
+  font-size: var(--font-size-xs);
+  color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: var(--space-2);
+  font-weight: var(--font-weight-medium);
+}
+
+.trend-arrow {
+  color: var(--color-primary-light);
+}
+
+.cash-illustration {
+  position: absolute;
+  right: -10px;
+  bottom: -15px;
+  width: 90px;
+  height: 90px;
+  opacity: 0.15;
+  color: var(--color-white);
+  transform: rotate(-15deg);
+  pointer-events: none;
+}
+
+/* Sub-metrics cards */
+.sub-metric-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4) !important;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-xs);
+}
+
+.sub-metric-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sub-metric-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.sub-metric-icon.orange-bg {
+  background-color: var(--color-warning-light);
+  color: var(--color-secondary-dark);
+}
+
+.sub-metric-icon.blue-bg {
+  background-color: var(--color-tertiary-subtle);
+  color: var(--color-tertiary);
+}
+
+.sub-metric-icon.green-bg {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary);
+}
+
+.sub-metric-icon.gold-bg {
+  background-color: var(--color-warning-light);
+  color: var(--color-secondary-dark);
+}
+
+.sub-metric-card .metric-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.sub-metric-card .metric-value {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  line-height: var(--line-height-tight);
+}
+
+.sub-metric-card .metric-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  font-weight: var(--font-weight-semibold);
+  margin-top: var(--space-1);
+}
+
+/* Columns Layout */
+.layout-columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+
+.listings-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.listings-section, .pending-orders-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column-header h2 {
+  font-size: var(--font-size-lg);
+  color: var(--color-neutral-900);
+  font-weight: var(--font-weight-bold);
+}
+
+.view-all-link {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-500);
+  font-weight: var(--font-weight-semibold);
+  transition: color var(--transition-fast);
+}
+
+.view-all-link:hover {
+  color: var(--color-primary);
+}
+
+/* Empty states */
+.empty-listings-card {
+  background-color: var(--color-white);
+  border: 1.5px dashed var(--color-neutral-300);
+  border-radius: var(--radius-lg);
+  padding: var(--space-10) var(--space-4);
+  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #6B6B63;
-  text-decoration: none;
-  font-size: 10px;
-  gap: 2px;
-  width: 25%;
+  gap: var(--space-3);
+}
+
+.empty-icon-box {
+  font-size: var(--font-size-3xl);
+}
+
+.empty-listings-card h3 {
+  font-size: var(--font-size-md);
+  color: var(--color-neutral-900);
+  font-weight: var(--font-weight-semibold);
+}
+
+.empty-listings-card p {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-500);
+  max-width: 300px;
+  margin-bottom: var(--space-2);
+}
+
+/* Listings Grid */
+.listings-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
   height: 100%;
 }
 
-.nav-item.active {
-  color: #2E7D32;
+.product-img-box {
+  aspect-ratio: 16 / 9;
+  background-color: var(--color-neutral-50);
+  border-bottom: 1px solid var(--color-border);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-3);
 }
 
-.nav-item.disabled {
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-placeholder {
+  font-size: var(--font-size-3xl);
+}
+
+.badge-overlay {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+}
+
+.product-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.product-info-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-1);
+}
+
+.product-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  line-height: var(--line-height-tight);
+}
+
+.price-pill {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-secondary-dark);
+  background-color: var(--color-secondary-light);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+.product-avail-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-500);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Outlined listing actions (Stitch design) */
+.product-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-3);
+}
+
+.action-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  height: 36px;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-neutral-300);
+  color: var(--color-neutral-700);
+}
+
+.action-btn.edit-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background-color: var(--color-primary-subtle);
+}
+
+.action-btn.delete-btn {
+  border-color: #F8D7DA;
+  color: var(--color-danger);
+}
+
+.action-btn.delete-btn:hover {
+  background-color: var(--color-danger-light);
+  border-color: var(--color-danger);
+}
+
+/* Pending Orders list section */
+.orders-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.order-item-card {
+  transition: all var(--transition-base);
+}
+
+.order-item-card:has(.preparing) {
+  border-left: 4px solid var(--color-tertiary);
+}
+
+.order-item-card:has(.awaiting_pickup) {
+  border-left: 4px solid var(--color-secondary);
+}
+
+.order-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.status-pill-badge {
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+}
+
+.status-pill-badge.preparing {
+  background-color: var(--color-tertiary-subtle);
+  color: var(--color-tertiary-hover);
+}
+
+.status-pill-badge.awaiting_pickup {
+  background-color: var(--color-warning-light);
+  color: var(--color-secondary-dark);
+}
+
+.order-number-lbl {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  font-weight: var(--font-weight-semibold);
+}
+
+.order-middle-row {
+  margin-bottom: var(--space-3);
+}
+
+.buyer-name-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin-bottom: 2px;
+}
+
+.order-desc-detail {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-500);
+}
+
+.transport-btn-custom {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 40px;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background-color: var(--color-secondary-dark) !important;
+  color: var(--color-white) !important;
+  border: none !important;
+}
+
+.transport-btn-custom:hover {
+  background-color: #5C2D0C !important;
+}
+
+/* Form column */
+.form-column {
+  width: 100%;
+}
+
+.sticky-form-card {
+  position: relative;
+}
+
+.form-card-title {
+  font-size: var(--font-size-lg);
+  color: var(--color-neutral-900);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 2px;
+}
+
+.form-card-subtitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+}
+
+.produce-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Upload dropzone custom styling */
+.form-group-custom {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.custom-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-900);
+}
+
+.custom-dropzone {
+  border: 2px dashed var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: var(--color-neutral-50);
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-base);
+}
+
+.custom-dropzone:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-subtle);
+}
+
+.custom-dropzone.has-error {
+  border-color: var(--color-danger);
+  background-color: var(--color-danger-light);
+}
+
+.hidden-file-input {
+  display: none !important;
+}
+
+.dropzone-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-4);
+  color: var(--color-neutral-700);
+}
+
+.upload-icon-svg {
+  color: var(--color-neutral-500);
+  margin-bottom: var(--space-2);
+  transition: color var(--transition-fast);
+}
+
+.custom-dropzone:hover .upload-icon-svg {
+  color: var(--color-primary);
+}
+
+.dropzone-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+}
+
+.dropzone-subtitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  margin-top: 2px;
+}
+
+.dropzone-preview-state {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-hover-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(27, 67, 50, 0.6);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.custom-dropzone:hover .preview-hover-overlay {
+  opacity: 1;
+}
+
+.error-validation-text {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-danger);
+  margin-top: 2px;
+}
+
+.w-full-btn {
+  width: 100%;
+  margin-top: var(--space-2);
+}
+
+/* Floating Action Button (FAB) */
+.fab-btn {
+  position: fixed;
+  bottom: calc(var(--bottom-nav-height) + 16px);
+  right: 16px;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 99;
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
+}
+
+.fab-btn:hover {
+  background-color: var(--color-primary-hover);
+  transform: scale(1.05);
+}
+
+.fab-btn:active {
+  transform: scale(0.95);
+}
+
+/* Mobile Bottom Navigation Bar (Stitch style) */
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--bottom-nav-height);
+  background-color: var(--color-white);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 100;
+  padding: 0 var(--space-2);
+}
+
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-neutral-500);
+  text-decoration: none;
+  width: 20%;
+  height: 100%;
+  font-weight: var(--font-weight-semibold);
+  transition: all var(--transition-fast);
+}
+
+.mobile-nav-item .nav-label {
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+.mobile-nav-item.active {
+  color: var(--color-primary);
+}
+
+.mobile-nav-item.active .nav-active-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary);
+  padding: 8px var(--space-4);
+  border-radius: var(--radius-pill);
+}
+
+.mobile-nav-item.active .nav-label {
+  font-size: var(--font-size-xs);
+  margin-top: 0;
+}
+
+.mobile-nav-item.disabled {
   opacity: 0.4;
   cursor: not-allowed;
   pointer-events: none;
 }
 
-.nav-label {
-  font-weight: 500;
-}
-
-.hide-desktop {
-  display: flex;
+/* Responsive Breakpoints */
+@media (max-width: 767px) {
+  .dashboard-container {
+    padding-bottom: var(--bottom-nav-height);
+    overflow-x: hidden;
+  }
 }
 
 @media (min-width: 768px) {
-  .hide-desktop {
-    display: none !important;
+  .mobile-header {
+    display: none;
+  }
+  .mobile-bottom-nav {
+    display: none;
+  }
+  .sidebar-nav {
+    display: flex;
+    width: var(--sidebar-width-collapsed);
+  }
+  .sidebar-user {
+    padding: var(--space-2);
+    margin: var(--space-2);
+  }
+  .user-info {
+    display: none;
+  }
+  .logo-text, .menu-label, .logout-label, .badge-coming {
+    display: none;
+  }
+  .sidebar-brand {
+    justify-content: center;
+  }
+  .menu-item {
+    justify-content: center;
+  }
+  .logout-btn-sidebar {
+    justify-content: center;
+  }
+  
+  .layout-columns {
+    grid-template-columns: 1.5fr 1fr;
+    align-items: start;
+  }
+  
+  /* Desktop metrics grid: Hero card left, 2x2 grid next to it */
+  .metrics-grid {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+  .hero-metric-card {
+    grid-column: span 1;
+    grid-row: span 2;
+    min-height: 100%;
+  }
+  
+  .listings-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .sticky-form-card {
+    position: sticky;
+    top: calc(var(--space-4) + 10px);
+  }
+  .fab-btn {
+    display: none;
+  }
+}
+
+@media (min-width: 1025px) {
+  .sidebar-nav {
+    width: var(--sidebar-width);
+  }
+  .sidebar-brand {
+    justify-content: flex-start;
+  }
+  .sidebar-user {
+    padding: var(--space-4);
+    margin: var(--space-3);
+  }
+  .user-info {
+    display: flex;
+  }
+  .logo-text, .menu-label, .logout-label {
+    display: inline;
+  }
+  .badge-coming {
+    display: inline-block;
+  }
+  .menu-item {
+    justify-content: flex-start;
+  }
+  .logout-btn-sidebar {
+    justify-content: flex-start;
   }
 }
 </style>
