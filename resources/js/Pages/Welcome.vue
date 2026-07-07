@@ -1,59 +1,111 @@
 <template>
   <div class="welcome-container">
-    <main class="welcome-card">
-      <div class="logo-area">
-        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="logo-icon">
-          <path d="m12 3-1.912 5.886a1 1 0 0 1-.95.686H2.929l4.908 3.566a1 1 0 0 1 .364 1.122L6.29 20.147l4.907-3.565a1 1 0 0 1 1.604 0l4.907 3.565-1.91-5.887a1 1 0 0 1 .364-1.122l4.908-3.566h-6.21a1 1 0 0 1-.95-.686z"/>
-        </svg>
-        <h1 class="title">FarmLink</h1>
-      </div>
-      <p class="subtitle">Connecting Western Region smallholders directly to vegetable buyers and transport providers.</p>
+    <!-- Mobile Device Mockup Frame -->
+    <div class="welcome-card-frame">
       
-      <!-- Flash Message -->
-      <div v-if="$page.props.flash?.message" class="flash-box">
-        <p class="flash-text">{{ $page.props.flash.message }}</p>
+      <!-- Topbar Header -->
+      <header class="app-header">
+        <div class="app-logo">
+          <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 3-1.912 5.886a1 1 0 0 1-.95.686H2.929l4.908 3.566a1 1 0 0 1 .364 1.122L6.29 20.147l4.907-3.565a1 1 0 0 1 1.604 0l4.907 3.565-1.91-5.887a1 1 0 0 1 .364-1.122l4.908-3.566h-6.21a1 1 0 0 1-.95-.686z"/>
+          </svg>
+          <span class="app-logo-text">FarmLink</span>
+        </div>
+        <a href="#" class="help-link" @click.prevent="triggerAlert('Help Center: Read our FAQs, buyer guidebooks, and driver delivery tips. (Scheduled for Phase 5 Shared screens)')">Help</a>
+      </header>
+
+      <!-- Hero Banner Image Section -->
+      <div class="hero-banner">
+        <div class="hero-text-overlay">
+          <h1 class="hero-title">Empowering Ghana's Agriculture from Soil to Shelf.</h1>
+          <p class="hero-subtitle">The digital marketplace connecting smallholder farmers, bulk buyers, and reliable transporters.</p>
+        </div>
       </div>
 
-      <!-- Authenticated State -->
-      <div v-if="$page.props.auth?.user" class="auth-state">
-        <div class="user-profile">
-          <div class="avatar-circle">
-            {{ $page.props.auth.user.name.charAt(0).toUpperCase() }}
+      <!-- Features container -->
+      <div class="features-container">
+        <!-- Direct Trade Feature (Full-width) -->
+        <div class="feature-row-full">
+          <div class="feature-circle-icon green-bg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
           </div>
-          <h2 class="user-name">{{ $page.props.auth.user.name }}</h2>
-          <span class="user-role-badge">{{ formatRole($page.props.auth.user.role) }}</span>
-        </div>
-
-        <div class="user-details">
-          <div class="detail-item">
-            <span class="detail-label">Phone</span>
-            <span class="detail-val">{{ $page.props.auth.user.phone_number }}</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">Location</span>
-            <span class="detail-val">{{ $page.props.auth.user.location }}</span>
-          </div>
-          <div class="detail-item">
-            <span class="detail-label">Rating</span>
-            <span class="detail-val">⭐ {{ Number($page.props.auth.user.average_rating).toFixed(2) }}</span>
+          <div class="feature-info">
+            <h4>Direct Trade</h4>
+            <p>Cut out middlemen and secure fair market prices directly.</p>
           </div>
         </div>
 
-        <Link href="/logout" method="post" as="button" class="logout-btn">
-          Log Out
+        <!-- Half-width Features Grid (Logistics & Ratings) -->
+        <div class="feature-half-row">
+          <div class="feature-card">
+            <div class="feature-circle-icon orange-bg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="1" y="3" width="15" height="13" />
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+                <circle cx="5.5" cy="18.5" r="2.5" />
+                <circle cx="18.5" cy="18.5" r="2.5" />
+              </svg>
+            </div>
+            <h4>Local Logistics</h4>
+            <p>Reliable rural-to-urban transport networks.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-circle-icon teal-bg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="m9 12 2 2 4-4"/>
+              </svg>
+            </div>
+            <h4>Trusted Ratings</h4>
+            <p>Verified profiles and reviews.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action / CTA Buttons -->
+      <div class="cta-section">
+        <Link href="/register" class="get-started-btn">
+          <span>Get Started</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
         </Link>
+        <p class="login-prompt">
+          Already have an account? <Link href="/login" class="login-prompt-link">Log In</Link>
+        </p>
       </div>
 
-      <!-- Guest State -->
-      <div v-else class="guest-state">
-        <div class="action-buttons">
-          <Link href="/login" class="btn-primary">Log In</Link>
-          <Link href="/register" class="btn-secondary">Create Account</Link>
+      <!-- Footer banner -->
+      <footer class="welcome-footer">
+        <span>Grounded Innovation for the Western Region.</span>
+        <div class="footer-icons">
+          <a href="#" class="footer-icon-link" @click.prevent="triggerAlert('FarmLink Global Website: Under construction.')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+          </a>
+          <a href="#" class="footer-icon-link" @click.prevent="triggerAlert('FarmLink Farmer Cooperatives network page: Under construction.')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 2 2 4v4a4 4 0 0 1-4 4h-2a3 3 0 0 0-3 3v3z"/>
+              <path d="M9 22v-4H7a2 2 0 0 1-2-2V8"/>
+            </svg>
+          </a>
+          <a href="mailto:info@farmlinkgh.com" class="footer-icon-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </a>
         </div>
-      </div>
+      </footer>
 
 
-    </main>
+
+    </div>
   </div>
 </template>
 
@@ -66,213 +118,283 @@ export default {
     Link
   },
   methods: {
-    formatRole(role) {
-      if (!role) return '';
-      if (role === 'driver') return 'Transport Provider';
-      return role.charAt(0).toUpperCase() + role.slice(1);
+    triggerAlert(msg) {
+      alert(msg);
     }
   }
 }
 </script>
 
 <style scoped>
+@import "../../css/design-tokens.css";
+
+/* Outer wrapper canvas */
 .welcome-container {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: 16px;
-  background-color: #F7F8F5;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  color: #1A1A1A;
+  padding: var(--space-4) 0;
+  background-color: #121212; /* Dark blueprint grid background */
+  background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
-.welcome-card {
+/* Simulated Mobile Phone Frame */
+.welcome-card-frame {
   width: 100%;
-  max-width: 448px;
-  background-color: #FFFFFF;
-  border: 1px solid #E0E0DA;
-  border-radius: 12px;
-  padding: 24px;
-  text-align: center;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
-}
-
-.logo-area {
+  max-width: 375px;
+  min-height: 720px;
+  background-color: var(--color-white);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
+  position: relative;
+  border: 4px solid #1E293B; /* Matte dark bezel border */
+}
+
+/* Header bar */
+.app-header {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-border);
+  height: 48px;
+}
+
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-primary);
 }
 
 .logo-icon {
-  margin-bottom: 12px;
+  color: var(--color-primary);
 }
 
-.title {
-  font-size: 28px;
-  font-weight: 500;
-  color: #1B5E20;
-  margin: 0;
+.app-logo-text {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.5px;
 }
 
-.subtitle {
-  font-size: 15px;
-  font-weight: 400;
-  color: #6B6B63;
-  line-height: 1.5;
-  margin-top: 0;
-  margin-bottom: 24px;
-}
-
-.flash-box {
-  background-color: #E8F5E9;
-  border-radius: 8px;
-  padding: 8px 12px;
-  margin-bottom: 20px;
-}
-
-.flash-text {
-  font-size: 14px;
-  font-weight: 500;
-  color: #2E7D32;
-  margin: 0;
-}
-
-.guest-state {
-  margin-bottom: 28px;
-}
-
-.action-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.btn-primary, .btn-secondary {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 44px;
-  font-size: 16px;
-  font-weight: 500;
-  border-radius: 8px;
+.help-link {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
   text-decoration: none;
-  transition: all 0.2s ease;
+  font-weight: var(--font-weight-semibold);
+  transition: color var(--transition-fast);
 }
 
-.btn-primary {
-  color: #FFFFFF;
-  background-color: #2E7D32;
-  border: none;
+.help-link:hover {
+  color: var(--color-primary);
 }
 
-.btn-primary:hover {
-  background-color: #1B5E20;
-}
-
-.btn-secondary {
-  color: #2E7D32;
-  background-color: #FFFFFF;
-  border: 1px solid #2E7D32;
-}
-
-.btn-secondary:hover {
-  background-color: #F7F8F5;
-  color: #1B5E20;
-  border-color: #1B5E20;
-}
-
-.auth-state {
+/* Hero Banner Image Section */
+.hero-banner {
+  width: 100%;
+  height: 250px;
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.8) 100%), url('/images/welcome_hero_banner.png');
+  background-size: cover;
+  background-position: center;
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 28px;
-  background-color: #F7F8F5;
-  border-radius: 12px;
-  padding: 20px 16px;
-  border: 1px solid #E0E0DA;
+  justify-content: flex-end;
+  padding: var(--space-4);
 }
 
-.user-profile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
+.hero-text-overlay {
+  color: var(--color-white);
+  z-index: 10;
 }
 
-.avatar-circle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background-color: #2E7D32;
-  color: #FFFFFF;
-  font-size: 24px;
-  font-weight: 500;
+.hero-title {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 0 0 var(--space-2) 0;
+  color: var(--color-white);
 }
 
-.user-name {
-  font-size: 18px;
-  font-weight: 500;
+.hero-subtitle {
+  font-size: var(--font-size-xs);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.8);
   margin: 0;
-  color: #1A1A1A;
 }
 
-.user-role-badge {
-  font-size: 12px;
-  font-weight: 500;
-  color: #2E7D32;
-  background-color: #E8F5E9;
-  padding: 4px 8px;
-  border-radius: 6px;
-}
-
-.user-details {
-  width: 100%;
+/* Features Grid */
+.features-container {
+  padding: var(--space-4);
+  background-color: var(--color-neutral-50);
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  border-top: 1px solid #E0E0DA;
-  padding-top: 12px;
+  gap: var(--space-3);
+  flex: 1;
 }
 
-.detail-item {
+.feature-row-full {
   display: flex;
-  justify-content: space-between;
-  font-size: 14px;
+  align-items: center;
+  gap: var(--space-3);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-neutral-100);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  box-shadow: var(--shadow-xs);
 }
 
-.detail-label {
-  color: #6B6B63;
+.feature-half-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
 }
 
-.detail-val {
-  color: #1A1A1A;
-  font-weight: 500;
+.feature-card {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-neutral-100);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-shadow: var(--shadow-xs);
 }
 
-.logout-btn {
-  width: 100%;
+.feature-circle-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.feature-row-full .feature-circle-icon {
+  margin-bottom: 0;
+}
+
+.feature-card .feature-circle-icon {
+  margin-bottom: var(--space-2);
+}
+
+.feature-circle-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.green-bg {
+  background-color: var(--color-primary-lighter);
+  color: var(--color-primary-hover);
+}
+
+.orange-bg {
+  background-color: var(--color-warning-light);
+  color: var(--color-secondary-dark);
+}
+
+.teal-bg {
+  background-color: var(--color-tertiary-subtle);
+  color: var(--color-tertiary);
+}
+
+.features-container h4 {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin: 0 0 2px 0;
+}
+
+.features-container p {
+  font-size: 10px;
+  color: var(--color-neutral-500);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.feature-info {
+  display: flex;
+  flex-direction: column;
+}
+
+/* CTA buttons section */
+.cta-section {
+  padding: var(--space-4);
+  background-color: var(--color-white);
+  text-align: center;
+}
+
+.get-started-btn {
+  width: 100%;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
   height: 44px;
-  font-size: 15px;
-  font-weight: 500;
-  color: #C62828;
-  background-color: #FFFFFF;
-  border: 1px solid #C62828;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  border: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  text-decoration: none;
+  transition: background-color var(--transition-fast);
 }
 
-.logout-btn:hover {
-  background-color: #FFEBEE;
+.get-started-btn:hover {
+  background-color: var(--color-primary-hover);
 }
 
+.login-prompt {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  margin-top: var(--space-3);
+  margin-bottom: 0;
+  font-weight: var(--font-weight-medium);
+}
+
+.login-prompt-link {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+  text-decoration: none;
+}
+
+.login-prompt-link:hover {
+  text-decoration: underline;
+}
+
+/* Footer Section */
+.welcome-footer {
+  background-color: var(--color-neutral-100);
+  padding: var(--space-4) var(--space-4) var(--space-5) var(--space-4);
+  text-align: center;
+  color: var(--color-neutral-500);
+  font-size: 10px;
+  font-weight: var(--font-weight-medium);
+  border-top: 1px solid var(--color-border);
+}
+
+.footer-icons {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+}
+
+.footer-icon-link {
+  color: var(--color-neutral-500);
+  transition: color var(--transition-fast);
+}
+
+.footer-icon-link:hover {
+  color: var(--color-primary);
+}
 </style>
