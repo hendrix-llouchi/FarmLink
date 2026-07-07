@@ -1,125 +1,133 @@
 <template>
   <div class="orders-wrapper">
-    <!-- Header -->
-    <header class="header">
-      <div class="header-content">
-        <div class="brand">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m12 3-1.912 5.886a1 1 0 0 1-.95.686H2.929l4.908 3.566a1 1 0 0 1 .364 1.122L6.29 20.147l4.907-3.565a1 1 0 0 1 1.604 0l4.907 3.565-1.91-5.887a1 1 0 0 1 .364-1.122l4.908-3.566h-6.21a1 1 0 0 1-.95-.686z"/>
+    <!-- Topbar Header -->
+    <header class="app-header">
+      <div class="app-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m12 3-1.912 5.886a1 1 0 0 1-.95.686H2.929l4.908 3.566a1 1 0 0 1 .364 1.122L6.29 20.147l4.907-3.565a1 1 0 0 1 1.604 0l4.907 3.565-1.91-5.887a1 1 0 0 1 .364-1.122l4.908-3.566h-6.21a1 1 0 0 1-.95-.686z"/>
+        </svg>
+        <span class="app-logo-text">FarmLink</span>
+      </div>
+      <div class="header-actions">
+        <button class="icon-action-btn" @click.prevent="triggerAlert('Notifications Center: Receive real-time updates on your orders and payments. (Scheduled for Phase 5)')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
           </svg>
-          <span class="logo-text">FarmLink</span>
-        </div>
-        <div class="user-greeting">
-          <span class="greeting-text">Buyer Portal</span>
-          <Link href="/buyer/browse" class="header-nav-link">Browse</Link>
-          <Link href="/buyer/orders" class="header-nav-link active">My Orders</Link>
-          <Link href="/logout" method="post" as="button" class="logout-link-btn">Log Out</Link>
-        </div>
+        </button>
+        <Link href="/logout" method="post" as="button" class="icon-action-btn logout-header-btn" title="Log Out">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+          </svg>
+        </Link>
       </div>
     </header>
 
-    <!-- Main Content Wrapped in Responsive Container -->
+    <!-- Main Content Body -->
     <main class="main-content">
-      <div class="orders-container">
-        <div class="page-header">
-          <h1 class="page-title">My Orders</h1>
-          <span class="orders-count">{{ orders.length }} order(s) placed</span>
-        </div>
+      <div class="page-title-row">
+        <h1 class="page-title">My Orders</h1>
+        <span class="orders-count-badge">{{ orders.length }} order(s) placed</span>
+      </div>
 
-        <!-- Empty State -->
-        <div v-if="orders.length === 0" class="empty-state">
-          <div class="empty-icon">🛒</div>
-          <p class="empty-text">You haven't placed any orders yet.</p>
-          <Link href="/buyer/browse" class="btn-primary-link">Browse Fresh Produce</Link>
-        </div>
+      <!-- Empty State -->
+      <div v-if="orders.length === 0" class="empty-state">
+        <div class="empty-icon">🛒</div>
+        <h3>No orders placed yet</h3>
+        <p>You haven't purchased any fresh produce from local smallholders yet.</p>
+        <Link href="/buyer/browse" class="browse-btn-link">Browse Produce</Link>
+      </div>
 
-        <!-- Orders List -->
-        <div v-else class="orders-list">
-          <div v-for="order in orders" :key="order.id" class="order-card">
-            <!-- Header Row: ID and Status -->
-            <div class="order-card-header">
-              <span class="order-id">Order #{{ order.id }}</span>
-              <span class="status-badge" :class="order.status">
-                {{ formatStatus(order.status) }}
-              </span>
-            </div>
+      <!-- High-Fidelity Orders Cards List -->
+      <div v-else class="orders-list">
+        <div v-for="order in orders" :key="order.id" class="order-card" :class="order.status">
+          <!-- Top Row: Order ID & Status Badge -->
+          <div class="order-card-header">
+            <span class="order-id">Order #{{ order.id }}</span>
+            <span class="status-badge" :class="order.status">
+              {{ formatStatus(order.status) }}
+            </span>
+          </div>
 
-            <!-- Body: Product Info and Image -->
-            <div class="order-card-body">
-              <div class="product-info-row">
-                <div class="product-image-wrapper">
-                  <img 
-                    v-if="order.product?.image_path" 
-                    :src="'/storage/' + order.product.image_path" 
-                    :alt="order.product.name" 
-                    class="product-image"
-                  />
-                  <div v-else class="product-placeholder">🍅</div>
+          <!-- Product Details Block -->
+          <div class="order-card-body">
+            <div class="product-info-row">
+              <div class="product-img-box">
+                <img 
+                  v-if="order.product?.image_path" 
+                  :src="'/storage/' + order.product.image_path" 
+                  :alt="order.product.name" 
+                  class="product-image"
+                />
+                <div v-else class="product-placeholder">🥦</div>
+              </div>
+
+              <div class="product-details">
+                <h3 class="product-name">{{ order.product?.name || 'Fresh Produce' }}</h3>
+                <span class="category-tag-pill" :class="order.product?.category.toLowerCase().replace('/', '-')">
+                  {{ order.product?.category || 'Vegetable' }}
+                </span>
+                <div class="price-calculations">
+                  <span class="qty-lbl">Qty: {{ order.quantity_ordered }}</span>
+                  <span class="dot-divider">•</span>
+                  <span class="price-unit-lbl">GH₵ {{ Number(order.product?.price || 0).toFixed(2) }} / unit</span>
                 </div>
-
-                <div class="product-details">
-                  <h2 class="product-name">{{ order.product?.name || 'Unknown Produce' }}</h2>
-                  <span class="category-tag">{{ order.product?.category || 'General' }}</span>
-                  <div class="price-calculations">
-                    <span class="qty">Qty: {{ order.quantity_ordered }}</span>
-                    <span class="divider">•</span>
-                    <span class="unit-price">GH₵ {{ Number(order.product?.price || 0).toFixed(2) }} / unit</span>
-                  </div>
-                </div>
               </div>
             </div>
+          </div>
 
-            <!-- Divider -->
-            <div class="card-divider"></div>
+          <div class="card-divider"></div>
 
-            <!-- Footer: Farmer and Total Price -->
-            <div class="order-card-footer">
-              <div class="farmer-details">
-                <span class="farmer-label">Farmer:</span>
-                <span class="farmer-name">{{ order.product?.user?.name || 'Local Farmer' }}</span>
-                <span class="farmer-location">📍 {{ order.product?.user?.location || 'Takoradi' }}</span>
-              </div>
-              <div class="total-price-section">
-                <span class="total-label">Total Paid:</span>
-                <span class="total-price">GH₵ {{ Number(order.total_price).toFixed(2) }}</span>
-              </div>
+          <!-- Farmer details & Total payment -->
+          <div class="order-card-footer">
+            <div class="farmer-meta">
+              <span class="farmer-label">Farmer:</span>
+              <span class="farmer-name">{{ order.product?.user?.name || 'Local Farmer' }}</span>
+              <span class="farmer-location">📍 {{ order.product?.user?.location || 'Takoradi' }}</span>
             </div>
+            <div class="total-paid-meta">
+              <span class="total-label">Total Paid:</span>
+              <span class="total-value">GH₵ {{ Number(order.total_price).toFixed(2) }}</span>
+            </div>
+          </div>
 
-            <!-- Action Row: Rate Order -->
-            <div v-if="order.status === 'delivered'" class="order-actions-row">
-              <div v-if="order.buyer_rating" class="rating-display">
-                <span class="rating-stars">⭐ Rated: {{ order.buyer_rating.score }}/5</span>
-                <span class="rating-comment" v-if="order.buyer_rating.comment">"{{ order.buyer_rating.comment }}"</span>
+          <!-- Rating Action Row (Delivered orders) -->
+          <div v-if="order.status === 'delivered'" class="order-actions-row">
+            <div v-if="order.buyer_rating" class="rating-display-box">
+              <div class="rated-stars-row">
+                <span class="star-rating-icon">⭐</span>
+                <span class="rated-score">Rated {{ order.buyer_rating.score }}/5</span>
               </div>
-              <button 
-                v-else 
-                @click="openRateModal(order)"
-                class="btn-rate-order"
-              >
-                Rate Order
-              </button>
+              <p class="rated-comment" v-if="order.buyer_rating.comment">"{{ order.buyer_rating.comment }}"</p>
             </div>
+            <button 
+              v-else 
+              @click="openRateModal(order)"
+              class="rate-order-btn"
+            >
+              Rate Order
+            </button>
+          </div>
 
-            <!-- Subtext: Order Date -->
-            <div class="order-date-row">
-              Ordered on {{ formatDate(order.created_at) }}
-            </div>
+          <!-- Bottom Meta: Order Timestamp -->
+          <div class="order-timestamp">
+            Ordered on {{ formatDate(order.created_at) }}
           </div>
         </div>
       </div>
     </main>
 
-    <!-- Rating Modal -->
-    <div v-if="isModalOpen" class="modal-overlay">
+    <!-- Escrow Feedback / Rating Modal Dialog -->
+    <div v-if="isModalOpen" class="modal-overlay" @click.self="closeRateModal">
       <div class="modal-card">
         <div class="modal-header">
           <h2 class="modal-title">Rate Order #{{ selectedOrder?.id }}</h2>
-          <button @click="closeRateModal" class="btn-close-modal">&times;</button>
+          <button @click="closeRateModal" class="btn-close-modal" aria-label="Close modal">&times;</button>
         </div>
+        
         <div class="modal-body">
-          <p class="modal-instructions">Rate your experience with <strong>{{ selectedOrder?.product?.user?.name }}</strong>:</p>
+          <p class="modal-instructions">Rate your experience with farmer <strong>{{ selectedOrder?.product?.user?.name }}</strong>:</p>
           
-          <!-- Star selection -->
+          <!-- Interactive Star Selector -->
           <div class="stars-rating-container">
             <button 
               v-for="star in 5" 
@@ -132,55 +140,55 @@
               ★
             </button>
           </div>
-          <span v-if="errors.score" class="form-error" style="text-align: center; display: block;">{{ errors.score }}</span>
+          <span v-if="errors.score" class="error-validation-text">{{ errors.score }}</span>
 
-          <!-- Optional comment -->
-          <div class="form-group">
-            <label for="comment-input" class="form-label">Review Comment (Optional)</label>
+          <!-- Optional Review Comment -->
+          <div class="form-group-custom">
+            <label for="comment-input" class="form-input-label">Review Comment (Optional)</label>
             <textarea 
               id="comment-input" 
               v-model="ratingForm.comment" 
               placeholder="Tell us about the quality of the produce or delivery..."
-              class="form-textarea"
+              class="form-textarea-input"
               rows="3"
             ></textarea>
-            <span v-if="errors.comment" class="form-error">{{ errors.comment }}</span>
+            <span v-if="errors.comment" class="error-validation-text">{{ errors.comment }}</span>
           </div>
         </div>
-        <div class="modal-footer">
-          <button @click="closeRateModal" class="btn-secondary" :disabled="isSubmitting">Cancel</button>
-          <button @click="submitRating" class="btn-submit" :disabled="isSubmitting || !ratingForm.score">
+        
+        <div class="modal-footer-actions">
+          <button @click="closeRateModal" class="btn-checkout-secondary" :disabled="isSubmitting">Cancel</button>
+          <button @click="submitRating" class="btn-checkout-primary" :disabled="isSubmitting || !ratingForm.score">
             {{ isSubmitting ? 'Submitting...' : 'Submit Feedback' }}
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Mobile Bottom Navigation (Design Brief requirement) -->
-    <nav class="mobile-nav hide-desktop">
-      <Link href="/buyer/browse" class="nav-item">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    <!-- Mobile Bottom Navigation Bar (Stitch style) -->
+    <nav class="mobile-bottom-nav">
+
+      <Link href="/buyer/browse" class="mobile-nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
         </svg>
-        <span class="nav-label">Browse</span>
+        <span class="nav-label">Market</span>
       </Link>
-      <Link href="/buyer/orders" class="nav-item active">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-        </svg>
-        <span class="nav-label">Orders</span>
+      <Link href="/buyer/orders" class="mobile-nav-item active">
+        <div class="nav-active-pill">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          <span class="nav-label">Orders</span>
+        </div>
       </Link>
-      <a href="#" class="nav-item disabled">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>
-        </svg>
-        <span class="nav-label">Alerts</span>
-      </a>
-      <Link href="/" class="nav-item">
+      <Link href="/" class="mobile-nav-item">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
         </svg>
-        <span class="nav-label">Profile</span>
+        <span class="nav-label">Account</span>
       </Link>
     </nav>
   </div>
@@ -228,6 +236,7 @@ export default {
     const formatStatus = (status) => {
       if (!status) return '';
       if (status === 'in_transit') return 'In Transit';
+      if (status === 'awaiting_pickup') return 'Awaiting Pickup';
       return status.charAt(0).toUpperCase() + status.slice(1);
     };
 
@@ -269,6 +278,10 @@ export default {
       });
     };
 
+    const triggerAlert = (msg) => {
+      alert(msg);
+    };
+
     return {
       formatDate,
       formatStatus,
@@ -279,255 +292,272 @@ export default {
       errors,
       openRateModal,
       closeRateModal,
-      submitRating
+      submitRating,
+      triggerAlert
     };
   }
 }
 </script>
 
 <style scoped>
-* {
-  box-sizing: border-box;
-}
+@import "../../css/design-tokens.css";
 
+/* Outer wrapper */
 .orders-wrapper {
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+  background-color: var(--color-white);
   min-height: 100vh;
-  background-color: #F7F8F5;
-  color: #1A1A1A;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  padding-bottom: 80px; /* space for mobile nav */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  padding-bottom: calc(var(--bottom-nav-height) + 20px);
+  font-family: var(--font-family);
+  color: var(--color-neutral-900);
 }
 
-/* Header styling */
-.header {
-  background-color: #FFFFFF;
-  border-bottom: 1px solid #E0E0DA;
+/* Header bar */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 var(--space-4);
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-border);
+  height: var(--topbar-height);
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 50;
 }
 
-.header-content {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 12px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.brand {
+.app-logo {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
+  color: var(--color-primary);
 }
 
-.logo-text {
-  font-size: 20px;
-  font-weight: 500;
-  color: #1B5E20;
+.logo-icon {
+  color: var(--color-primary);
 }
 
-.user-greeting {
+.app-logo-text {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.5px;
+}
+
+.header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-2);
 }
 
-.header-nav-link {
-  font-size: 14px;
-  font-weight: 500;
-  color: #6B6B63;
-  text-decoration: none;
-  padding: 4px 8px;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-}
-
-.header-nav-link:hover {
-  color: #2E7D32;
-  background-color: #F7F8F5;
-}
-
-.header-nav-link.active {
-  color: #2E7D32;
-  background-color: #E8F5E9;
-}
-
-.greeting-text {
-  font-size: 14px;
-  color: #6B6B63;
-  font-weight: 500;
-  background-color: #E8F5E9;
-  padding: 4px 8px;
-  border-radius: 6px;
-}
-
-.logout-link-btn {
-  color: #C62828;
+.icon-action-btn {
   background: none;
   border: none;
-  font-size: 14px;
-  font-weight: 500;
+  color: var(--color-neutral-700);
   cursor: pointer;
-  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  transition: background-color var(--transition-fast);
 }
 
-/* Container constraints for layout stretching prevention */
-.orders-container {
-  max-width: 448px; /* max-w-md */
-  margin: 0 auto;
-  padding: 0 16px;
-  width: 100%;
+.icon-action-btn:hover {
+  background-color: var(--color-neutral-100);
 }
 
-@media (min-width: 768px) {
-  .orders-container {
-    max-width: 896px; /* md:max-w-4xl */
-  }
+.icon-action-btn.logout-header-btn {
+  color: var(--color-danger);
 }
 
+.icon-action-btn.logout-header-btn:hover {
+  background-color: var(--color-danger-light);
+}
+
+/* Main Content area */
 .main-content {
-  padding-top: 24px;
-  padding-bottom: 24px;
+  padding: var(--space-4);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-.page-header {
+.page-title-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: var(--space-5);
 }
 
 .page-title {
-  font-size: 24px;
-  font-weight: 500;
-  color: #1A1A1A;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
   margin: 0;
 }
 
-.orders-count {
-  font-size: 14px;
-  color: #6B6B63;
+.orders-count-badge {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  font-weight: var(--font-weight-semibold);
 }
 
 /* Empty State */
 .empty-state {
-  background-color: #FFFFFF;
-  border: 1px solid #E0E0DA;
-  border-radius: 12px;
-  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  padding: var(--space-10) var(--space-4);
+  gap: var(--space-2);
 }
 
 .empty-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
+  font-size: var(--font-size-3xl);
 }
 
-.empty-text {
-  font-size: 16px;
-  color: #6B6B63;
-  margin-bottom: 20px;
+.empty-state h3 {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin: 0;
 }
 
-.btn-primary-link {
+.empty-state p {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-500);
+  margin: 0 var(--space-2) var(--space-4) var(--space-2);
+}
+
+.browse-btn-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 44px;
-  padding: 0 24px;
-  font-size: 15px;
-  font-weight: 500;
-  color: #FFFFFF;
-  background-color: #2E7D32;
-  border-radius: 8px;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  padding: 0 var(--space-4);
+  height: 40px;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
   text-decoration: none;
-  transition: background-color 0.2s ease;
+  transition: background-color var(--transition-fast);
 }
 
-.btn-primary-link:hover {
-  background-color: #1B5E20;
+.browse-btn-link:hover {
+  background-color: var(--color-primary-hover);
 }
 
-/* Orders List & Card */
+/* Stacked Orders List */
 .orders-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-4);
 }
 
 .order-card {
-  background-color: #FFFFFF;
-  border: 1px solid #E0E0DA;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-neutral-100);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-4);
   display: flex;
   flex-direction: column;
+  transition: border-left var(--transition-base);
+}
+
+/* Status-based left borders */
+.order-card.preparing {
+  border-left: 4px solid var(--color-tertiary);
+}
+.order-card.awaiting_pickup {
+  border-left: 4px solid var(--color-secondary);
+}
+.order-card.in_transit {
+  border-left: 4px solid var(--color-primary-light);
+}
+.order-card.delivered {
+  border-left: 4px solid var(--color-primary);
+}
+.order-card.cancelled {
+  border-left: 4px solid var(--color-danger);
 }
 
 .order-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: var(--space-3);
 }
 
 .order-id {
-  font-size: 14px;
-  font-weight: 500;
-  color: #1A1A1A;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
 }
 
-/* Status Badge colors matching design.md */
 .status-badge {
-  font-size: 12px;
-  font-weight: 500;
-  padding: 4px 8px;
-  border-radius: 6px;
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.status-badge.pending {
-  background-color: #FFF8E1;
-  color: #B8860B; /* amber warning color */
+.status-badge.preparing {
+  background-color: var(--color-tertiary-subtle);
+  color: var(--color-tertiary-hover);
 }
 
-.status-badge.processing {
-  background-color: #E3F2FD;
-  color: #1976D2;
+.status-badge.awaiting_pickup {
+  background-color: var(--color-warning-light);
+  color: var(--color-secondary-dark);
 }
 
 .status-badge.in_transit {
-  background-color: #E0F7FA;
-  color: #00796B;
+  background-color: var(--color-primary-lighter);
+  color: var(--color-primary-hover);
 }
 
 .status-badge.delivered {
-  background-color: #E8F5E9;
-  color: #2E7D32; /* success green color */
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary-hover);
 }
 
+.status-badge.cancelled {
+  background-color: var(--color-danger-light);
+  color: var(--color-danger);
+}
+
+/* Card Body detail section */
 .order-card-body {
-  margin-bottom: 12px;
+  margin-bottom: var(--space-3);
 }
 
 .product-info-row {
   display: flex;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
-.product-image-wrapper {
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
-  overflow: hidden;
-  background-color: #F7F8F5;
-  border: 1px solid #E0E0DA;
+.product-img-box {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-neutral-50);
+  border: 1px solid var(--color-neutral-100);
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   flex-shrink: 0;
 }
 
@@ -538,366 +568,415 @@ export default {
 }
 
 .product-placeholder {
-  font-size: 28px;
+  font-size: var(--font-size-lg);
 }
 
 .product-details {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: flex-start;
+  gap: 2px;
 }
 
 .product-name {
-  font-size: 16px;
-  font-weight: 500;
-  color: #1A1A1A;
-  margin: 0 0 2px 0;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin: 0;
+  line-height: var(--line-height-tight);
 }
 
-.category-tag {
-  font-size: 11px;
-  color: #6B6B63;
-  background-color: #F7F8F5;
-  padding: 2px 6px;
-  border-radius: 4px;
-  width: fit-content;
-  margin-bottom: 4px;
+.category-tag-pill {
+  font-size: 9px;
+  font-weight: var(--font-weight-bold);
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-pill);
+  text-transform: uppercase;
+}
+
+.category-tag-pill.vegetable {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary-hover);
+}
+
+.category-tag-pill.leafy-green {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary-hover);
+}
+
+.category-tag-pill.root-tuber {
+  background-color: var(--color-warning-light);
+  color: var(--color-secondary-dark);
+}
+
+.category-tag-pill.other {
+  background-color: var(--color-tertiary-subtle);
+  color: var(--color-tertiary);
 }
 
 .price-calculations {
-  font-size: 13px;
-  color: #6B6B63;
   display: flex;
-  gap: 6px;
   align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  font-weight: var(--font-weight-semibold);
+  margin-top: 1px;
 }
 
-.divider {
-  color: #E0E0DA;
+.dot-divider {
+  color: var(--color-neutral-300);
 }
 
 .card-divider {
   height: 1px;
-  background-color: #E0E0DA;
-  margin-bottom: 12px;
+  background-color: var(--color-neutral-100);
+  margin-bottom: var(--space-3);
 }
 
+/* Card footer details */
 .order-card-footer {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
-.farmer-details {
+.farmer-meta {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
 .farmer-label {
-  font-size: 11px;
-  color: #6B6B63;
+  font-size: 9px;
+  text-transform: uppercase;
+  color: var(--color-neutral-500);
+  font-weight: var(--font-weight-bold);
 }
 
 .farmer-name {
-  font-size: 13px;
-  font-weight: 500;
-  color: #1A1A1A;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
 }
 
 .farmer-location {
-  font-size: 11px;
-  color: #6B6B63;
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  font-weight: var(--font-weight-medium);
 }
 
-.total-price-section {
+.total-paid-meta {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  gap: 1px;
 }
 
 .total-label {
-  font-size: 11px;
-  color: #6B6B63;
+  font-size: 9px;
+  text-transform: uppercase;
+  color: var(--color-neutral-500);
+  font-weight: var(--font-weight-bold);
 }
 
-.total-price {
-  font-size: 18px;
-  font-weight: 500;
-  color: #2E7D32;
+.total-value {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-hover);
 }
 
-.order-date-row {
-  margin-top: 12px;
-  font-size: 11px;
-  color: #6B6B63;
-  border-top: 1px dashed #E0E0DA;
-  padding-top: 8px;
-  text-align: right;
+/* Ratings displays & Actions */
+.order-actions-row {
+  margin-top: var(--space-4);
+  border-top: 1px solid var(--color-neutral-100);
+  padding-top: var(--space-3);
 }
 
-/* Mobile bottom nav */
-.mobile-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
-  background-color: #FFFFFF;
-  border-top: 1px solid #E0E0DA;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  z-index: 10;
+.rate-order-btn {
+  width: 100%;
+  height: 38px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
 }
 
-.nav-item {
+.rate-order-btn:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.rating-display-box {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #6B6B63;
-  text-decoration: none;
-  font-size: 10px;
   gap: 2px;
-  width: 25%;
-  height: 100%;
+  background-color: var(--color-neutral-50);
+  border: 1px solid var(--color-border);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
 }
 
-.nav-item.active {
-  color: #2E7D32;
-}
-
-.nav-item.disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.nav-label {
-  font-weight: 500;
-}
-
-.hide-desktop {
+.rated-stars-row {
   display: flex;
+  align-items: center;
+  gap: var(--space-1);
 }
 
-@media (min-width: 768px) {
-  .hide-desktop {
-    display: none !important;
-  }
+.star-rating-icon {
+  font-size: var(--font-size-xs);
 }
 
-/* Modal overlay backdrop */
+.rated-score {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-secondary-dark);
+}
+
+.rated-comment {
+  font-size: var(--font-size-xs);
+  font-style: italic;
+  color: var(--color-neutral-700);
+  margin: 2px 0 0 0;
+  line-height: var(--line-height-base);
+}
+
+.order-timestamp {
+  font-size: 10px;
+  color: var(--color-neutral-500);
+  margin-top: var(--space-3);
+  text-align: right;
+  font-weight: var(--font-weight-medium);
+}
+
+/* Modals & Rating Drawer Overlay */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  inset: 0;
+  background-color: rgba(33, 37, 41, 0.6);
+  z-index: 1000;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  z-index: 50;
-  padding: 16px;
 }
 
-/* Modal Card */
 .modal-card {
-  background-color: #FFFFFF;
-  border-radius: 12px;
-  max-width: 400px;
   width: 100%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 480px;
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  animation: slide-up 0.3s ease-out;
+  padding: var(--space-5);
+}
+
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
-  border-bottom: 1px solid #E0E0DA;
+  margin-bottom: var(--space-4);
 }
 
 .modal-title {
-  font-size: 18px;
-  font-weight: 500;
-  color: #1A1A1A;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
   margin: 0;
 }
 
 .btn-close-modal {
   background: none;
   border: none;
-  font-size: 24px;
-  color: #6B6B63;
+  font-size: var(--font-size-2xl);
+  color: var(--color-neutral-500);
   cursor: pointer;
-  padding: 4px;
+  line-height: 1;
+  padding: 0;
+}
+
+.btn-close-modal:hover {
+  color: var(--color-neutral-900);
 }
 
 .modal-body {
-  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
 }
 
 .modal-instructions {
-  font-size: 14px;
-  color: #6B6B63;
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
   margin: 0;
 }
 
-/* Stars rating */
 .stars-rating-container {
   display: flex;
-  gap: 8px;
   justify-content: center;
-  padding: 8px 0;
+  gap: var(--space-2);
 }
 
 .star-btn {
   background: none;
   border: none;
-  font-size: 36px;
-  color: #E0E0DA;
+  font-size: 32px;
+  color: var(--color-neutral-300);
   cursor: pointer;
-  transition: color 0.15s ease;
-  padding: 4px;
+  transition: color var(--transition-fast);
 }
 
 .star-btn.active {
-  color: #FFB300; /* Amber star color */
+  color: #FFC107;
 }
 
-.form-group {
+.form-group-custom {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--space-1);
 }
 
-.form-label {
-  font-size: 13px;
-  font-weight: 500;
-  color: #1A1A1A;
+.form-input-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
 }
 
-.form-textarea {
+.form-textarea-input {
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-neutral-300);
+  padding: var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-900);
+  background-color: var(--color-neutral-50);
   width: 100%;
-  border: 1px solid #E0E0DA;
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 14px;
-  font-family: inherit;
   resize: vertical;
+}
+
+.form-textarea-input:focus {
+  border-color: var(--color-primary);
+  background-color: var(--color-white);
   outline: none;
 }
 
-.form-textarea:focus {
-  border-color: #2E7D32;
+.error-validation-text {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-danger);
+  margin-top: 2px;
 }
 
-.form-error {
-  font-size: 12px;
-  color: #C62828;
-}
-
-.modal-footer {
+.modal-footer-actions {
   display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  padding: 16px;
-  border-top: 1px solid #E0E0DA;
-  background-color: #F7F8F5;
+  gap: var(--space-3);
 }
 
-.btn-secondary {
+.btn-checkout-primary {
+  flex: 1.5;
   height: 44px;
-  padding: 0 16px;
-  border: 1px solid #E0E0DA;
-  border-radius: 8px;
-  background-color: #FFFFFF;
-  color: #1A1A1A;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.btn-submit {
-  height: 44px;
-  padding: 0 20px;
+  background-color: var(--color-primary);
+  color: var(--color-white);
   border: none;
-  border-radius: 8px;
-  background-color: #2E7D32;
-  color: #FFFFFF;
-  font-weight: 500;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color var(--transition-fast);
 }
 
-.btn-submit:hover:not(:disabled) {
-  background-color: #1B5E20;
+.btn-checkout-primary:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
 }
 
-.btn-submit:disabled {
-  opacity: 0.6;
+.btn-checkout-primary:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* Order action row inside card */
-.order-actions-row {
-  margin-top: 16px;
-  border-top: 1px solid #E0E0DA;
-  padding-top: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.btn-checkout-secondary {
+  flex: 1;
+  height: 44px;
+  background-color: var(--color-white);
+  color: var(--color-neutral-700);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
-.btn-rate-order {
-  width: 100%;
-  height: 44px; /* Generous tap target */
-  background-color: #2E7D32;
-  color: #FFFFFF;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+.btn-checkout-secondary:hover:not(:disabled) {
+  background-color: var(--color-neutral-100);
+}
+
+/* Mobile Bottom Navigation Bar (Stitch style) */
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: 480px;
+  margin: 0 auto;
+  height: var(--bottom-nav-height);
+  background-color: var(--color-white);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 100;
+  padding: 0 var(--space-2);
+}
+
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-neutral-500);
+  text-decoration: none;
+  width: 25%;
+  height: 100%;
+  font-weight: var(--font-weight-semibold);
+  transition: all var(--transition-fast);
+}
+
+.mobile-nav-item .nav-label {
+  font-size: 9px;
+  margin-top: 2px;
+}
+
+.mobile-nav-item.active {
+  color: var(--color-primary);
+}
+
+.mobile-nav-item.active .nav-active-pill {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: var(--space-1);
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary);
+  padding: 6px var(--space-3);
+  border-radius: var(--radius-pill);
 }
 
-.btn-rate-order:hover {
-  background-color: #1B5E20;
-}
-
-.rating-display {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  background-color: #F7F8F5;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #E0E0DA;
-}
-
-.rating-stars {
-  font-size: 14px;
-  font-weight: 500;
-  color: #2E7D32;
-}
-
-.rating-comment {
-  font-size: 13px;
-  color: #6B6B63;
-  font-style: italic;
+.mobile-nav-item.active .nav-label {
+  font-size: 10px;
+  margin-top: 0;
 }
 </style>
