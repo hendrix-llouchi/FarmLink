@@ -1,28 +1,32 @@
 <template>
   <div class="browse-wrapper">
-    <!-- Header -->
-    <header class="header">
-      <div class="header-content">
-        <div class="brand">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m12 3-1.912 5.886a1 1 0 0 1-.95.686H2.929l4.908 3.566a1 1 0 0 1 .364 1.122L6.29 20.147l4.907-3.565a1 1 0 0 1 1.604 0l4.907 3.565-1.91-5.887a1 1 0 0 1 .364-1.122l4.908-3.566h-6.21a1 1 0 0 1-.95-.686z"/>
+    <!-- Topbar Header -->
+    <header class="app-header">
+      <div class="app-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m12 3-1.912 5.886a1 1 0 0 1-.95.686H2.929l4.908 3.566a1 1 0 0 1 .364 1.122L6.29 20.147l4.907-3.565a1 1 0 0 1 1.604 0l4.907 3.565-1.91-5.887a1 1 0 0 1 .364-1.122l4.908-3.566h-6.21a1 1 0 0 1-.95-.686z"/>
+        </svg>
+        <span class="app-logo-text">FarmLink</span>
+      </div>
+      <div class="header-actions">
+        <button class="icon-action-btn" @click.prevent="triggerAlert('Notifications Center: Receive real-time alerts for delivery statuses and order receipts. (Scheduled for Phase 5)')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
           </svg>
-          <span class="logo-text">FarmLink</span>
-        </div>
-        <div class="user-greeting">
-          <span class="greeting-text">Buyer Portal</span>
-          <Link href="/buyer/browse" class="header-nav-link active">Browse</Link>
-          <Link href="/buyer/orders" class="header-nav-link">My Orders</Link>
-          <Link href="/logout" method="post" as="button" class="logout-link-btn">Log Out</Link>
-        </div>
+        </button>
+        <Link href="/logout" method="post" as="button" class="icon-action-btn logout-header-btn" title="Log Out">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+          </svg>
+        </Link>
       </div>
     </header>
 
-    <!-- Pinned Search & Filter Utility Bar (Jumia/Tonaton structural pattern) -->
-    <section class="filter-bar">
-      <div class="filter-content">
-        <div class="search-input-wrapper">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B6B63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon">
+    <!-- Search & Location Filters -->
+    <section class="search-section">
+      <div class="search-inputs-row">
+        <div class="search-bar-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
           </svg>
           <input 
@@ -30,106 +34,151 @@
             @input="debounceSearch"
             type="text" 
             placeholder="Search produce..." 
-            class="filter-input-search"
+            class="search-input"
           />
         </div>
         
-        <div class="selects-row">
-          <select v-model="category" @change="applyFilters" class="filter-select">
-            <option value="">All Categories</option>
-            <option value="Vegetable">Vegetables</option>
-            <option value="Leafy Green">Leafy Greens</option>
-            <option value="Root/Tuber">Roots & Tubers</option>
-            <option value="Other">Others</option>
-          </select>
-
+        <div class="location-filter-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
+          </svg>
           <input 
             v-model="location" 
             @input="debounceSearch"
             type="text" 
             placeholder="Filter location..." 
-            class="filter-input-location"
+            class="location-input"
           />
-
-          <button v-if="search || category || location" @click="clearFilters" class="btn-clear">
-            Clear
-          </button>
         </div>
       </div>
+
+      <button v-if="search || category || location" @click="clearFilters" class="clear-filters-btn">
+        Clear Filters
+      </button>
     </section>
 
-    <!-- Main Content -->
+    <!-- Horizontal Categories Scroll Bar -->
+    <div class="category-scroll-bar">
+      <button 
+        class="category-pill" 
+        :class="{ active: category === '' }" 
+        @click="category = ''; applyFilters();"
+      >
+        All Produce
+      </button>
+      <button 
+        class="category-pill" 
+        :class="{ active: category === 'Vegetable' }" 
+        @click="category = 'Vegetable'; applyFilters();"
+      >
+        Vegetables
+      </button>
+      <button 
+        class="category-pill" 
+        :class="{ active: category === 'Leafy Green' }" 
+        @click="category = 'Leafy Green'; applyFilters();"
+      >
+        Leafy Greens
+      </button>
+      <button 
+        class="category-pill" 
+        :class="{ active: category === 'Root/Tuber' }" 
+        @click="category = 'Root/Tuber'; applyFilters();"
+      >
+        Roots &amp; Tubers
+      </button>
+      <button 
+        class="category-pill" 
+        :class="{ active: category === 'Other' }" 
+        @click="category = 'Other'; applyFilters();"
+      >
+        Others
+      </button>
+    </div>
+
+    <!-- Seasonal Promo Banner Card -->
+    <div class="promo-banner-card">
+      <div class="promo-badge">SEASONAL SPECIAL</div>
+      <h3 class="promo-title">Bountiful Harvest: Up to 20% Off Bulk Grains</h3>
+      <p class="promo-subtitle">Limited time offers from the Western Region.</p>
+    </div>
+
+    <!-- Main Results Section -->
     <main class="main-content">
-      <div class="results-info">
-        <h1 class="page-title">Browse Fresh Produce</h1>
-        <span class="results-count">{{ products.length }} item(s) found</span>
+      <div class="section-header">
+        <h2 class="section-title">Available Near You</h2>
+        <button v-if="search || category || location" class="see-all-btn" @click="clearFilters">See All</button>
       </div>
 
       <!-- Empty State -->
       <div v-if="products.length === 0" class="empty-state">
-        <p class="empty-text">No listings match your search criteria.</p>
-        <button @click="clearFilters" class="btn-reset">View All Listings</button>
+        <div class="empty-icon">🥬</div>
+        <h3>No produce matches found</h3>
+        <p>Try resetting filters or adjusting search queries.</p>
+        <button @click="clearFilters" class="reset-filters-btn">Reset Filters</button>
       </div>
 
-      <!-- 2-Column Mobile-First Grid Layout (Jumia/Tonaton pattern) -->
-      <div v-else class="products-grid">
+      <!-- Vertical Product List Cards -->
+      <div v-else class="products-list-stacked">
         <div v-for="product in products" :key="product.id" class="product-card">
-          <!-- Image -->
-          <div class="product-image-container">
+          <!-- Card Image & Price Overlay -->
+          <div class="product-img-wrapper">
             <img 
               v-if="product.image_path" 
               :src="'/storage/' + product.image_path" 
               :alt="product.name" 
               class="product-image"
             />
-            <div v-else class="product-placeholder">
-              🍅
-            </div>
-            <!-- Category Badge overlay -->
-            <span class="category-badge">{{ product.category }}</span>
+            <div v-else class="product-placeholder">🥦</div>
+            <div class="price-badge-overlay">GH₵ {{ Number(product.price).toFixed(2) }}</div>
           </div>
 
-          <!-- Content -->
-          <div class="product-details">
-            <div class="price-row">
-              <span class="price">GH₵ {{ Number(product.price).toFixed(2) }}</span>
-            </div>
-            <h2 class="name">{{ product.name }}</h2>
-            
-            <div class="farmer-row">
-              <span class="farmer-name">{{ product.user?.name }}</span>
-              <span class="rating">
-                ★ {{ Number(product.user?.average_rating || 0).toFixed(1) }}
-              </span>
+          <!-- Card Body details -->
+          <div class="product-card-body">
+            <div class="title-rating-row">
+              <h3 class="product-name">{{ product.name }}</h3>
+              <div class="rating-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                </svg>
+                <span>{{ Number(product.user?.average_rating || 0).toFixed(1) }}</span>
+              </div>
             </div>
 
-            <div class="location-row">
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <div class="location-farmer-row">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="loc-icon">
                 <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
               </svg>
-              <span class="location-text">{{ product.user?.location }}</span>
+              <span>{{ product.user?.location || 'Takoradi' }} • Listed by {{ product.user?.name }}</span>
             </div>
 
-            <!-- Call To Action Button -->
-            <button @click="openProductModal(product)" class="cta-button">
-              Order Now
+            <div class="tags-row-flex">
+              <span class="category-pill-tag" :class="product.category.toLowerCase().replace('/', '-')">
+                {{ product.category }}
+              </span>
+              <span class="custom-badge-tag">Grade A Quality</span>
+            </div>
+
+            <button @click="openProductModal(product)" class="place-order-btn">
+              Place Order
             </button>
           </div>
         </div>
       </div>
     </main>
 
-    <!-- Product Details Modal (Overlay drawer) -->
+    <!-- Product Details Modal (Mobile Money Checkout Drawer) -->
     <div v-if="selectedProduct" class="modal-overlay" @click.self="closeProductModal">
       <div class="modal-card">
-        <button class="close-btn" @click="closeProductModal">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Close button -->
+        <button class="close-btn" @click="closeProductModal" aria-label="Close modal">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
         </button>
 
         <div class="modal-body">
-          <div class="modal-image-wrapper">
+          <div class="modal-img-container">
             <img 
               v-if="selectedProduct.image_path" 
               :src="'/storage/' + selectedProduct.image_path" 
@@ -139,183 +188,191 @@
             <div v-else class="modal-placeholder">🍅</div>
           </div>
 
-          <div class="modal-info">
-            <span class="modal-category">{{ selectedProduct.category }}</span>
+          <div class="modal-info-content">
+            <span class="modal-category-lbl">{{ selectedProduct.category }}</span>
             <h2 class="modal-title">{{ selectedProduct.name }}</h2>
-            <div class="modal-price">GH₵ {{ Number(selectedProduct.price).toFixed(2) }}</div>
+            <div class="modal-price-lbl">GH₵ {{ Number(selectedProduct.price).toFixed(2) }}</div>
 
             <div class="modal-divider"></div>
 
-            <!-- Farmer details -->
-            <div class="modal-farmer-info">
-              <div class="avatar">
+            <!-- Farmer metadata details -->
+            <div class="modal-farmer-profile">
+              <div class="avatar-circle">
                 {{ selectedProduct.user?.name.charAt(0).toUpperCase() }}
               </div>
               <div class="farmer-meta">
-                <span class="label">Listed by Farmer</span>
-                <span class="name">{{ selectedProduct.user?.name }}</span>
-                <div class="location-rating">
+                <span class="farmer-label">Listed by Farmer</span>
+                <span class="farmer-name">{{ selectedProduct.user?.name }}</span>
+                <div class="farmer-location-rating">
                   <span>⭐ {{ Number(selectedProduct.user?.average_rating || 0).toFixed(1) }}</span>
                   <span>•</span>
-                  <span>{{ selectedProduct.user?.location }}</span>
+                  <span>📍 {{ selectedProduct.user?.location || 'Takoradi' }}</span>
                 </div>
               </div>
             </div>
 
             <div class="modal-divider"></div>
 
-            <div class="stock-info">
+            <div class="stock-info-row">
               <span class="label">Stock Available:</span>
               <span class="val">{{ selectedProduct.quantity }} units</span>
             </div>
 
-            <!-- Quantity select and checkout actions -->
-            <!-- Step-based Checkout Actions & Payment -->
-            <div class="order-form">
+            <!-- Step-based Checkout form -->
+            <div class="checkout-form-container">
               <!-- STEP 1: QUANTITY SELECTION -->
               <div v-if="checkoutStep === 1">
-                <div class="quantity-control">
-                  <label for="order-qty">Quantity</label>
+                <div class="input-form-group">
+                  <label for="order-qty" class="form-input-label">Quantity to Order</label>
                   <input 
                     id="order-qty" 
                     v-model.number="orderQuantity" 
                     type="number" 
                     min="1" 
                     :max="selectedProduct.quantity" 
-                    class="qty-input"
+                    class="form-number-input"
                     :disabled="processing"
                   />
                 </div>
 
                 <!-- Error Display -->
-                <div v-if="errorMessage" class="error-message">
+                <div v-if="errorMessage" class="error-alert-text">
                   {{ errorMessage }}
                 </div>
                 
                 <button 
                   @click="checkoutStep = 2" 
-                  class="btn-confirm-order" 
+                  class="btn-checkout-primary" 
                   :disabled="processing || selectedProduct.quantity <= 0 || orderQuantity < 1 || orderQuantity > selectedProduct.quantity"
                 >
                   Proceed to Pay (GH₵ {{ Number(selectedProduct.price * orderQuantity).toFixed(2) }})
                 </button>
               </div>
 
-              <!-- STEP 2: MOBILE MONEY PAYMENT FORM -->
-              <div v-else-if="checkoutStep === 2 && !paymentProcessing && !paymentSuccess">
-                <div class="payment-header-momo">
-                  <span class="momo-title">Mobile Money Escrow Payment</span>
-                  <span class="momo-subtitle">Funds are held securely in escrow until delivery is complete.</span>
+              <!-- STEP 2: PAYMENT METHOD (MoMo) -->
+              <div v-if="checkoutStep === 2">
+                <div class="checkout-summary-box">
+                  <div class="summary-line">
+                    <span>Order:</span>
+                    <span>{{ orderQuantity }}x {{ selectedProduct.name }}</span>
+                  </div>
+                  <div class="summary-line total">
+                    <span>Total Amount:</span>
+                    <span>GH₵ {{ Number(selectedProduct.price * orderQuantity).toFixed(2) }}</span>
+                  </div>
                 </div>
 
-                <!-- Network Selection -->
-                <div class="form-group-momo">
-                  <label class="momo-label">Select Mobile Network</label>
-                  <div class="momo-networks-grid">
-                    <label class="network-option" :class="{ active: paymentNetwork === 'MTN' }">
+                <div class="input-form-group">
+                  <label class="form-input-label">Mobile Money Network</label>
+                  <div class="momo-networks-row">
+                    <label class="network-option" :class="{ selected: paymentNetwork === 'MTN' }">
                       <input type="radio" value="MTN" v-model="paymentNetwork" class="hidden-radio" />
-                      <div class="network-logo mtn-logo"></div>
-                      <span class="network-name">MTN MoMo</span>
+                      <span>MTN</span>
                     </label>
-                    <label class="network-option" :class="{ active: paymentNetwork === 'Telecel' }">
-                      <input type="radio" value="Telecel" v-model="paymentNetwork" class="hidden-radio" />
-                      <div class="network-logo telecel-logo"></div>
-                      <span class="network-name">Telecel Cash</span>
+                    <label class="network-option" :class="{ selected: paymentNetwork === 'Vodafone' }">
+                      <input type="radio" value="Vodafone" v-model="paymentNetwork" class="hidden-radio" />
+                      <span>Telecel</span>
+                    </label>
+                    <label class="network-option" :class="{ selected: paymentNetwork === 'AirtelTigo' }">
+                      <input type="radio" value="AirtelTigo" v-model="paymentNetwork" class="hidden-radio" />
+                      <span>AT Money</span>
                     </label>
                   </div>
                 </div>
 
-                <!-- MoMo Number -->
-                <div class="form-group-momo">
-                  <label for="momo-number" class="momo-label">Momo Number</label>
+                <div class="input-form-group">
+                  <label for="momo-num" class="form-input-label">Momo Number</label>
                   <input 
-                    id="momo-number"
-                    type="text" 
-                    v-model="paymentNumber"
-                    placeholder="e.g. 0541234567" 
+                    id="momo-num" 
+                    v-model="paymentNumber" 
+                    type="tel" 
+                    placeholder="e.g. 0244123456" 
+                    class="form-text-input"
                     maxlength="10"
-                    class="momo-input"
+                    :disabled="processing"
                   />
                 </div>
 
-                <!-- 4-digit PIN -->
-                <div class="form-group-momo">
-                  <label for="momo-pin" class="momo-label">4-Digit PIN</label>
+                <div class="input-form-group">
+                  <label for="momo-pin" class="form-input-label">4-Digit PIN</label>
                   <input 
-                    id="momo-pin"
+                    id="momo-pin" 
+                    v-model="paymentPin" 
                     type="password" 
-                    v-model="paymentPin"
                     placeholder="••••" 
+                    class="form-text-input"
                     maxlength="4"
-                    class="momo-input font-mono"
+                    :disabled="processing"
                   />
                 </div>
 
                 <!-- Error Display -->
-                <div v-if="errorMessage" class="error-message">
+                <div v-if="errorMessage" class="error-alert-text">
                   {{ errorMessage }}
                 </div>
 
-                <!-- Action Buttons -->
-                <div class="momo-actions">
-                  <button @click="checkoutStep = 1; errorMessage = ''" class="btn-momo-back">
-                    Back
-                  </button>
-                  <button @click="startMomoPayment" class="btn-momo-pay">
+                <div class="momo-action-buttons">
+                  <button 
+                    @click="startMomoPayment" 
+                    class="btn-checkout-primary"
+                    :disabled="processing"
+                  >
                     Pay GH₵ {{ Number(selectedProduct.price * orderQuantity).toFixed(2) }}
                   </button>
+                  <button 
+                    @click="checkoutStep = 1" 
+                    class="btn-checkout-secondary"
+                    :disabled="processing"
+                  >
+                    Back to Quantity
+                  </button>
                 </div>
               </div>
 
-              <!-- SIMULATED PROCESSING STATE -->
-              <div v-else-if="paymentProcessing" class="momo-status-container">
-                <div class="spinner-momo"></div>
-                <h3 class="momo-status-title">Authorizing Transaction...</h3>
-                <p class="momo-status-desc">Simulating Mobile Money request. Please check your device for a prompt.</p>
+              <!-- STEP 3: TRANSACTION PROCESSING OVERLAY -->
+              <div v-if="paymentProcessing" class="momo-loader-overlay">
+                <div class="momo-spinner"></div>
+                <p>Contacting {{ paymentNetwork }} Mobile Money Gateway...</p>
+                <p class="subtext">Please check your phone for the PIN prompt request.</p>
               </div>
 
-              <!-- SUCCESS TRANSACTION CONFIRMATION -->
-              <div v-else-if="paymentSuccess" class="momo-status-container">
-                <div class="success-icon-momo">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                </div>
-                <h3 class="momo-status-title text-success">Payment Approved</h3>
-                <p class="momo-status-desc">GH₵ {{ Number(selectedProduct.price * orderQuantity).toFixed(2) }} held in Escrow.</p>
-                <p class="momo-status-redirect">Redirecting to your orders...</p>
+              <!-- STEP 4: SUCCESS OVERLAY -->
+              <div v-if="paymentSuccess" class="momo-success-overlay">
+                <div class="success-icon-box">✓</div>
+                <h3>Payment Successful!</h3>
+                <p>Escrow payment verified. Creating your order now...</p>
               </div>
             </div>
+
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Mobile Bottom Navigation (Design Brief requirement) -->
-    <nav class="mobile-nav hide-desktop">
-      <Link href="/buyer/browse" class="nav-item active">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <span class="nav-label">Browse</span>
+    <!-- Mobile Bottom Navigation Bar (Stitch style) -->
+    <nav class="mobile-bottom-nav">
+
+      <Link href="/buyer/browse" class="mobile-nav-item active">
+        <div class="nav-active-pill">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+          </svg>
+          <span class="nav-label">Market</span>
+        </div>
       </Link>
-      <Link href="/buyer/orders" class="nav-item">
+      <Link href="/buyer/orders" class="mobile-nav-item">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
         </svg>
         <span class="nav-label">Orders</span>
       </Link>
-      <a href="#" class="nav-item disabled">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>
-        </svg>
-        <span class="nav-label">Alerts</span>
-      </a>
-      <Link href="/" class="nav-item">
+      <Link href="/" class="mobile-nav-item">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
         </svg>
-        <span class="nav-label">Profile</span>
+        <span class="nav-label">Account</span>
       </Link>
     </nav>
   </div>
@@ -482,6 +539,10 @@ export default {
       });
     };
 
+    const triggerAlert = (msg) => {
+      alert(msg);
+    };
+
     return {
       search,
       category,
@@ -502,306 +563,337 @@ export default {
       openProductModal,
       closeProductModal,
       startMomoPayment,
-      placeOrder
+      placeOrder,
+      triggerAlert
     };
   }
 }
 </script>
 
 <style scoped>
-* {
-  box-sizing: border-box;
-}
+@import "../../css/design-tokens.css";
 
+/* Outer wrapper */
 .browse-wrapper {
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+  background-color: var(--color-white);
   min-height: 100vh;
-  background-color: #F7F8F5;
-  color: #1A1A1A;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  padding-bottom: 80px; /* space for mobile nav */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  padding-bottom: calc(var(--bottom-nav-height) + 20px);
+  font-family: var(--font-family);
+  color: var(--color-neutral-900);
 }
 
-/* Header styling */
-.header {
-  background-color: #FFFFFF;
-  border-bottom: 1px solid #E0E0DA;
+/* Header bar */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 var(--space-4);
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-border);
+  height: var(--topbar-height);
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 50;
 }
 
-.header-content {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 12px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.brand {
+.app-logo {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
+  color: var(--color-primary);
 }
 
-.logo-text {
-  font-size: 20px;
-  font-weight: 500;
-  color: #1B5E20;
+.logo-icon {
+  color: var(--color-primary);
 }
 
-.user-greeting {
+.app-logo-text {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.5px;
+}
+
+.header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-2);
 }
 
-.header-nav-link {
-  font-size: 14px;
-  font-weight: 500;
-  color: #6B6B63;
-  text-decoration: none;
-  padding: 4px 8px;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-}
-
-.header-nav-link:hover {
-  color: #2E7D32;
-  background-color: #F7F8F5;
-}
-
-.header-nav-link.active {
-  color: #2E7D32;
-  background-color: #E8F5E9;
-}
-
-.greeting-text {
-  font-size: 14px;
-  color: #6B6B63;
-  font-weight: 500;
-  background-color: #E8F5E9;
-  padding: 4px 8px;
-  border-radius: 6px;
-}
-
-.error-message {
-  color: #C62828;
-  font-size: 13px;
-  background-color: #FFEBEE;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #FFCDD2;
-  margin-top: 4px;
-  margin-bottom: 4px;
-  text-align: left;
-}
-
-.logout-link-btn {
-  color: #C62828;
+.icon-action-btn {
   background: none;
   border: none;
-  font-size: 14px;
-  font-weight: 500;
+  color: var(--color-neutral-700);
   cursor: pointer;
-  padding: 4px 8px;
-}
-
-/* Filter utility bar - Tonaton/Jumia pattern */
-.filter-bar {
-  background-color: #FFFFFF;
-  border-bottom: 1px solid #E0E0DA;
-  padding: 12px 16px;
-  position: sticky;
-  top: 49px;
-  z-index: 9;
-}
-
-.filter-content {
-  max-width: 1000px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-@media (min-width: 768px) {
-  .filter-content {
-    flex-direction: row;
-    align-items: center;
-  }
-}
-
-.search-input-wrapper {
-  position: relative;
-  flex: 1.5;
-  min-width: 0;
-}
-
-.search-icon {
-  position: absolute;
-  left: 12px;
-  top: 14px;
-}
-
-.filter-input-search {
-  width: 100%;
-  height: 44px;
-  border: 1px solid #E0E0DA;
-  border-radius: 8px;
-  padding: 0 12px 0 36px;
-  font-size: 14px;
-  outline: none;
-}
-
-.filter-input-search:focus, .filter-select:focus, .filter-input-location:focus {
-  border-color: #2E7D32;
-}
-
-.selects-row {
-  display: flex;
-  gap: 8px;
-  width: 100%;
-  min-width: 0;
-}
-
-@media (min-width: 768px) {
-  .selects-row {
-    width: auto;
-    flex: 2;
-  }
-}
-
-.filter-select {
-  height: 44px;
-  border: 1px solid #E0E0DA;
-  border-radius: 8px;
-  padding: 0 8px;
-  font-size: 14px;
-  flex: 1;
-  background-color: #FFFFFF;
-  outline: none;
-  min-width: 0;
-}
-
-.filter-input-location {
-  height: 44px;
-  border: 1px solid #E0E0DA;
-  border-radius: 8px;
-  padding: 0 12px;
-  font-size: 14px;
-  flex: 1;
-  outline: none;
-  min-width: 0;
-}
-
-.btn-clear {
-  height: 44px;
-  border: 1px solid #C62828;
-  color: #C62828;
-  background-color: #FFFFFF;
-  border-radius: 8px;
-  padding: 0 12px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-/* Main Area */
-.main-content {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 24px 16px;
-}
-
-.results-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.page-title {
-  font-size: 18px;
-  font-weight: 500;
-  margin: 0;
-  color: #1A1A1A;
-}
-
-.results-count {
-  font-size: 13px;
-  color: #6B6B63;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 40px 16px;
-  background-color: #FFFFFF;
-  border: 1px solid #E0E0DA;
-  border-radius: 12px;
-}
-
-.empty-text {
-  color: #6B6B63;
-  margin-bottom: 12px;
-}
-
-.btn-reset {
-  background-color: #2E7D32;
-  color: #FFFFFF;
-  border: none;
-  border-radius: 8px;
-  height: 44px;
-  padding: 0 20px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-/* 2-Column mobile layout, 3-Column tablet, 4-Column desktop */
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-}
-
-@media (min-width: 768px) {
-  .products-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .products-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-.product-card {
-  background-color: #FFFFFF;
-  border: 1px solid #E0E0DA;
-  border-radius: 12px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
-}
-
-.product-image-container {
-  height: 120px;
-  position: relative;
-  background-color: #F7F8F5;
-  border-bottom: 1px solid #E0E0DA;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  transition: background-color var(--transition-fast);
 }
 
-@media (min-width: 768px) {
-  .product-image-container {
-    height: 160px;
-  }
+.icon-action-btn:hover {
+  background-color: var(--color-neutral-100);
+}
+
+.icon-action-btn.logout-header-btn {
+  color: var(--color-danger);
+}
+
+.icon-action-btn.logout-header-btn:hover {
+  background-color: var(--color-danger-light);
+}
+
+/* Search bar styling */
+.search-section {
+  padding: var(--space-4) var(--space-4) var(--space-2) var(--space-4);
+  background-color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.search-inputs-row {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: var(--space-2);
+}
+
+.search-bar-wrapper, .location-filter-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: var(--space-3);
+  color: var(--color-neutral-500);
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.search-input, .location-input {
+  width: 100%;
+  height: var(--input-height);
+  padding: 0 var(--space-3) 0 36px;
+  border: 1.5px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-900);
+  background-color: var(--color-neutral-50);
+  transition: all var(--transition-fast);
+}
+
+.search-input:focus, .location-input:focus {
+  border-color: var(--color-primary);
+  background-color: var(--color-white);
+  outline: none;
+}
+
+.clear-filters-btn {
+  width: 100%;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-neutral-300);
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.clear-filters-btn:hover {
+  background-color: var(--color-neutral-200);
+  color: var(--color-neutral-900);
+}
+
+/* Category Pills scrollbar */
+.category-scroll-bar {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  overflow-x: auto;
+  background-color: var(--color-white);
+  scrollbar-width: none; /* hide scrollbars Firefox */
+}
+
+.category-scroll-bar::-webkit-scrollbar {
+  display: none; /* hide scrollbars Chrome/Safari */
+}
+
+.category-pill {
+  white-space: nowrap;
+  padding: 8px var(--space-4);
+  border-radius: var(--radius-pill);
+  border: none;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary-hover);
+  background-color: var(--color-primary-subtle);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.category-pill.active {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+/* Promo Banner Card */
+.promo-banner-card {
+  margin: var(--space-3) var(--space-4);
+  padding: var(--space-5) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(27, 67, 50, 0.95), rgba(45, 106, 79, 0.8)), url('/images/welcome_hero_banner.png');
+  background-size: cover;
+  background-position: center;
+  color: var(--color-white);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.promo-badge {
+  font-size: 9px;
+  font-weight: var(--font-weight-bold);
+  background-color: var(--color-secondary);
+  color: var(--color-secondary-dark);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.5px;
+}
+
+.promo-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  margin: 0;
+}
+
+.promo-subtitle {
+  font-size: var(--font-size-xs);
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+/* Main Content Body */
+.main-content {
+  padding: var(--space-2) var(--space-4);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.section-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin: 0;
+}
+
+.see-all-btn {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+}
+
+.see-all-btn:hover {
+  text-decoration: underline;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-10) var(--space-4);
+  gap: var(--space-2);
+}
+
+.empty-icon {
+  font-size: var(--font-size-3xl);
+}
+
+.empty-state h3 {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin: 0;
+}
+
+.empty-state p {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-500);
+  margin: 0 var(--space-2) var(--space-4) var(--space-2);
+}
+
+.reset-filters-btn {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.reset-filters-btn:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* Stacked Products Lists */
+.products-list-stacked {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.product-card {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-neutral-100);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+}
+
+.product-img-wrapper {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: var(--color-neutral-50);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .product-image {
@@ -811,139 +903,158 @@ export default {
 }
 
 .product-placeholder {
-  font-size: 40px;
+  font-size: var(--font-size-3xl);
 }
 
-.category-badge {
+.price-badge-overlay {
   position: absolute;
-  left: 8px;
-  top: 8px;
-  background-color: rgba(46, 125, 50, 0.9);
-  color: #FFFFFF;
-  font-size: 10px;
-  font-weight: 500;
-  padding: 2px 6px;
-  border-radius: 4px;
+  top: var(--space-3);
+  right: var(--space-3);
+  background-color: var(--color-warning-light);
+  color: var(--color-secondary-dark);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
 }
 
-.product-details {
-  padding: 10px;
+.product-card-body {
+  padding: var(--space-4);
   display: flex;
   flex-direction: column;
-  flex: 1;
+  gap: var(--space-2);
 }
 
-.price-row {
-  margin-bottom: 4px;
-}
-
-.price {
-  font-size: 16px;
-  font-weight: 500;
-  color: #1B5E20;
-}
-
-.name {
-  font-size: 13px;
-  font-weight: 400;
-  color: #1A1A1A;
-  margin: 0 0 6px 0;
-  line-height: 1.3;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  height: 34px;
-}
-
-.farmer-row {
+.title-rating-row {
   display: flex;
   justify-content: space-between;
-  font-size: 11px;
-  color: #6B6B63;
-  margin-bottom: 4px;
+  align-items: flex-start;
+  gap: var(--space-2);
 }
 
-.farmer-name {
-  font-weight: 500;
+.product-name {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin: 0;
+  line-height: var(--line-height-tight);
 }
 
-.rating {
-  color: #B8860B;
-  font-weight: 500;
-}
-
-.location-row {
+.rating-badge {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  color: #6B6B63;
-  margin-bottom: 10px;
+  gap: 2px;
+  background-color: var(--color-neutral-50);
+  border: 1px solid var(--color-neutral-100);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-secondary-dark);
+  flex-shrink: 0;
 }
 
-.location-text {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
+.location-farmer-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  font-weight: var(--font-weight-semibold);
 }
 
-.cta-button {
+.loc-icon {
+  color: var(--color-neutral-500);
+  flex-shrink: 0;
+}
+
+.tags-row-flex {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: 2px;
+}
+
+.category-pill-tag {
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  text-transform: uppercase;
+}
+
+.category-pill-tag.vegetable {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary-hover);
+}
+
+.category-pill-tag.leafy-green {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary-hover);
+}
+
+.category-pill-tag.root-tuber {
+  background-color: var(--color-warning-light);
+  color: var(--color-secondary-dark);
+}
+
+.category-pill-tag.other {
+  background-color: var(--color-tertiary-subtle);
+  color: var(--color-tertiary);
+}
+
+.custom-badge-tag {
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-neutral-50);
+  border: 1px solid var(--color-neutral-300);
+  color: var(--color-neutral-700);
+  text-transform: uppercase;
+}
+
+.place-order-btn {
   width: 100%;
-  height: 38px;
-  background-color: #2E7D32;
-  color: #FFFFFF;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary);
+  color: var(--color-white);
   border: none;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
   cursor: pointer;
-  margin-top: auto;
-  transition: background-color 0.2s ease;
+  transition: background-color var(--transition-fast);
+  margin-top: var(--space-2);
 }
 
-.cta-button:hover {
-  background-color: #1B5E20;
+.place-order-btn:hover {
+  background-color: var(--color-primary-hover);
 }
 
-/* Modal details drawer */
+/* Modals & Momo Checkout Overlay Drawer */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(33, 37, 41, 0.6);
+  z-index: 1000;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  z-index: 100;
-  overflow-y: auto;
-}
-
-@media (min-width: 768px) {
-  .modal-overlay {
-    align-items: center;
-    padding: 24px;
-  }
 }
 
 .modal-card {
-  background-color: #FFFFFF;
-  border-radius: 16px 16px 0 0;
   width: 100%;
-  max-width: 500px;
-  position: relative;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-  animation: slide-up 0.2s ease-out;
+  max-width: 480px;
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
   display: flex;
   flex-direction: column;
-}
-
-@media (min-width: 768px) {
-  .modal-card {
-    border-radius: 12px;
-    animation: zoom-in 0.2s ease-out;
-    max-height: 85vh;
-  }
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  animation: slide-up 0.3s ease-out;
 }
 
 @keyframes slide-up {
@@ -951,43 +1062,41 @@ export default {
   to { transform: translateY(0); }
 }
 
-@keyframes zoom-in {
-  from { transform: scale(0.95); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
 .close-btn {
   position: absolute;
-  right: 12px;
-  top: 12px;
-  background: #FFFFFF;
-  border: 1px solid #E0E0DA;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  top: var(--space-4);
+  right: var(--space-4);
+  background: none;
+  border: none;
+  color: var(--color-neutral-500);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  z-index: 1;
+  transition: all var(--transition-fast);
+  z-index: 10;
+}
+
+.close-btn:hover {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-900);
 }
 
 .modal-body {
-  padding: 16px;
-  overflow-y: auto;
-  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-.modal-image-wrapper {
-  height: 180px;
-  background-color: #F7F8F5;
-  border: 1px solid #E0E0DA;
-  border-radius: 8px;
+.modal-img-container {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: var(--color-neutral-50);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  margin-bottom: 12px;
 }
 
 .modal-image {
@@ -997,61 +1106,63 @@ export default {
 }
 
 .modal-placeholder {
-  font-size: 60px;
+  font-size: var(--font-size-4xl);
 }
 
-.modal-info {
+.modal-info-content {
+  padding: var(--space-5);
   display: flex;
   flex-direction: column;
+  gap: var(--space-3);
+  position: relative;
 }
 
-.modal-category {
-  font-size: 11px;
-  color: #2E7D32;
-  background-color: #E8F5E9;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-weight: 500;
-  width: fit-content;
-  margin-bottom: 4px;
+.modal-category-lbl {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .modal-title {
-  font-size: 20px;
-  font-weight: 500;
-  margin: 0 0 6px 0;
-  color: #1A1A1A;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin: 0;
+  line-height: var(--line-height-tight);
 }
 
-.modal-price {
-  font-size: 22px;
-  font-weight: 500;
-  color: #1B5E20;
+.modal-price-lbl {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-secondary-dark);
 }
 
 .modal-divider {
   height: 1px;
-  background-color: #E0E0DA;
-  margin: 12px 0;
+  background-color: var(--color-neutral-100);
+  margin: var(--space-1) 0;
 }
 
-.modal-farmer-info {
+.modal-farmer-profile {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
-.modal-farmer-info .avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #2E7D32;
-  color: #FFFFFF;
+.modal-farmer-profile .avatar-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary-hover);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 500;
-  font-size: 18px;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-md);
+  box-shadow: var(--shadow-xs);
 }
 
 .farmer-meta {
@@ -1059,371 +1170,337 @@ export default {
   flex-direction: column;
 }
 
-.farmer-meta .label {
-  font-size: 11px;
-  color: #6B6B63;
+.farmer-label {
+  font-size: 10px;
+  color: var(--color-neutral-500);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
 }
 
-.farmer-meta .name {
-  font-size: 14px;
-  font-weight: 500;
-  color: #1A1A1A;
+.farmer-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin: 1px 0;
 }
 
-.location-rating {
-  font-size: 11px;
-  color: #6B6B63;
+.farmer-location-rating {
   display: flex;
-  gap: 4px;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  font-weight: var(--font-weight-semibold);
 }
 
-.stock-info {
+.stock-info-row {
   display: flex;
   justify-content: space-between;
-  font-size: 14px;
-  margin-bottom: 12px;
+  font-size: var(--font-size-sm);
+  background-color: var(--color-neutral-50);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
 }
 
-.stock-info .label {
-  color: #6B6B63;
+.stock-info-row .label {
+  color: var(--color-neutral-500);
+  font-weight: var(--font-weight-medium);
 }
 
-.stock-info .val {
-  font-weight: 500;
-  color: #1A1A1A;
+.stock-info-row .val {
+  color: var(--color-neutral-900);
+  font-weight: var(--font-weight-bold);
 }
 
-.order-form {
+/* Checkout Form elements */
+.checkout-form-container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
 }
 
-.quantity-control {
+.input-form-group {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: var(--space-1);
 }
 
-.quantity-control label {
-  font-size: 14px;
-  font-weight: 500;
+.form-input-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
 }
 
-.qty-input {
-  width: 70px;
-  height: 38px;
-  border: 1px solid #E0E0DA;
-  border-radius: 8px;
-  padding: 0 8px;
-  font-size: 14px;
-  text-align: center;
-}
-
-.btn-confirm-order {
-  height: 44px;
-  background-color: #2E7D32;
-  color: #FFFFFF;
-  border: none;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
+.form-number-input, .form-text-input {
+  height: var(--input-height);
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-neutral-300);
+  padding: 0 var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-900);
+  background-color: var(--color-neutral-50);
   width: 100%;
 }
 
-.btn-confirm-order:hover {
-  background-color: #1B5E20;
+.form-number-input:focus, .form-text-input:focus {
+  border-color: var(--color-primary);
+  background-color: var(--color-white);
+  outline: none;
 }
 
-/* Mobile navigation */
-.mobile-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
-  background-color: #FFFFFF;
-  border-top: 1px solid #E0E0DA;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  z-index: 10;
+.error-alert-text {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-danger);
+  background-color: var(--color-danger-light);
+  border: 1px solid var(--color-danger);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
 }
 
-.nav-item {
+.btn-checkout-primary {
+  width: 100%;
+  height: 44px;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #6B6B63;
-  text-decoration: none;
-  font-size: 10px;
-  gap: 2px;
-  width: 25%;
-  height: 100%;
+  gap: var(--space-2);
 }
 
-.nav-item.active {
-  color: #2E7D32;
+.btn-checkout-primary:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
 }
 
-.nav-item.disabled {
-  opacity: 0.4;
+.btn-checkout-primary:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
-  pointer-events: none;
 }
 
-.nav-label {
-  font-weight: 500;
+.btn-checkout-secondary {
+  width: 100%;
+  height: 44px;
+  background-color: var(--color-white);
+  color: var(--color-neutral-700);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
-.hide-desktop {
+.btn-checkout-secondary:hover {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-900);
+}
+
+/* Step 2 summary */
+.checkout-summary-box {
+  background-color: var(--color-primary-subtle);
+  border: 1.5px solid var(--color-primary-lighter);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
   display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
 }
 
-@media (min-width: 768px) {
-  .hide-desktop {
-    display: none !important;
-  }
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-xs);
+  color: var(--color-primary-hover);
+  font-weight: var(--font-weight-medium);
 }
 
-/* Mobile Money Escrow Styles */
-.payment-header-momo {
-  margin-bottom: 16px;
-  text-align: left;
+.summary-line.total {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  border-top: 1px dashed var(--color-primary-light);
+  padding-top: var(--space-2);
+  margin-top: 2px;
 }
 
-.momo-title {
-  display: block;
-  font-size: 14px;
-  font-weight: 500;
-  color: #1A1A1A;
-}
-
-.momo-subtitle {
-  display: block;
-  font-size: 11px;
-  color: #6B6B63;
-  line-height: 1.4;
-  margin-top: 4px;
-}
-
-.form-group-momo {
-  margin-bottom: 14px;
-  text-align: left;
-}
-
-.momo-label {
-  display: block;
-  font-size: 12px;
-  font-weight: 500;
-  color: #1A1A1A;
-  margin-bottom: 6px;
-}
-
-.momo-networks-grid {
+/* Radio buttons momo networks */
+.momo-networks-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
 }
 
 .network-option {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  border: 1px solid #E0E0DA;
-  border-radius: 8px;
-  padding: 12px 6px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-neutral-300);
   cursor: pointer;
-  transition: all 0.2s ease;
-  background-color: #FFFFFF;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-700);
+  background-color: var(--color-neutral-50);
+  transition: all var(--transition-fast);
 }
 
 .network-option:hover {
-  border-color: #2E7D32;
+  border-color: var(--color-primary-light);
 }
 
-.network-option.active {
-  border-color: #2E7D32;
-  background-color: #F1F8F2;
+.network-option.selected {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary);
 }
 
 .hidden-radio {
-  display: none;
+  display: none !important;
 }
 
-.network-logo {
-  width: 24px;
-  height: 24px;
-  border-radius: 6px;
-}
-
-.mtn-logo {
-  background-color: #FFCC00;
-  position: relative;
-}
-
-.mtn-logo::after {
-  content: '';
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  right: 4px;
-  bottom: 4px;
-  border-radius: 50%;
-  border: 2px solid #003399;
-}
-
-.telecel-logo {
-  background-color: #E60000;
-  position: relative;
-}
-
-.telecel-logo::after {
-  content: 't';
-  color: #FFFFFF;
-  font-family: sans-serif;
-  font-size: 16px;
-  font-weight: bold;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+.momo-action-buttons {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
-.network-name {
-  font-size: 11px;
-  font-weight: 500;
-  color: #1A1A1A;
-}
-
-.momo-input {
-  width: 100%;
-  height: 44px;
-  padding: 0 12px;
-  border: 1px solid #E0E0DA;
-  border-radius: 8px;
-  font-size: 14px;
-  outline: none;
-  background-color: #FFFFFF;
-  color: #1A1A1A;
-}
-
-.momo-input:focus {
-  border-color: #2E7D32;
-}
-
-.momo-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 18px;
-}
-
-.btn-momo-back {
-  flex: 1;
-  height: 44px;
-  border: 1px solid #E0E0DA;
-  background-color: #FFFFFF;
-  color: #1A1A1A;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: background-color 0.2s;
-}
-
-.btn-momo-back:hover {
-  background-color: #F7F8F5;
-}
-
-.btn-momo-pay {
-  flex: 2;
-  height: 44px;
-  border: none;
-  background-color: #2E7D32;
-  color: #FFFFFF;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: background-color 0.2s;
-}
-
-.btn-momo-pay:hover {
-  background-color: #1B5E20;
-}
-
-.momo-status-container {
+/* Momo overlays */
+.momo-loader-overlay, .momo-success-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.98);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px 12px;
+  padding: var(--space-5);
   text-align: center;
+  z-index: 50;
+  animation: fade-in 0.2s ease-out;
 }
 
-.spinner-momo {
-  width: 44px;
-  height: 44px;
-  border: 4px solid #E8F5E9;
-  border-top: 4px solid #2E7D32;
-  border-radius: 50%;
-  animation: spin-momo 1s linear infinite;
-  margin-bottom: 16px;
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-@keyframes spin-momo {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.momo-loader-overlay p {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin: var(--space-4) 0 4px 0;
 }
 
-.success-icon-momo {
+.momo-loader-overlay .subtext {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  margin: 0;
+}
+
+.momo-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--color-neutral-100);
+  border-top-color: var(--color-primary);
+  border-radius: var(--radius-full);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.success-icon-box {
   width: 56px;
   height: 56px;
-  border-radius: 50%;
-  background-color: #E8F5E9;
+  border-radius: var(--radius-full);
+  background-color: var(--color-success);
+  color: var(--color-white);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
+  font-size: 28px;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-4);
+  box-shadow: 0 4px 10px rgba(46, 125, 50, 0.2);
 }
 
-.momo-status-title {
-  font-size: 16px;
-  font-weight: 500;
-  color: #1A1A1A;
-  margin-bottom: 6px;
+.momo-success-overlay h3 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin: 0 0 var(--space-2) 0;
 }
 
-.momo-status-desc {
-  font-size: 12px;
-  color: #6B6B63;
-  max-width: 220px;
-  line-height: 1.4;
-  margin-bottom: 4px;
+.momo-success-overlay p {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-500);
+  margin: 0;
+  max-width: 250px;
 }
 
-.momo-status-redirect {
-  font-size: 11px;
-  color: #2E7D32;
-  font-weight: 500;
-  margin-top: 8px;
+/* Mobile Bottom Navigation Bar (Stitch style) */
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: 480px;
+  margin: 0 auto;
+  height: var(--bottom-nav-height);
+  background-color: var(--color-white);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 100;
+  padding: 0 var(--space-2);
 }
 
-.text-success {
-  color: #2E7D32 !important;
+.mobile-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-neutral-500);
+  text-decoration: none;
+  width: 25%;
+  height: 100%;
+  font-weight: var(--font-weight-semibold);
+  transition: all var(--transition-fast);
 }
 
-.font-mono {
-  font-family: monospace !important;
-  letter-spacing: 0.2em;
+.mobile-nav-item .nav-label {
+  font-size: 9px;
+  margin-top: 2px;
+}
+
+.mobile-nav-item.active {
+  color: var(--color-primary);
+}
+
+.mobile-nav-item.active .nav-active-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary);
+  padding: 6px var(--space-3);
+  border-radius: var(--radius-pill);
+}
+
+.mobile-nav-item.active .nav-label {
+  font-size: 10px;
+  margin-top: 0;
 }
 </style>
