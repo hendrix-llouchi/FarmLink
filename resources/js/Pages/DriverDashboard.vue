@@ -1,213 +1,254 @@
 <template>
-  <div class="dashboard-wrapper">
-    <!-- Header -->
-    <header class="header">
-      <div class="header-content">
-        <div class="brand">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+  <div class="driver-wrapper">
+
+    <!-- Sticky Top Header -->
+    <header class="app-header">
+      <div class="app-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m12 3-1.912 5.886a1 1 0 0 1-.95.686H2.929l4.908 3.566a1 1 0 0 1 .364 1.122L6.29 20.147l4.907-3.565a1 1 0 0 1 1.604 0l4.907 3.565-1.91-5.887a1 1 0 0 1 .364-1.122l4.908-3.566h-6.21a1 1 0 0 1-.95-.686z"/>
+        </svg>
+        <span class="app-logo-text">FarmLink</span>
+      </div>
+      <div class="header-actions">
+        <button class="icon-action-btn" @click.prevent="triggerAlert('Notifications Center: Get real-time alerts for job requests, ETA updates, and payment confirmations. (Scheduled for Phase 5)')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
           </svg>
-          <span class="logo-text">FarmLink</span>
-        </div>
-        <div class="user-greeting">
-          <span class="greeting-text">Driver Portal</span>
-          <Link href="/logout" method="post" as="button" class="logout-link-btn">Log Out</Link>
-        </div>
+        </button>
+        <Link href="/logout" method="post" as="button" class="icon-action-btn" title="Log Out">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </Link>
       </div>
     </header>
 
-    <!-- Main Content Wrapped in Responsive Container -->
+    <!-- Flash message -->
+    <div v-if="$page.props.flash?.message" class="flash-alert">
+      {{ $page.props.flash.message }}
+    </div>
+
+    <!-- Main Scrollable Body -->
     <main class="main-content">
-      <div class="dashboard-container max-w-6xl mx-auto px-4 py-6">
-        <!-- Flash Alert -->
-        <div v-if="$page.props.flash?.message" class="flash-alert">
-          <p>{{ $page.props.flash.message }}</p>
+
+      <!-- ═══ ACTIVE TRIP SECTION ═══ -->
+      <section class="section-block">
+        <div class="section-header">
+          <h2 class="section-title">Active Trip</h2>
         </div>
 
-        <!-- Active Trips Section -->
-        <div class="active-trips-section mb-10">
-          <div class="section-header mb-4">
-            <h2 class="section-title text-xl font-medium text-gray-800" style="font-weight: 500; font-size: 20px; margin: 0 0 4px 0;">Active Trips</h2>
-            <p class="section-subtitle text-sm text-gray-500" style="color: #6B6B63; font-size: 14px; margin: 0;">Your current delivery tasks. Complete these to drop off produce.</p>
-          </div>
-
-          <div v-if="activeTrips.length === 0" class="empty-state-active" style="background-color: #FFFFFF; border: 1px solid #E0E0DA; border-radius: 12px; padding: 24px; text-align: center; box-shadow: 0 1px 2px rgba(0,0,0,0.06); margin-bottom: 24px;">
-            <div style="font-size: 32px; margin-bottom: 8px;">📍</div>
-            <h3 style="font-size: 15px; font-weight: 500; margin: 0 0 4px 0; color: #1A1A1A;">No Active Trips</h3>
-            <p style="font-size: 13px; color: #6B6B63; margin: 0;">Accept an available job below to begin a delivery transit.</p>
-          </div>
-
-          <div v-else class="jobs-grid mb-8" style="margin-bottom: 32px;">
-            <div v-for="order in activeTrips" :key="order.id" class="job-card border-active">
-              <!-- Header Row: ID and Cost -->
-              <div class="job-card-header">
-                <div class="job-header-left">
-                  <span class="job-id">Trip #{{ order.id }}</span>
-                  <span class="active-badge">Active</span>
-                </div>
-                <div class="job-payout" v-if="order.estimated_transport_cost">
-                  <span class="payout-label">Payout:</span>
-                  <span class="payout-value">GH₵ {{ Number(order.estimated_transport_cost).toFixed(2) }}</span>
-                </div>
-                <div class="job-payout-est" v-else>
-                  <span class="payout-label">Order Value:</span>
-                  <span class="payout-value">GH₵ {{ Number(order.total_price).toFixed(2) }}</span>
-                </div>
-              </div>
-
-              <!-- Body: Pickup and Destination -->
-              <div class="job-card-body">
-                <!-- Pickup -->
-                <div class="location-step">
-                  <div class="step-indicator">
-                    <div class="dot pickup-dot"></div>
-                    <div class="line"></div>
-                  </div>
-                  <div class="step-content">
-                    <span class="step-label">Pickup Location (Farmer)</span>
-                    <h3 class="location-name">{{ order.product?.user?.location || 'Takoradi Market' }}</h3>
-                    <p class="party-name">{{ order.product?.user?.name || 'Local Farmer' }}</p>
-                  </div>
-                </div>
-
-                <!-- Destination -->
-                <div class="location-step">
-                  <div class="step-indicator">
-                    <div class="dot dropoff-dot"></div>
-                  </div>
-                  <div class="step-content">
-                    <span class="step-label">Delivery Destination (Buyer)</span>
-                    <h3 class="location-name">{{ order.buyer?.location || 'Tarkwa Center' }}</h3>
-                    <p class="party-name">{{ order.buyer?.name || 'Local Buyer' }}</p>
-                  </div>
-                </div>
-
-                <!-- Cargo Details -->
-                <div class="cargo-details">
-                  <span class="cargo-label">Produce Cargo:</span>
-                  <span class="cargo-value">{{ order.quantity_ordered }}x {{ order.product?.name || 'Produce' }}</span>
-                </div>
-              </div>
-
-              <!-- Action Button -->
-              <div class="job-card-actions">
-                <button 
-                  @click="completeJob(order.id)" 
-                  :disabled="processingId === order.id"
-                  class="btn-complete"
-                >
-                  <span v-if="processingId === order.id">Updating...</span>
-                  <span v-else>Mark as Delivered</span>
-                </button>
-              </div>
-            </div>
-          </div>
+        <!-- Empty Active Trip State -->
+        <div v-if="activeTrips.length === 0" class="empty-active-card">
+          <svg xmlns="http://www.w3.org/2000/svg" class="empty-state-svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          <h3 class="empty-title">No Active Trips</h3>
+          <p class="empty-sub">Accept an available job below to begin a delivery transit.</p>
         </div>
 
-        <div style="height: 1px; background-color: #E0E0DA; margin-bottom: 32px; width: 100%;"></div>
-
-        <div class="page-header">
-          <div>
-            <h1 class="page-title">Available Deliveries</h1>
-            <p class="page-subtitle">Accept jobs to coordinate local vegetable transport</p>
-          </div>
-          <span class="jobs-count-badge">{{ orders.length }} delivery job(s) available</span>
-        </div>
-
-        <!-- Empty State -->
-        <div v-if="orders.length === 0" class="empty-state">
-          <div class="empty-icon">🚚</div>
-          <h2 class="empty-title">No Deliveries Available</h2>
-          <p class="empty-text">There are currently no pending orders awaiting a driver. Check back later.</p>
-        </div>
-
-        <!-- Jobs Grid -->
-        <div v-else class="jobs-grid">
-          <div v-for="order in orders" :key="order.id" class="job-card">
-            <!-- Header Row: ID and Cost -->
-            <div class="job-card-header">
-              <span class="job-id">Job #{{ order.id }}</span>
-              <div class="job-payout" v-if="order.estimated_transport_cost">
-                <span class="payout-label">Payout:</span>
-                <span class="payout-value">GH₵ {{ Number(order.estimated_transport_cost).toFixed(2) }}</span>
-              </div>
-              <div class="job-payout-est" v-else>
-                <span class="payout-label">Order Value:</span>
-                <span class="payout-value">GH₵ {{ Number(order.total_price).toFixed(2) }}</span>
+        <!-- Active Trip Cards -->
+        <div v-else class="active-trips-list">
+          <div v-for="order in activeTrips" :key="order.id" class="active-trip-card">
+            <!-- Status & Payout Row -->
+            <div class="trip-status-row">
+              <span class="in-progress-badge">IN PROGRESS</span>
+              <div class="payout-col">
+                <span class="payout-label-sm">Estimated Payout</span>
+                <span class="payout-amount">
+                  GHS {{ order.estimated_transport_cost
+                    ? Number(order.estimated_transport_cost).toFixed(2)
+                    : Number(order.total_price).toFixed(2) }}
+                </span>
               </div>
             </div>
 
-            <!-- Body: Pickup and Destination -->
-            <div class="job-card-body">
-              <!-- Pickup -->
-              <div class="location-step">
-                <div class="step-indicator">
-                  <div class="dot pickup-dot"></div>
-                  <div class="line"></div>
+            <!-- Progress Steps: Farm → Transit → Market -->
+            <div class="progress-steps-row">
+              <div class="progress-step completed">
+                <div class="step-icon-circle">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                  </svg>
                 </div>
-                <div class="step-content">
-                  <span class="step-label">Pickup Location (Farmer)</span>
-                  <h3 class="location-name">{{ order.product?.user?.location || 'Takoradi Market' }}</h3>
-                  <p class="party-name">{{ order.product?.user?.name || 'Local Farmer' }}</p>
-                </div>
+                <span class="step-name">Farm</span>
               </div>
-
-              <!-- Destination -->
-              <div class="location-step">
-                <div class="step-indicator">
-                  <div class="dot dropoff-dot"></div>
+              <div class="step-connector"></div>
+              <div class="progress-step active">
+                <div class="step-icon-circle">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <rect x="1" y="3" width="15" height="13"/>
+                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                    <circle cx="5.5" cy="18.5" r="2.5"/>
+                    <circle cx="18.5" cy="18.5" r="2.5"/>
+                  </svg>
                 </div>
-                <div class="step-content">
-                  <span class="step-label">Delivery Destination (Buyer)</span>
-                  <h3 class="location-name">{{ order.buyer?.location || 'Tarkwa Center' }}</h3>
-                  <p class="party-name">{{ order.buyer?.name || 'Local Buyer' }}</p>
-                </div>
+                <span class="step-name">Transit</span>
               </div>
-
-              <!-- Cargo Details -->
-              <div class="cargo-details">
-                <span class="cargo-label">Produce Cargo:</span>
-                <span class="cargo-value">{{ order.quantity_ordered }}x {{ order.product?.name || 'Produce' }}</span>
+              <div class="step-connector"></div>
+              <div class="progress-step pending">
+                <div class="step-icon-circle">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/>
+                  </svg>
+                </div>
+                <span class="step-name">Market</span>
               </div>
             </div>
 
-            <!-- Action Button -->
-            <div class="job-card-actions">
-              <button 
-                @click="acceptJob(order.id)" 
+            <!-- Pickup & Drop-off -->
+            <div class="route-info-block">
+              <div class="route-row">
+                <span class="route-type-tag pickup-tag">PICKUP</span>
+                <div class="route-detail">
+                  <span class="route-location">{{ order.product?.user?.location || 'Takoradi Market' }}</span>
+                  <span class="route-party">{{ order.product?.user?.name || 'Local Farmer' }}</span>
+                </div>
+              </div>
+              <div class="route-connector-line"></div>
+              <div class="route-row">
+                <span class="route-type-tag dropoff-tag">DROP-OFF</span>
+                <div class="route-detail">
+                  <span class="route-location">{{ order.buyer?.location || 'Tarkwa Center' }}</span>
+                  <span class="route-party">{{ order.buyer?.name || 'Local Buyer' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cargo Info -->
+            <div class="cargo-chip">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              </svg>
+              {{ order.quantity_ordered }}x {{ order.product?.name || 'Fresh Produce' }}
+            </div>
+
+            <!-- Action Buttons: Picked Up + Delivered -->
+            <div class="trip-action-buttons">
+              <button class="btn-picked-up" :disabled="processingId === order.id" @click.prevent="triggerAlert('Picked Up: This marks that you have collected the produce from the farm pickup point. Full logistics tracking integration is scheduled for Phase 4 completion.')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Picked Up
+              </button>
+              <button
+                class="btn-delivered"
+                @click="completeJob(order.id)"
                 :disabled="processingId === order.id"
-                class="btn-accept"
               >
-                <span v-if="processingId === order.id">Accepting...</span>
-                <span v-else>Accept Delivery</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+                <span v-if="processingId === order.id">Updating...</span>
+                <span v-else>Delivered</span>
               </button>
             </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- ═══ AVAILABLE DELIVERY JOBS SECTION ═══ -->
+      <section class="section-block">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Available Delivery Jobs</h2>
+            <p class="section-subtitle">Accept jobs to coordinate local vegetable transport</p>
+          </div>
+          <span class="nearby-badge">{{ orders.length }} NEARBY</span>
+        </div>
+
+        <!-- Empty Jobs State -->
+        <div v-if="orders.length === 0" class="empty-jobs-card">
+          <svg xmlns="http://www.w3.org/2000/svg" class="empty-state-svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="15" height="13"/>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/>
+            <circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+          <h3 class="empty-title">No Deliveries Available</h3>
+          <p class="empty-sub">There are currently no pending orders awaiting a driver. Check back later.</p>
+        </div>
+
+        <!-- Available Jobs List -->
+        <div v-else class="jobs-list">
+          <div v-for="order in orders" :key="order.id" class="job-card">
+            <!-- Top Row: Payout + Distance -->
+            <div class="job-top-row">
+              <div class="job-payout-block">
+                <span class="est-payout-label">EST. PAYOUT</span>
+                <span class="est-payout-amount">
+                  GHS {{ order.estimated_transport_cost
+                    ? Number(order.estimated_transport_cost).toFixed(2)
+                    : Number(order.total_price).toFixed(2) }}
+                </span>
+              </div>
+              <span class="distance-badge">↕ ~{{ Math.floor(Math.random() * 20 + 3) }}.{{ Math.floor(Math.random() * 9) }} km</span>
+            </div>
+
+            <!-- Route Block -->
+            <div class="job-route-block">
+              <div class="job-route-row">
+                <span class="pickup-dot-icon"></span>
+                <div class="job-route-text">
+                  <span class="job-route-label">From:</span>
+                  <span class="job-route-value">{{ order.product?.user?.location || 'Takoradi Market' }}</span>
+                  <span class="job-cargo-sub">{{ order.quantity_ordered }}x {{ order.product?.name || 'Produce' }}</span>
+                </div>
+              </div>
+              <div class="job-route-line"></div>
+              <div class="job-route-row">
+                <span class="dropoff-dot-icon"></span>
+                <div class="job-route-text">
+                  <span class="job-route-label">To:</span>
+                  <span class="job-route-value">{{ order.buyer?.location || 'Tarkwa Center' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Accept Job Button -->
+            <button
+              @click="acceptJob(order.id)"
+              :disabled="processingId === order.id"
+              class="btn-accept-job"
+            >
+              <span v-if="processingId === order.id">Accepting...</span>
+              <span v-else>Accept Job</span>
+            </button>
+          </div>
+        </div>
+      </section>
     </main>
 
-    <!-- Mobile Bottom Navigation (Design Brief requirement) -->
-    <nav class="mobile-nav hide-desktop">
-      <Link href="/driver/dashboard" class="nav-item active">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
-        </svg>
-        <span class="nav-label">Deliveries</span>
+    <!-- Mobile Bottom Navigation Bar (Stitch style — teal accent) -->
+    <nav class="mobile-bottom-nav">
+      <Link href="/driver/dashboard" class="mobile-nav-item active">
+        <div class="nav-active-pill">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="15" height="13"/>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/>
+            <circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+          <span class="nav-label">Deliveries</span>
+        </div>
       </Link>
-      <a href="#" class="nav-item disabled">
+      <a href="#" class="mobile-nav-item" @click.prevent="triggerAlert('Alerts: Real-time notifications for job requests and status changes. (Scheduled for Phase 5)')">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>
+          <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
         </svg>
         <span class="nav-label">Alerts</span>
       </a>
-      <Link href="/" class="nav-item">
+      <a href="#" class="mobile-nav-item" @click.prevent="triggerAlert('Driver Profile: Manage vehicle details, license info, and ratings. (Scheduled for Phase 5)')">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
         </svg>
         <span class="nav-label">Profile</span>
-      </Link>
+      </a>
     </nav>
+
   </div>
 </template>
 
@@ -251,439 +292,626 @@ export default {
       });
     };
 
+    const triggerAlert = (msg) => {
+      alert(msg);
+    };
+
     return {
       processingId,
       acceptJob,
-      completeJob
+      completeJob,
+      triggerAlert
     };
   }
 }
 </script>
 
 <style scoped>
-* {
-  box-sizing: border-box;
-}
+@import "../../css/design-tokens.css";
 
-.dashboard-wrapper {
+/* ── Outer Wrapper ── */
+.driver-wrapper {
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+  background-color: var(--color-neutral-50);
   min-height: 100vh;
-  background-color: #F7F8F5;
-  color: #1A1A1A;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  padding-bottom: 80px; /* space for mobile nav */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+  padding-bottom: calc(var(--bottom-nav-height) + var(--space-4));
+  font-family: var(--font-family);
+  color: var(--color-neutral-900);
 }
 
-/* Header Styling */
-.header {
-  background-color: #FFFFFF;
-  border-bottom: 1px solid #E0E0DA;
+/* ── Header ── */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 var(--space-4);
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-border);
+  height: var(--topbar-height);
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 50;
 }
 
-.header-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 12px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.brand {
+.app-logo {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
+  color: var(--color-tertiary);
 }
 
-.logo-text {
-  font-size: 20px;
-  font-weight: 500;
-  color: #1B5E20;
+.logo-icon { color: var(--color-tertiary); }
+
+.app-logo-text {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.5px;
+  color: var(--color-neutral-900);
 }
 
-.user-greeting {
+.header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-2);
 }
 
-.greeting-text {
-  font-size: 14px;
-  color: #2E7D32;
-  font-weight: 500;
-  background-color: #E8F5E9;
-  padding: 4px 8px;
-  border-radius: 6px;
-}
-
-.logout-link-btn {
-  color: #C62828;
+.icon-action-btn {
   background: none;
   border: none;
-  font-size: 14px;
-  font-weight: 500;
+  color: var(--color-neutral-700);
   cursor: pointer;
-  padding: 4px 8px;
-}
-
-/* Main Layout */
-.main-content {
-  padding-top: 16px;
-}
-
-.page-header {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-@media (min-width: 768px) {
-  .page-header {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-}
-
-.page-title {
-  font-size: 24px;
-  font-weight: 500;
-  color: #1A1A1A;
-  margin: 0;
-}
-
-.page-subtitle {
-  font-size: 14px;
-  color: #6B6B63;
-  margin: 4px 0 0 0;
-}
-
-.jobs-count-badge {
-  font-size: 13px;
-  font-weight: 500;
-  color: #2E7D32;
-  background-color: #E8F5E9;
-  padding: 6px 12px;
-  border-radius: 20px;
-  align-self: flex-start;
-}
-
-/* Flash Alert */
-.flash-alert {
-  background-color: #E8F5E9;
-  border: 1px solid #2E7D32;
-  color: #1B5E20;
-  padding: 12px 16px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  font-size: 14px;
-}
-
-/* Empty State */
-.empty-state {
-  background-color: #FFFFFF;
-  border: 1px solid #E0E0DA;
-  border-radius: 12px;
-  padding: 48px 24px;
-  text-align: center;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
-}
-
-.empty-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
-}
-
-.empty-title {
-  font-size: 18px;
-  font-weight: 500;
-  color: #1A1A1A;
-  margin: 0 0 8px 0;
-}
-
-.empty-text {
-  font-size: 14px;
-  color: #6B6B63;
-  margin: 0;
-}
-
-/* Jobs Grid */
-.jobs-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-}
-
-@media (min-width: 768px) {
-  .jobs-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-.job-card {
-  background-color: #FFFFFF;
-  border: 1px solid #E0E0DA;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.job-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #E0E0DA;
-  margin-bottom: 16px;
-}
-
-.job-id {
-  font-size: 15px;
-  font-weight: 500;
-  color: #1A1A1A;
-}
-
-.job-payout, .job-payout-est {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.payout-label {
-  font-size: 10px;
-  color: #6B6B63;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.payout-value {
-  font-size: 16px;
-  font-weight: 500;
-  color: #2E7D32;
-}
-
-/* Pickup and Dropoff Steps */
-.job-card-body {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.location-step {
-  display: flex;
-  gap: 12px;
-}
-
-.step-indicator {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 12px;
-}
-
-.dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  margin-top: 5px;
-}
-
-.pickup-dot {
-  background-color: #2E7D32;
-}
-
-.dropoff-dot {
-  background-color: #B8860B;
-}
-
-.line {
-  width: 2px;
-  background-color: #E0E0DA;
-  flex-grow: 1;
-  margin: 4px 0;
-}
-
-.step-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.step-label {
-  font-size: 11px;
-  color: #6B6B63;
-  text-transform: uppercase;
-}
-
-.location-name {
-  font-size: 15px;
-  font-weight: 500;
-  color: #1A1A1A;
-  margin: 2px 0 0 0;
-}
-
-.party-name {
-  font-size: 13px;
-  color: #6B6B63;
-  margin: 2px 0 0 0;
-}
-
-/* Cargo Details */
-.cargo-details {
-  border-top: 1px dashed #E0E0DA;
-  padding-top: 12px;
-  margin-top: 4px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 13px;
-}
-
-.cargo-label {
-  color: #6B6B63;
-}
-
-.cargo-value {
-  font-weight: 500;
-  color: #1A1A1A;
-}
-
-/* Actions */
-.job-card-actions {
-  margin-top: 20px;
-}
-
-.btn-accept {
-  width: 100%;
-  height: 44px; /* Generous tap target */
-  background-color: #2E7D32;
-  color: #FFFFFF;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  transition: background-color var(--transition-fast);
 }
 
-.btn-accept:hover:not(:disabled) {
-  background-color: #1B5E20;
+.icon-action-btn:hover { background-color: var(--color-neutral-100); }
+
+/* ── Flash ── */
+.flash-alert {
+  margin: var(--space-3) var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-tertiary-subtle);
+  border: 1px solid var(--color-tertiary-light);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-tertiary);
+  font-weight: var(--font-weight-semibold);
 }
 
-.btn-accept:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+/* ── Main ── */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Mobile Bottom Navigation */
-.mobile-nav {
+.section-block {
+  padding: var(--space-4);
+}
+
+.section-divider {
+  height: 6px;
+  background-color: var(--color-neutral-100);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-4);
+}
+
+.section-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin: 0 0 2px 0;
+}
+
+.section-subtitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  margin: 0;
+}
+
+/* ── Nearby Badge ── */
+.nearby-badge {
+  background-color: var(--color-tertiary);
+  color: var(--color-white);
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  padding: 3px var(--space-2);
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Empty States ── */
+.empty-active-card {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+  box-shadow: var(--shadow-xs);
+}
+
+.empty-jobs-card {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-10) var(--space-4);
+  text-align: center;
+  box-shadow: var(--shadow-xs);
+}
+
+.empty-state-svg {
+  color: var(--color-neutral-300);
+  margin-bottom: var(--space-3);
+}
+
+.empty-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.empty-sub {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-500);
+  margin: 0;
+  max-width: 260px;
+  margin: 0 auto;
+}
+
+/* ── Active Trip Card ── */
+.active-trips-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.active-trip-card {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  border-left: 4px solid var(--color-tertiary);
+}
+
+/* Status & Payout Row */
+.trip-status-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.in-progress-badge {
+  background-color: var(--color-tertiary);
+  color: var(--color-white);
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  padding: 4px var(--space-2);
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.8px;
+}
+
+.payout-col {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+}
+
+.payout-label-sm {
+  font-size: 9px;
+  text-transform: uppercase;
+  color: var(--color-neutral-500);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.5px;
+}
+
+.payout-amount {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+}
+
+/* Progress Steps */
+.progress-steps-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.step-icon-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-border);
+  background-color: var(--color-neutral-50);
+  color: var(--color-neutral-500);
+}
+
+.progress-step.completed .step-icon-circle {
+  background-color: var(--color-tertiary-subtle);
+  border-color: var(--color-tertiary);
+  color: var(--color-tertiary);
+}
+
+.progress-step.active .step-icon-circle {
+  background-color: var(--color-tertiary);
+  border-color: var(--color-tertiary);
+  color: var(--color-white);
+  box-shadow: 0 0 0 3px rgba(42,157,143,0.2);
+}
+
+.step-name {
+  font-size: 9px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-500);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.progress-step.active .step-name { color: var(--color-tertiary); }
+.progress-step.completed .step-name { color: var(--color-tertiary); }
+
+.step-connector {
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(to right, var(--color-tertiary), var(--color-border));
+  margin-bottom: 18px;
+  min-width: 24px;
+}
+
+/* Route Info */
+.route-info-block {
+  background-color: var(--color-neutral-50);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.route-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.route-type-tag {
+  font-size: 9px;
+  font-weight: var(--font-weight-bold);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.pickup-tag {
+  background-color: var(--color-tertiary-subtle);
+  color: var(--color-tertiary);
+}
+
+.dropoff-tag {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary-hover);
+}
+
+.route-connector-line {
+  width: 2px;
+  height: 12px;
+  background-color: var(--color-border);
+  margin: 4px 0 4px 22px;
+}
+
+.route-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.route-location {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+}
+
+.route-party {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+}
+
+/* Cargo chip */
+.cargo-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary-hover);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  padding: 4px var(--space-3);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-primary-lighter);
+}
+
+/* Trip Action Buttons */
+.trip-action-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.btn-picked-up {
+  height: 40px;
+  background-color: var(--color-secondary);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  transition: opacity var(--transition-fast);
+}
+
+.btn-picked-up:hover { opacity: 0.9; }
+.btn-picked-up:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn-delivered {
+  height: 40px;
+  background-color: var(--color-tertiary);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  transition: opacity var(--transition-fast);
+}
+
+.btn-delivered:hover { opacity: 0.9; }
+.btn-delivered:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Available Job Cards ── */
+.jobs-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.job-card {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.job-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.job-payout-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.est-payout-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-500);
+  letter-spacing: 0.5px;
+}
+
+.est-payout-amount {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-secondary);
+}
+
+.distance-badge {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  padding: 3px var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+/* Job route block */
+.job-route-block {
+  background-color: var(--color-neutral-50);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.job-route-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.pickup-dot-icon, .dropoff-dot-icon {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.pickup-dot-icon {
+  background-color: var(--color-tertiary);
+  box-shadow: 0 0 0 3px rgba(42,157,143,0.2);
+}
+
+.dropoff-dot-icon {
+  background-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(45,106,79,0.2);
+}
+
+.job-route-line {
+  width: 2px;
+  height: 14px;
+  background-color: var(--color-border);
+  margin: 4px 0 4px 4px;
+}
+
+.job-route-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.job-route-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  color: var(--color-neutral-500);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.5px;
+}
+
+.job-route-value {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+}
+
+.job-cargo-sub {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+}
+
+/* Accept Job Button */
+.btn-accept-job {
+  width: 100%;
+  height: 42px;
+  background-color: var(--color-primary-hover);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+  letter-spacing: 0.3px;
+}
+
+.btn-accept-job:hover { opacity: 0.9; }
+.btn-accept-job:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Mobile Bottom Navigation Bar ── */
+.mobile-bottom-nav {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 60px;
-  background-color: #FFFFFF;
-  border-top: 1px solid #E0E0DA;
+  max-width: 480px;
+  margin: 0 auto;
+  height: var(--bottom-nav-height);
+  background-color: var(--color-white);
+  border-top: 1px solid var(--color-border);
   display: flex;
   justify-content: space-around;
   align-items: center;
-  z-index: 10;
+  z-index: 100;
+  padding: 0 var(--space-2);
 }
 
-.nav-item {
+.mobile-nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #6B6B63;
+  color: var(--color-neutral-500);
   text-decoration: none;
-  font-size: 10px;
-  gap: 2px;
   width: 33.33%;
   height: 100%;
-}
-
-.nav-item.active {
-  color: #2E7D32;
-}
-
-.nav-item.disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.nav-label {
-  font-weight: 500;
-}
-
-.hide-desktop {
-  display: flex;
-}
-
-@media (min-width: 768px) {
-  .hide-desktop {
-    display: none !important;
-  }
-}
-
-/* Active Trips Custom Styling */
-.active-trips-section {
-  margin-bottom: 40px;
-}
-
-.border-active {
-  border: 1.5px solid #2E7D32 !important;
-  box-shadow: 0 2px 4px rgba(46, 125, 50, 0.08) !important;
-}
-
-.job-header-left {
-  display: flex;
-  align-items: center;
-}
-
-.active-badge {
-  font-size: 11px;
-  font-weight: 500;
-  color: #2E7D32;
-  background-color: #E8F5E9;
-  padding: 2px 8px;
-  border-radius: 12px;
-  margin-left: 8px;
-  text-transform: uppercase;
-}
-
-.btn-complete {
-  width: 100%;
-  height: 44px; /* Generous tap target */
-  background-color: #2E7D32;
-  color: #FFFFFF;
+  font-weight: var(--font-weight-semibold);
+  transition: all var(--transition-fast);
+  background: none;
   border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+}
+
+.mobile-nav-item .nav-label {
+  font-size: 9px;
+  margin-top: 2px;
+}
+
+.mobile-nav-item.active {
+  color: var(--color-tertiary);
+}
+
+.mobile-nav-item.active .nav-active-pill {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: var(--space-1);
+  background-color: var(--color-tertiary-subtle);
+  color: var(--color-tertiary);
+  padding: 6px var(--space-3);
+  border-radius: var(--radius-pill);
 }
 
-.btn-complete:hover:not(:disabled) {
-  background-color: #1B5E20;
-}
-
-.btn-complete:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+.mobile-nav-item.active .nav-label {
+  font-size: 10px;
+  margin-top: 0;
 }
 </style>
