@@ -405,12 +405,7 @@
           <span class="nav-label">Home</span>
         </div>
       </Link>
-      <a href="#" class="mobile-nav-item" @click.prevent="triggerAlert('Marketplace: This allows buyers to browse listed produce. Selecting this redirects to the Buyer Marketplace screen (Phase 3).')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <span class="nav-label">Market</span>
-      </a>
+
       <a href="#" class="mobile-nav-item" @click.prevent="triggerAlert('Orders: Displays your active shipment offers, logistics tracking status, and delivery completion logs (Phase 5 Shared screens).')">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
