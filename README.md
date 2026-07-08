@@ -60,12 +60,18 @@ FarmLink connects **farmers**, **buyers**, and **drivers** in a single monolithi
 - Duplicate rating prevention per order
 
 ### ✅ Module 5 — Mobile Money & Escrow
-- **MoMo Checkout Form**: buyers select a network (MTN / Telecel), enter their MoMo number and 4-digit PIN before an order is placed
+- **MoMo Checkout Form**: buyers select a network (MTN / Telecel / AT), enter their MoMo number and 4-digit PIN before an order is placed
 - **2-second authorization simulation**: a spinner plays to mimic real MoMo network authorization, followed by a confirmation prompt
 - **Escrow hold**: on successful checkout, `payment_status` is set to `escrow_held` — funds are considered locked until delivery
 - **Automatic escrow release**: when a driver marks a delivery as complete, `payment_status` transitions to `released` automatically
 - **Farmer revenue card**: the Farmer Dashboard now shows a **Total Revenue** metric card displaying only earnings from `released` orders (i.e. confirmed deliveries)
 - **Scroll UX fix**: background page scroll is locked while the checkout modal is open; modal content scrolls internally on large viewports
+
+### ✅ Module 6 — Agri-Tech Modern Redesign (Phases 1–4)
+- **Phase 1 (Auth)**: Redesigned Login and Register screens with responsive split-screen layouts, color-coded role cards, Forgot Password 6-digit flow, and CSS design tokens setup.
+- **Phase 2 (Farmer)**: Redesigned Farmer Dashboard with sidebar navigation (desktop), collapsible tablet sidebar, bottom navigation capsule (mobile), responsive metrics cards, and listing actions.
+- **Phase 3 (Buyer)**: Redesigned Buyer Browse with full-width product cards, horizontal category scrollbar filter, seasonal promo banners, slide-up Mobile Money payment drawers, and status-bordered order logs.
+- **Phase 4 (Transporter)**: Redesigned Driver Dashboard featuring active trip card progress stages (Farm → Transit → Market), orange "Picked Up" & teal "Delivered" action indicators, nearby jobs list, and bottom navigation.
 
 ---
 
@@ -161,16 +167,33 @@ Visit [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
 ---
 
-## Design System
+## Design System (Agri-Tech Modern)
 
-- **Primary accent:** `#2E7D32` (green)
-- **Background:** `#F7F8F5` (warm off-white)
-- **Typography:** System font stack (`-apple-system`, `Segoe UI`, `Roboto`)
-- **Layout:** Mobile-first, max-width containers (`max-w-6xl`) to prevent desktop stretching
-- **Icons:** Tabler / Lucide outline SVG (no icon font dependencies)
+Defined as CSS Custom Properties in `resources/css/design-tokens.css`:
+
+### Colors
+
+| Variable | Hex Value | Purpose |
+|---|---|---|
+| `--color-primary` | `#2D6A4F` | Primary green accents, active buttons |
+| `--color-primary-hover` | `#1B4332` | Darker green for hover states |
+| `--color-primary-light` | `#52B788` | Light green for borders & icon backdrops |
+| `--color-secondary` | `#F4A261` | Warm orange accent for buyer/pricing |
+| `--color-tertiary` | `#2A9D8F` | Teal transporter/delivery details |
+| `--color-neutral-50` | `#F8F9FA` | Main page background |
+| `--color-neutral-900` | `#212529` | Headings & dark typography |
+| `--color-danger` | `#DC3545` | Delete, reject & error actions |
+| `--color-white` | `#FFFFFF` | Card & form content surfaces |
+
+### Typography & Spacing
+- **Font Family**: Inter (imported from Google Fonts)
+- **Typography Weights**: 400 (Body), 500 (Labels), 600 (Subtitle), 700 (Headings)
+- **Border Radius**: Cards (`12px`), Buttons/Inputs (`8px`), Pills (`999px`)
+- **Card Shadow**: Subtle depth (`0 2px 12px rgba(0,0,0,0.08)`)
 
 ---
 
 ## License
 
 Private project — Western Region of Ghana localized marketplace.
+
