@@ -609,12 +609,14 @@ export default {
   flex-direction: column;
   background-color: var(--color-bg-sidebar);
   border-right: 1px solid var(--color-border);
-  position: sticky;
+  position: fixed;
   top: 0;
-  height: 100vh;
+  left: 0;
+  bottom: 0;
   flex-shrink: 0;
   transition: width var(--transition-base);
   z-index: 100;
+  overflow-y: auto;
 }
 
 .sidebar-brand {
@@ -823,6 +825,7 @@ export default {
   min-width: 0;
   display: flex;
   flex-direction: column;
+  margin-left: 0;
 }
 
 .content-body {
@@ -1511,6 +1514,9 @@ export default {
     display: flex;
     width: var(--sidebar-width-collapsed);
   }
+  .main-layout {
+    margin-left: var(--sidebar-width-collapsed);
+  }
   .sidebar-user {
     padding: var(--space-2);
     margin: var(--space-2);
@@ -1561,6 +1567,9 @@ export default {
 @media (min-width: 1025px) {
   .sidebar-nav {
     width: var(--sidebar-width);
+  }
+  .main-layout {
+    margin-left: var(--sidebar-width);
   }
   .sidebar-brand {
     justify-content: flex-start;
