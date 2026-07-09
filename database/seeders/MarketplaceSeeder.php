@@ -78,7 +78,7 @@ class MarketplaceSeeder extends Seeder
             'category' => 'Vegetable',
             'quantity' => 50,
             'price' => 15.00,
-            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640400/farmlink/products/sample_habanero.jpg',
+            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640442/farmlink/products/lzph1vevp9lipswfinqr.jpg',
         ]);
 
         Product::create([
@@ -87,7 +87,7 @@ class MarketplaceSeeder extends Seeder
             'category' => 'Vegetable',
             'quantity' => 100,
             'price' => 25.00,
-            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640402/farmlink/products/sample_tomatoes.jpg',
+            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640523/farmlink/products/nezb33oppjmh3kxw3byg.jpg',
         ]);
 
         Product::create([
@@ -96,7 +96,7 @@ class MarketplaceSeeder extends Seeder
             'category' => 'Vegetable',
             'quantity' => 40,
             'price' => 12.00,
-            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640400/farmlink/products/sample_garden_eggs.jpg',
+            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640420/farmlink/products/yinpnwbpaowgfnsxbip0.jpg',
         ]);
 
         Product::create([
@@ -105,7 +105,7 @@ class MarketplaceSeeder extends Seeder
             'category' => 'Leafy Green',
             'quantity' => 80,
             'price' => 8.00,
-            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640401/farmlink/products/sample_kontomire.jpg',
+            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640452/farmlink/products/js6sss7rxva2blmzcsbg.jpg',
         ]);
 
         Product::create([
@@ -124,7 +124,7 @@ class MarketplaceSeeder extends Seeder
             'category' => 'Root/Tuber',
             'quantity' => 20,
             'price' => 120.00,
-            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640399/farmlink/products/sample_cassava.jpg',
+            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640411/farmlink/products/wwtlqffgg7gmustawwvz.jpg',
         ]);
 
         Product::create([
@@ -133,7 +133,7 @@ class MarketplaceSeeder extends Seeder
             'category' => 'Root/Tuber',
             'quantity' => 30,
             'price' => 45.00,
-            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640402/farmlink/products/sample_yam.jpg',
+            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640531/farmlink/products/hax4ri16u3iss1pxlhj3.jpg',
         ]);
 
         Product::create([
@@ -142,7 +142,7 @@ class MarketplaceSeeder extends Seeder
             'category' => 'Other',
             'quantity' => 15,
             'price' => 35.00,
-            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640402/farmlink/products/sample_plantain.jpg',
+            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640509/farmlink/products/of0yj2pn0rgadrsvtzqe.jpg',
         ]);
 
         Product::create([
@@ -151,7 +151,7 @@ class MarketplaceSeeder extends Seeder
             'category' => 'Vegetable',
             'quantity' => 60,
             'price' => 18.00,
-            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640401/farmlink/products/sample_pepper.jpg',
+            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640478/farmlink/products/cdwin6xxdclixdajy2sq.jpg',
         ]);
 
         Product::create([
@@ -160,7 +160,7 @@ class MarketplaceSeeder extends Seeder
             'category' => 'Root/Tuber',
             'quantity' => 25,
             'price' => 30.00,
-            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640402/farmlink/products/sample_sweet_potatoes.jpg',
+            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640519/farmlink/products/pj5lxspgp9rhj22vrrbx.jpg',
         ]);
     }
 }
