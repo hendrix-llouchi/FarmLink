@@ -19,8 +19,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libzip-dev \
     unzip \
     git \
+    libpq-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd pdo_mysql bcmath zip opcache \
+    && docker-php-ext-install -j$(nproc) gd pdo_mysql pdo_pgsql bcmath zip opcache \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
