@@ -9,11 +9,14 @@
         <span class="app-logo-text">FarmLink</span>
       </div>
       <div class="header-actions">
-        <button class="icon-action-btn" @click.prevent="triggerAlert('Notifications Center: Receive real-time alerts for delivery statuses and order receipts. (Scheduled for Phase 5)')">
+        <Link href="/notifications" class="icon-action-btn" style="position: relative; display: flex; align-items: center; justify-content: center;">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
           </svg>
-        </button>
+          <span v-if="$page.props.auth?.unread_notifications_count > 0" class="badge-count-mobile" style="position: absolute; top: 2px; right: 2px; background-color: var(--color-danger); color: var(--color-white); font-size: 9px; font-weight: var(--font-weight-bold); min-width: 14px; height: 14px; border-radius: var(--radius-pill); display: flex; align-items: center; justify-content: center;">
+            {{ $page.props.auth.unread_notifications_count }}
+          </span>
+        </Link>
         <Link href="/logout" method="post" as="button" class="icon-action-btn logout-header-btn" title="Log Out">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
@@ -368,7 +371,7 @@
         </svg>
         <span class="nav-label">Orders</span>
       </Link>
-      <Link href="/" class="mobile-nav-item">
+      <Link href="/settings" class="mobile-nav-item">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
         </svg>

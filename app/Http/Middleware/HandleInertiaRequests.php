@@ -46,6 +46,7 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->user()->location,
                     'average_rating' => $request->user()->average_rating,
                 ] : null,
+                'unread_notifications_count' => $request->user() ? $request->user()->notifications()->whereNull('read_at')->count() : 0,
             ],
             'flash' => [
                 'message' => fn () => $request->session()->get('message'),

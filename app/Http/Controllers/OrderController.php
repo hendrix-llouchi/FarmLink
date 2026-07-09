@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Rating;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -55,13 +56,20 @@ class OrderController extends Controller
                 $product->decrement('quantity', $request->quantity_ordered);
 
                 // Create the order
-                Order::create([
+                $order = Order::create([
                     'buyer_id' => auth()->id(),
                     'product_id' => $product->id,
                     'quantity_ordered' => $request->quantity_ordered,
                     'total_price' => $product->price * $request->quantity_ordered,
                     'status' => 'pending',
                     'payment_status' => 'escrow_held',
+                ]);
+
+                // Notify the farmer
+                Notification::create([
+                    'user_id' => $product->user_id,
+                    'message' => "New order received: " . auth()->user()->name . " ordered " . $request->quantity_ordered . " " . ($product->unit ?? 'item(s)') . " of " . $product->name . ".",
+                    'type' => 'order_update',
                 ]);
             });
         } catch (ValidationException $e) {
@@ -118,6 +126,20 @@ class OrderController extends Controller
                     'driver_id' => auth()->id(),
                     'status' => 'processing',
                 ]);
+
+                // Notify buyer
+                Notification::create([
+                    'user_id' => $order->buyer_id,
+                    'message' => "Your delivery has been accepted by driver " . auth()->user()->name . " for your order of " . $order->quantity_ordered . " " . ($order->product->unit ?? 'item(s)') . " of " . $order->product->name . ".",
+                    'type' => 'transport_update',
+                ]);
+
+                // Notify farmer
+                Notification::create([
+                    'user_id' => $order->product->user_id,
+                    'message' => "Driver " . auth()->user()->name . " has accepted the delivery request for your product: " . $order->product->name . ".",
+                    'type' => 'transport_update',
+                ]);
             });
         } catch (ValidationException $e) {
             throw $e;
@@ -154,6 +176,20 @@ class OrderController extends Controller
                 $order->update([
                     'status' => 'delivered',
                     'payment_status' => 'released',
+                ]);
+
+                // Notify buyer
+                Notification::create([
+                    'user_id' => $order->buyer_id,
+                    'message' => "Your order for " . $order->quantity_ordered . " " . ($order->product->unit ?? 'item(s)') . " of " . $order->product->name . " has been delivered by driver " . auth()->user()->name . "! You can now rate this order.",
+                    'type' => 'order_update',
+                ]);
+
+                // Notify farmer
+                Notification::create([
+                    'user_id' => $order->product->user_id,
+                    'message' => "Order #" . $order->id . " has been successfully delivered by " . auth()->user()->name . ". Funds of ₵" . number_format($order->total_price, 2) . " have been released to your account.",
+                    'type' => 'order_update',
                 ]);
             });
         } catch (ValidationException $e) {
