@@ -1498,6 +1498,9 @@ export default {
 }
 
 @media (min-width: 768px) {
+  .dashboard-container {
+    flex-direction: row;
+  }
   .mobile-header {
     display: none;
   }
