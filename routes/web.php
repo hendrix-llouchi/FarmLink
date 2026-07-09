@@ -82,3 +82,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/driver/orders/{id}/complete', [OrderController::class, 'completeDelivery'])->name('driver.orders.complete');
     });
 });
+
+Route::get('/run-migrations-temp-secure', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        return 'Migrations completed successfully:<br><pre>' . \Illuminate\Support\Facades\Artisan::output() . '</pre>';
+    } catch (\Exception $e) {
+        return 'Error running migrations: ' . $e->getMessage();
+    }
+});
