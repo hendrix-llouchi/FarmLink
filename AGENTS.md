@@ -117,31 +117,24 @@ These components must be used across all screens — do not re-implement button 
 | `database/migrations/2026_07_06_000000_add_reset_token_to_users_table.php` | ✅ Migrated |
 | `routes/web.php` | ✅ Updated — forgot/reset routes added |
 
-### ⏳ Phase 2 — Farmer Dashboard (NOT STARTED)
-**Branch to create:** `redesign/phase-2-farmer`
-**Target files to redesign:**
-| File | Screen | Notes |
+### ✅ Phase 2 — Farmer Dashboard (MERGED into main, PR #22)
+**Branch:** `redesign/phase-2-farmer`
+| File | Status | Notes |
 |---|---|---|
-| `resources/js/Pages/Farmer/Dashboard.vue` | Farmer Dashboard | Main screen — sidebar nav, stats cards, product listings, recent orders |
-| `resources/js/Pages/Farmer/Products.vue` or inline | Post Produce / My Listings | Form to list produce + active listings table |
+| `resources/js/Pages/FarmerDashboard.vue` | ✅ Redesigned | Sidebar nav, collapsible tablet sidebar, bottom nav capsule, metrics cards, product listings |
 
-**Key design requirements for Phase 2:**
-- Left sidebar navigation (desktop), bottom nav (mobile) — see Section 4 Nav Layout
-- Dashboard stats cards: total listings, pending orders, total revenue, avg rating
-- Product listing cards with status badges (Available / Sold / Pending)
-- Primary accent: `var(--color-primary)` — farmer role = green
-- All props/logic from Inertia must be preserved exactly
+### ✅ Phase 3 — Buyer Marketplace (MERGED into main, PR #23)
+**Branch:** `redesign/phase-3-buyer`
+| File | Status | Notes |
+|---|---|---|
+| `resources/js/Pages/BuyerBrowse.vue` | ✅ Redesigned | Full-width product cards, categories, seasonal promo banner, drawer MoMo checkout |
+| `resources/js/Pages/MyOrders.vue` | ✅ Redesigned | Status-bordered tracking timeline/logs |
 
-### ⏳ Phase 3 — Buyer Marketplace (NOT STARTED)
-**Branch to create:** `redesign/phase-3-buyer`
-- `resources/js/Pages/Buyer/Browse.vue` — marketplace grid
-- `resources/js/Pages/Buyer/Orders.vue` — order history & tracking
-- Primary accent: `var(--color-secondary)` — buyer role = orange
-
-### ⏳ Phase 4 — Transporter Portal (NOT STARTED)
-**Branch to create:** `redesign/phase-4-transporter`
-- `resources/js/Pages/Driver/Dashboard.vue` — available jobs + active delivery
-- Primary accent: `var(--color-tertiary)` — transporter role = teal
+### ✅ Phase 4 — Transporter Portal (MERGED into main, PR #24)
+**Branch:** `redesign/phase-4-transporter`
+| File | Status | Notes |
+|---|---|---|
+| `resources/js/Pages/DriverDashboard.vue` | ✅ Redesigned | Active trip card stages, pickup/delivered action buttons, bottom nav |
 
 ### ⏳ Phase 5 — Shared Screens (NOT STARTED)
 **Branch to create:** `redesign/phase-5-shared`
