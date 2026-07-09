@@ -21,14 +21,6 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\NotificationController;
 
-Route::get('/run-seeder-temp-secure', function () {
-    \Illuminate\Support\Facades\DB::table('orders')->delete();
-    \Illuminate\Support\Facades\DB::table('products')->delete();
-    \Illuminate\Support\Facades\DB::table('users')->delete();
-    \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'MarketplaceSeeder']);
-    return 'Seeder completed successfully with Cloudinary URLs!';
-});
-
 Route::get('/', function () {
     if (auth()->check()) {
         $role = auth()->user()->role;
