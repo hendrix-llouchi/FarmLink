@@ -136,9 +136,12 @@ These components must be used across all screens — do not re-implement button 
 |---|---|---|
 | `resources/js/Pages/DriverDashboard.vue` | ✅ Redesigned | Active trip card stages, pickup/delivered action buttons, bottom nav |
 
-### ⏳ Phase 5 — Shared Screens (NOT STARTED)
-**Branch to create:** `redesign/phase-5-shared`
-- Settings / Profile, Notifications, Admin panel
+### ✅ Phase 5 — Shared Screens (MERGED into main, PR #28)
+**Branch:** `redesign/phase-5-shared`
+| File | Status | Notes |
+|---|---|---|
+| `resources/js/Pages/Settings.vue` | ✅ Redesigned | User Profile, password reset forms, and average platform rating card |
+| `resources/js/Pages/Notifications.vue` | ✅ Redesigned | In-app alerts feed, read states, category icons, and clear-all actions |
 
 ## 7. Running the Project Locally
 ```bash
