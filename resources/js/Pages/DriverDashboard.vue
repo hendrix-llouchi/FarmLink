@@ -10,11 +10,14 @@
         <span class="app-logo-text">FarmLink</span>
       </div>
       <div class="header-actions">
-        <button class="icon-action-btn" @click.prevent="triggerAlert('Notifications Center: Get real-time alerts for job requests, ETA updates, and payment confirmations. (Scheduled for Phase 5)')">
+        <Link href="/notifications" class="icon-action-btn" style="position: relative; display: flex; align-items: center; justify-content: center;">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
           </svg>
-        </button>
+          <span v-if="$page.props.auth?.unread_notifications_count > 0" class="badge-count-mobile" style="position: absolute; top: 2px; right: 2px; background-color: var(--color-danger); color: var(--color-white); font-size: 9px; font-weight: var(--font-weight-bold); min-width: 14px; height: 14px; border-radius: var(--radius-pill); display: flex; align-items: center; justify-content: center;">
+            {{ $page.props.auth.unread_notifications_count }}
+          </span>
+        </Link>
         <Link href="/logout" method="post" as="button" class="icon-action-btn" title="Log Out">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
@@ -235,18 +238,18 @@
           <span class="nav-label">Deliveries</span>
         </div>
       </Link>
-      <a href="#" class="mobile-nav-item" @click.prevent="triggerAlert('Alerts: Real-time notifications for job requests and status changes. (Scheduled for Phase 5)')">
+      <Link href="/notifications" class="mobile-nav-item">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
         </svg>
         <span class="nav-label">Alerts</span>
-      </a>
-      <a href="#" class="mobile-nav-item" @click.prevent="triggerAlert('Driver Profile: Manage vehicle details, license info, and ratings. (Scheduled for Phase 5)')">
+      </Link>
+      <Link href="/settings" class="mobile-nav-item">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
         </svg>
         <span class="nav-label">Profile</span>
-      </a>
+      </Link>
     </nav>
 
   </div>
