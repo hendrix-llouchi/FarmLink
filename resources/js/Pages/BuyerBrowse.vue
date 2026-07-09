@@ -128,7 +128,7 @@
           <div class="product-img-wrapper">
             <img 
               v-if="product.image_path" 
-              :src="'/storage/' + product.image_path" 
+              :src="product.image_path.startsWith('http') ? product.image_path : '/storage/' + product.image_path" 
               :alt="product.name" 
               class="product-image"
             />
@@ -184,7 +184,7 @@
           <div class="modal-img-container">
             <img 
               v-if="selectedProduct.image_path" 
-              :src="'/storage/' + selectedProduct.image_path" 
+              :src="selectedProduct.image_path.startsWith('http') ? selectedProduct.image_path : '/storage/' + selectedProduct.image_path" 
               :alt="selectedProduct.name" 
               class="modal-image"
             />

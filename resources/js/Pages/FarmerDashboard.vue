@@ -196,7 +196,7 @@
               <div v-else class="listings-grid">
                 <AppCard v-for="product in localProducts" :key="product.id" class="product-card" paddingSize="sm">
                   <div class="product-img-box">
-                    <img v-if="product.image_path" :src="product.image_path.startsWith('data:') ? product.image_path : '/storage/' + product.image_path" :alt="product.name" class="product-image" />
+                    <img v-if="product.image_path" :src="product.image_path.startsWith('data:') || product.image_path.startsWith('http') ? product.image_path : '/storage/' + product.image_path" :alt="product.name" class="product-image" />
                     <div v-else class="product-placeholder">🥦</div>
                     <div class="badge-overlay">
                       <AppBadge :variant="product.quantity > 0 ? 'success' : 'danger'" size="sm">
@@ -504,7 +504,7 @@ export default {
       form.category = product.category;
       form.quantity = String(product.quantity);
       form.price = String(product.price);
-      imagePreview.value = product.image_path ? (product.image_path.startsWith('data:') ? product.image_path : '/storage/' + product.image_path) : null;
+      imagePreview.value = product.image_path ? (product.image_path.startsWith('data:') || product.image_path.startsWith('http') ? product.image_path : '/storage/' + product.image_path) : null;
       scrollToForm();
     };
 
@@ -540,7 +540,7 @@ export default {
             category: form.category,
             quantity: Number(form.quantity),
             price: Number(form.price),
-            image_path: newImgPath.startsWith('/storage/') ? newImgPath.replace('/storage/', '') : newImgPath
+            image_path: (newImgPath.startsWith('/storage/') ? newImgPath.replace('/storage/', '') : newImgPath)
           };
         }
         editingProductId.value = null;

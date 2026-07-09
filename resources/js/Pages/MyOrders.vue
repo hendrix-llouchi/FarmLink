@@ -57,7 +57,7 @@
               <div class="product-img-box">
                 <img 
                   v-if="order.product?.image_path" 
-                  :src="'/storage/' + order.product.image_path" 
+                  :src="order.product.image_path.startsWith('http') ? order.product.image_path : '/storage/' + order.product.image_path" 
                   :alt="order.product.name" 
                   class="product-image"
                 />
