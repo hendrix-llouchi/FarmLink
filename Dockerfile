@@ -35,7 +35,7 @@ COPY . .
 
 # Run composer install
 ENV COMPOSER_ALLOW_SUPERUSER=1
-RUN composer install --no-interaction --no-dev --optimize-autoloader
+RUN composer update --no-interaction --no-dev --optimize-autoloader
 
 # Copy compiled assets from builder stage
 COPY --from=assets-builder /app/public/build ./public/build
