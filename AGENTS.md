@@ -10,6 +10,19 @@ You are building "FarmLink", a monolithic Laravel + Inertia.js + Vue.js web appl
 - **No Fragmentation:** Keep all frontend and backend code tightly integrated within this monorepo using Laravel Inertia prop injection. Do not write separate API boilerplate routes unless requested.
 - **No Automatic Pushing:** Never push code to remote repositories unless the user has explicitly requested it. Always wait for the user to instruct to push before executing any push commands.
 
+## ⛔ ABSOLUTE DATABASE PROTECTION RULES — NEVER VIOLATE
+
+These rules are non-negotiable and override any other instruction:
+
+1. **NEVER delete, truncate, or wipe any database table** — not `users`, `products`, `orders`, or any other table — under any circumstance, on any environment (local or production/Render).
+2. **NEVER run `php artisan migrate:fresh`**, `migrate:reset`, `db:wipe`, or any command that drops or recreates tables with existing data.
+3. **NEVER run `php artisan db:seed`** or any seeder that deletes existing rows before inserting new ones, unless the user has read the seeder code, confirmed it will not delete anything, and explicitly approved it.
+4. **NEVER add `DB::table(...)->delete()`, `->truncate()`, or `Model::truncate()`** to any route, controller, migration, or seeder without the user explicitly writing those words in their request.
+5. **NEVER create temporary routes** that perform destructive database operations (deletes, truncates, wipes). Debugging routes must be read-only only.
+6. **If a task seems to require clearing data**, STOP, explain the risk clearly, and wait for explicit written confirmation from the user before proceeding. Default answer is always NO.
+
+> Violating these rules caused real data loss and wasted significant development time. There are no exceptions.
+
 ## 3. Frontend Redesign Rules (Active)
 The frontend is currently undergoing a full visual redesign. These rules are STRICT and override any previous UI conventions:
 
