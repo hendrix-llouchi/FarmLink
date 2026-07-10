@@ -21,6 +21,14 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\NotificationController;
 
+// Temporary: patch cabbage image URL in live DB — safe update only, no deletes
+Route::get('/patch-cabbage-image', function () {
+    $count = \Illuminate\Support\Facades\DB::table('products')
+        ->where('name', 'Cabbage Heads')
+        ->update(['image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783644045/farmlink/products/cabbage_heads.jpg']);
+    return "Done! Updated $count cabbage product(s).";
+});
+
 Route::get('/', function () {
     if (auth()->check()) {
         $role = auth()->user()->role;

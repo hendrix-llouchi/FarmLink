@@ -114,7 +114,7 @@ class MarketplaceSeeder extends Seeder
             'category' => 'Vegetable',
             'quantity' => 35,
             'price' => 15.00,
-            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640398/farmlink/products/sample_cabbage.jpg',
+            'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783644045/farmlink/products/cabbage_heads.jpg',
         ]);
 
         // Farmer 2 (Kwesi) Products
