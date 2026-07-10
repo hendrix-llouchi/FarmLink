@@ -117,7 +117,10 @@
 
             <!-- Progress Steps: Farm → Transit → Market -->
             <div class="progress-steps-row">
-              <div class="progress-step completed">
+              <div class="progress-step" :class="{
+                completed: order.status === 'in_transit' || order.status === 'delivered',
+                active: order.status === 'processing'
+              }">
                 <div class="step-icon-circle">
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -126,8 +129,12 @@
                 </div>
                 <span class="step-name">Farm</span>
               </div>
-              <div class="step-connector"></div>
-              <div class="progress-step active">
+              <div class="step-connector" :class="{ completed: order.status === 'in_transit' || order.status === 'delivered' }"></div>
+              <div class="progress-step" :class="{
+                completed: order.status === 'delivered',
+                active: order.status === 'in_transit',
+                pending: order.status === 'processing'
+              }">
                 <div class="step-icon-circle">
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <rect x="1" y="3" width="15" height="13"/>
@@ -138,8 +145,11 @@
                 </div>
                 <span class="step-name">Transit</span>
               </div>
-              <div class="step-connector"></div>
-              <div class="progress-step pending">
+              <div class="step-connector" :class="{ completed: order.status === 'delivered' }"></div>
+              <div class="progress-step" :class="{
+                completed: order.status === 'delivered',
+                pending: order.status !== 'delivered'
+              }">
                 <div class="step-icon-circle">
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/>
@@ -178,21 +188,28 @@
 
             <!-- Action Buttons: Picked Up + Delivered -->
             <div class="trip-action-buttons">
-              <button class="btn-picked-up" :disabled="processingId === order.id" @click.prevent="triggerAlert('Picked Up: This marks that you have collected the produce from the farm pickup point. Full logistics tracking integration is scheduled for Phase 4 completion.')">
+              <button 
+                class="btn-picked-up" 
+                :class="{ 'picked-up': order.status === 'in_transit' || order.status === 'delivered' }"
+                :disabled="processingId === order.id || order.status === 'in_transit' || order.status === 'delivered'" 
+                @click.prevent="pickupJob(order.id)"
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                   <polyline points="20 6 9 17 4 12"/>
                 </svg>
-                Picked Up
+                <span v-if="processingId === order.id && order.status !== 'in_transit'">Updating...</span>
+                <span v-else-if="order.status === 'in_transit' || order.status === 'delivered'">Picked Up ✓</span>
+                <span v-else>Picked Up</span>
               </button>
               <button
                 class="btn-delivered"
                 @click="completeJob(order.id)"
-                :disabled="processingId === order.id"
+                :disabled="processingId === order.id || order.status !== 'in_transit'"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
-                <span v-if="processingId === order.id">Updating...</span>
+                <span v-if="processingId === order.id && order.status === 'in_transit'">Updating...</span>
                 <span v-else>Delivered</span>
               </button>
             </div>
@@ -346,6 +363,15 @@ export default {
       });
     };
 
+    const pickupJob = (orderId) => {
+      processingId.value = orderId;
+      router.post(`/driver/orders/${orderId}/pickup`, {}, {
+        onFinish: () => {
+          processingId.value = null;
+        }
+      });
+    };
+
     const triggerAlert = (msg) => {
       alert(msg);
     };
@@ -353,6 +379,7 @@ export default {
     return {
       processingId,
       acceptJob,
+      pickupJob,
       completeJob,
       triggerAlert
     };
@@ -645,6 +672,10 @@ export default {
   min-width: 24px;
 }
 
+.step-connector.completed {
+  background: var(--color-tertiary);
+}
+
 /* Route Info */
 .route-info-block {
   background-color: var(--color-neutral-50);
@@ -746,6 +777,13 @@ export default {
 
 .btn-picked-up:hover { opacity: 0.9; }
 .btn-picked-up:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-picked-up.picked-up {
+  background-color: var(--color-neutral-200);
+  color: var(--color-neutral-600);
+  border: 1px solid var(--color-border);
+  cursor: not-allowed;
+  opacity: 1 !important;
+}
 
 .btn-delivered {
   height: 40px;

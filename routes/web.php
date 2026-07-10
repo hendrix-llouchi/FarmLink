@@ -83,6 +83,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:driver')->group(function () {
         Route::get('/driver/dashboard', [OrderController::class, 'driverIndex'])->name('driver.dashboard');
         Route::post('/driver/orders/{id}/accept', [OrderController::class, 'acceptDelivery'])->name('driver.orders.accept');
+        Route::post('/driver/orders/{id}/pickup', [OrderController::class, 'pickupDelivery'])->name('driver.orders.pickup');
         Route::post('/driver/orders/{id}/complete', [OrderController::class, 'completeDelivery'])->name('driver.orders.complete');
     });
 });

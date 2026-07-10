@@ -153,6 +153,49 @@ class OrderController extends Controller
     }
 
     /**
+     * Mark a delivery as in transit (status set to in_transit).
+     */
+    public function pickupDelivery(Request $request, $id)
+    {
+        try {
+            \Illuminate\Support\Facades\DB::transaction(function () use ($id) {
+                $order = Order::lockForUpdate()->findOrFail($id);
+
+                if ($order->driver_id !== auth()->id()) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'order' => ['You are not assigned as the driver for this order.']
+                    ]);
+                }
+
+                if ($order->status !== 'processing') {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'status' => ['Only processing orders can be marked as in transit.']
+                    ]);
+                }
+
+                $order->update([
+                    'status' => 'in_transit',
+                ]);
+
+                // Notify buyer
+                Notification::create([
+                    'user_id' => $order->buyer_id,
+                    'message' => "Your order for " . $order->quantity_ordered . " item(s) of " . $order->product->name . " has been picked up by driver " . auth()->user()->name . " and is now in transit!",
+                    'type' => 'order_update',
+                ]);
+            });
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'order' => ['Failed to update delivery status: ' . $e->getMessage()]
+            ]);
+        }
+
+        return redirect()->route('driver.dashboard')->with('message', 'Order picked up and is now in transit!');
+    }
+
+    /**
      * Mark a delivery as completed (status set to delivered).
      */
     public function completeDelivery(Request $request, $id)
