@@ -145,9 +145,21 @@
               <span class="farmer-name">{{ order.product?.user?.name || 'Local Farmer' }}</span>
               <span class="farmer-location">📍 {{ order.product?.user?.location || 'Takoradi' }}</span>
             </div>
-            <div class="total-paid-meta">
-              <span class="total-label">Total Paid:</span>
-              <span class="total-value">GH₵ {{ Number(order.total_price).toFixed(2) }}</span>
+            <div class="total-paid-meta" style="display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-1);">
+              <div style="display: flex; align-items: center; gap: var(--space-2);">
+                <span class="total-label">{{ order.payment_status === 'unpaid' ? 'Awaiting Payment:' : 'Total Paid:' }}</span>
+                <span class="total-value" :style="order.payment_status === 'unpaid' ? 'color: var(--color-danger);' : ''">
+                  GH₵ {{ Number(order.total_price).toFixed(2) }}
+                </span>
+              </div>
+              <button 
+                v-if="order.payment_status === 'unpaid'" 
+                @click="triggerDemoPrompt(order)" 
+                class="simulate-momo-prompt-btn"
+                style="margin-top: 4px; background-color: var(--color-secondary); color: var(--color-white); border: none; border-radius: var(--radius-sm); font-size: 10px; padding: 4px 8px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 4px;"
+              >
+                <span>📱 Simulate MoMo PIN Prompt</span>
+              </button>
             </div>
           </div>
 
@@ -351,6 +363,40 @@ export default {
       alert(msg);
     };
 
+    const triggerDemoPrompt = (order) => {
+      const pin = prompt(`[MTN MoMo Sandbox Prompt]\n\nAuthorize payment of GH₵ ${Number(order.total_price).toFixed(2)} to FarmLink for Order #${order.id}?\n\nEnter 4-digit MoMo PIN to complete:`);
+      if (pin) {
+        if (!/^[0-9]{4}$/.test(pin)) {
+          alert('Error: PIN must be exactly 4 numeric digits.');
+          return;
+        }
+        
+        fetch('/api/webhooks/momo', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            externalId: order.id,
+            status: 'SUCCESSFUL',
+            financialTransactionId: Math.floor(100000000 + Math.random() * 900000000).toString()
+          })
+        })
+        .then(response => {
+          if (response.ok) {
+            alert('Payment authorized successfully! Funds are now held in secure escrow.');
+            router.reload();
+          } else {
+            alert('Failed to authorize payment.');
+          }
+        })
+        .catch(err => {
+          alert('Payment simulation request error: ' + err);
+        });
+      }
+    };
+
     return {
       formatDate,
       formatStatus,
@@ -362,7 +408,8 @@ export default {
       openRateModal,
       closeRateModal,
       submitRating,
-      triggerAlert
+      triggerAlert,
+      triggerDemoPrompt
     };
   }
 }
