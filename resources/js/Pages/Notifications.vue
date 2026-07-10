@@ -223,7 +223,7 @@
 </template>
 
 <script setup>
-import { router, Link } from '@inertiajs/vue3';
+import { router, Link, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import AppButton from '../Components/UI/AppButton.vue';
 import AppBadge from '../Components/UI/AppBadge.vue';
@@ -235,12 +235,14 @@ const props = defineProps({
   },
 });
 
+const page = usePage();
+
 const unreadCount = computed(() => {
   return props.notifications.filter(n => !n.read_at).length;
 });
 
 const homeRoute = computed(() => {
-  const role = router.page.props.auth?.user?.role;
+  const role = page.props.auth?.user?.role;
   if (role === 'farmer') return '/farmer/dashboard';
   if (role === 'buyer') return '/buyer/browse';
   if (role === 'driver') return '/driver/dashboard';
