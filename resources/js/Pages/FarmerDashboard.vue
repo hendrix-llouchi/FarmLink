@@ -64,8 +64,11 @@
 
     <!-- Mobile Top Header -->
     <header class="mobile-header">
-      <div class="header-brand">
+      <div class="header-brand" style="display: flex; align-items: center; gap: var(--space-2);">
         <span class="logo-text">FarmLink</span>
+        <span class="mobile-user-name" style="font-size: var(--font-size-xs); color: var(--color-neutral-500); border-left: 1.5px solid var(--color-border); padding-left: var(--space-2); margin-left: var(--space-1); font-weight: var(--font-weight-medium);">
+          {{ $page.props.auth?.user?.name }}
+        </span>
       </div>
       <div class="header-actions">
         <Link href="/notifications" class="icon-action-btn" style="position: relative; display: flex; align-items: center; justify-content: center;">

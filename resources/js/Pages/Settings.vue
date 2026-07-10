@@ -35,6 +35,13 @@
           <span class="menu-label">Orders</span>
         </Link>
 
+        <Link v-if="$page.props.auth?.user?.role === 'farmer'" href="/farmer/orders" class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span class="menu-label">Orders</span>
+        </Link>
+
         <Link href="/notifications" class="menu-item">
           <div class="menu-item-badge-wrap">
             <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -67,8 +74,11 @@
 
     <!-- Mobile Top Header -->
     <header class="mobile-header">
-      <div class="header-brand">
+      <div class="header-brand" style="display: flex; align-items: center; gap: var(--space-2);">
         <span class="logo-text">Settings</span>
+        <span class="mobile-user-name" style="font-size: var(--font-size-xs); color: var(--color-neutral-500); border-left: 1.5px solid var(--color-border); padding-left: var(--space-2); margin-left: var(--space-1); font-weight: var(--font-weight-medium);">
+          {{ $page.props.auth?.user?.name }}
+        </span>
       </div>
       <div class="header-actions">
         <Link href="/notifications" class="icon-action-btn relative">
