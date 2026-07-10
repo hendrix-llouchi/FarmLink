@@ -170,7 +170,11 @@
                 <span class="searching-txt">Searching for transporter...</span>
               </div>
               <div v-else class="request-transport-action-row">
+                <div v-if="order.payment_status === 'unpaid'" class="awaiting-payment-badge-farmer" style="display: flex; align-items: center; justify-content: center; gap: 6px; background-color: var(--color-neutral-100); color: var(--color-neutral-500); font-size: var(--font-size-xs); font-weight: bold; height: 36px; border-radius: var(--radius-md); border: 1px dashed var(--color-border); width: 100%;">
+                  <span>🔒 Awaiting Buyer Payment</span>
+                </div>
                 <button 
+                  v-else
                   @click="requestTransport(order.id)" 
                   class="request-transport-btn"
                   :disabled="requestingId === order.id"

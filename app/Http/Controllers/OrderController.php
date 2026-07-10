@@ -377,6 +377,12 @@ class OrderController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
+        if ($order->payment_status !== 'escrow_held') {
+            throw ValidationException::withMessages([
+                'order' => ['Cannot request transport for an unpaid order. Payment must be secured in escrow first.']
+            ]);
+        }
+
         if ($order->transport_requested) {
             throw ValidationException::withMessages([
                 'order' => ['Transport has already been requested for this order.']

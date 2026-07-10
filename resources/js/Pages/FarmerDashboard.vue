@@ -244,7 +244,10 @@
                     <h4 class="buyer-name-title" style="font-size: var(--font-size-sm); font-weight: bold; margin: 0 0 var(--space-1) 0;">{{ order.buyer?.name || 'Local Buyer' }}</h4>
                     <p class="order-desc-detail" style="font-size: var(--font-size-xs); color: var(--color-neutral-700); margin: 0;">{{ order.quantity_ordered }}x {{ order.product?.name || 'Produce' }} • {{ order.buyer?.location || 'Takoradi' }}</p>
                   </div>
-                  <button v-if="!order.transport_requested" class="transport-btn-custom" @click="requestTransport(order.id)">
+                  <div v-if="order.payment_status === 'unpaid'" class="awaiting-payment-badge-farmer" style="display: flex; align-items: center; justify-content: center; gap: 6px; background-color: var(--color-neutral-100); color: var(--color-neutral-500); font-size: 10px; font-weight: bold; height: 32px; border-radius: var(--radius-sm); border: 1px dashed var(--color-border); width: 100%;">
+                    <span>🔒 Awaiting Buyer Payment</span>
+                  </div>
+                  <button v-else-if="!order.transport_requested" class="transport-btn-custom" @click="requestTransport(order.id)">
                     <svg xmlns="http://www.w3.org/2000/svg" class="btn-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <rect x="1" y="3" width="15" height="13" />
                       <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
