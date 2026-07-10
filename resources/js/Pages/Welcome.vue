@@ -528,5 +528,35 @@ export default {
 .footer-icon-link:hover {
   color: var(--color-primary);
 }
+
+@media (max-width: 576px) {
+  .header-inner {
+    padding: 0 var(--space-3);
+    height: 60px;
+  }
+  
+  .app-logo-text {
+    font-size: var(--font-size-base);
+  }
+  
+  .header-nav {
+    gap: var(--space-2);
+  }
+  
+  .help-link,
+  .nav-login-btn,
+  .nav-register-btn {
+    white-space: nowrap;
+    font-size: var(--font-size-xs);
+  }
+  
+  .nav-login-btn {
+    padding: 6px 10px;
+  }
+  
+  .nav-register-btn {
+    padding: 6px 12px;
+  }
+}
 </style>
 
