@@ -31,8 +31,21 @@ Route::get('/run-seeder-temp-secure', function () {
 
 Route::get('/fix-passwords-temp', function () {
     $hash = \Illuminate\Support\Facades\Hash::make('password123');
-    $count = \Illuminate\Support\Facades\DB::table('users')->update(['password' => $hash]);
-    return "Done! Updated $count users. Hash: " . substr($hash, 0, 20) . '...';
+    $now  = now();
+
+    \Illuminate\Support\Facades\DB::table('users')->delete();
+
+    \Illuminate\Support\Facades\DB::table('users')->insert([
+        ['name'=>'Kojo Mensah',    'phone_number'=>'0244111222','password'=>$hash,'role'=>'farmer','location'=>'Takoradi Market Circle','average_rating'=>4.80,'created_at'=>$now,'updated_at'=>$now],
+        ['name'=>'Kwesi Appiah',   'phone_number'=>'0244222333','password'=>$hash,'role'=>'farmer','location'=>'Tarkwa',                'average_rating'=>4.50,'created_at'=>$now,'updated_at'=>$now],
+        ['name'=>'Ama Serwaa',     'phone_number'=>'0244333444','password'=>$hash,'role'=>'buyer', 'location'=>'Takoradi',             'average_rating'=>0.00,'created_at'=>$now,'updated_at'=>$now],
+        ['name'=>'Yaw Boateng',    'phone_number'=>'0244444555','password'=>$hash,'role'=>'buyer', 'location'=>'Tarkwa',               'average_rating'=>0.00,'created_at'=>$now,'updated_at'=>$now],
+        ['name'=>'Emmanuel Mensah','phone_number'=>'0244555666','password'=>$hash,'role'=>'driver','location'=>'Takoradi Market Circle','average_rating'=>0.00,'created_at'=>$now,'updated_at'=>$now],
+        ['name'=>'Chale Driver',   'phone_number'=>'0244666777','password'=>$hash,'role'=>'driver','location'=>'Tarkwa',               'average_rating'=>0.00,'created_at'=>$now,'updated_at'=>$now],
+    ]);
+
+    $count = \Illuminate\Support\Facades\DB::table('users')->count();
+    return "Done! $count users inserted. Login with 0244111222 / password123";
 });
 
 Route::get('/', function () {
