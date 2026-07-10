@@ -964,6 +964,15 @@ export default {
     padding-bottom: var(--bottom-nav-height);
     overflow-x: hidden;
   }
+  .request-transport-action-row {
+    justify-content: center;
+    width: 100%;
+  }
+  .request-transport-btn {
+    width: 100%;
+    justify-content: center;
+    height: 40px;
+  }
 }
 
 @media (min-width: 768px) {

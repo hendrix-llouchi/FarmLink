@@ -365,6 +365,9 @@
                     placeholder="••••" 
                     class="form-text-input"
                     maxlength="4"
+                    autocomplete="new-password"
+                    inputmode="numeric"
+                    pattern="[0-9]*"
                     :disabled="processing"
                   />
                 </div>
