@@ -41,7 +41,7 @@ Route::get('/fix-passwords-temp', function () {
         ['name'=>'Ama Serwaa',     'phone_number'=>'0244333444','password'=>$hash,'role'=>'buyer', 'location'=>'Takoradi',             'average_rating'=>0.00,'created_at'=>$now,'updated_at'=>$now],
         ['name'=>'Yaw Boateng',    'phone_number'=>'0244444555','password'=>$hash,'role'=>'buyer', 'location'=>'Tarkwa',               'average_rating'=>0.00,'created_at'=>$now,'updated_at'=>$now],
         ['name'=>'Emmanuel Mensah','phone_number'=>'0244555666','password'=>$hash,'role'=>'driver','location'=>'Takoradi Market Circle','average_rating'=>0.00,'created_at'=>$now,'updated_at'=>$now],
-        ['name'=>'Chale Driver',   'phone_number'=>'0244666777','password'=>$hash,'role'=>'driver','location'=>'Tarkwa',               'average_rating'=>0.00,'created_at'=>$now,'updated_at'=>$now],
+        ['name'=>'Kofi Ansah',     'phone_number'=>'0244666777','password'=>$hash,'role'=>'driver','location'=>'Tarkwa',               'average_rating'=>0.00,'created_at'=>$now,'updated_at'=>$now],
     ]);
 
     $count = \Illuminate\Support\Facades\DB::table('users')->count();
