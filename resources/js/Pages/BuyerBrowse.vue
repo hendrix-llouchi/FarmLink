@@ -235,7 +235,7 @@
         </div>
       </div>
     </main>
-  </div>
+  </main>
 </div>
 
     <!-- Product Details Modal (Mobile Money Checkout Drawer) -->
