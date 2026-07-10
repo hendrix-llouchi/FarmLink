@@ -807,5 +807,10 @@ const markAllAsRead = () => {
     width: 28px;
     justify-content: center;
   }
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
 }
 </style>
