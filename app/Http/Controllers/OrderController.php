@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\Rating;
 use App\Models\Notification;
+use App\Services\MomoApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -36,13 +37,15 @@ class OrderController extends Controller
         $request->validate([
             'product_id' => ['required', 'exists:products,id'],
             'quantity_ordered' => ['required', 'integer', 'min:1'],
-            'payment_network' => ['required', 'string', 'in:MTN,Telecel'],
+            'payment_network' => ['required', 'string', 'in:MTN'],
             'payment_number' => ['required', 'string', 'regex:/^[0-9]{10}$/'],
-            'payment_pin' => ['required', 'string', 'regex:/^[0-9]{4}$/'],
         ]);
 
+        $referenceId = (string) \Illuminate\Support\Str::uuid();
+        $order = null;
+
         try {
-            DB::transaction(function () use ($request) {
+            DB::transaction(function () use ($request, $referenceId, &$order) {
                 // Lock the product for update to prevent race conditions
                 $product = Product::lockForUpdate()->findOrFail($request->product_id);
 
@@ -55,32 +58,64 @@ class OrderController extends Controller
                 // Deduct stock
                 $product->decrement('quantity', $request->quantity_ordered);
 
-                // Create the order
+                // Create the order with unpaid status initially
                 $order = Order::create([
                     'buyer_id' => auth()->id(),
                     'product_id' => $product->id,
                     'quantity_ordered' => $request->quantity_ordered,
                     'total_price' => $product->price * $request->quantity_ordered,
                     'status' => 'pending',
-                    'payment_status' => 'escrow_held',
-                ]);
-
-                // Notify the farmer
-                Notification::create([
-                    'user_id' => $product->user_id,
-                    'message' => "New order received: " . auth()->user()->name . " ordered " . $request->quantity_ordered . " " . ($product->unit ?? 'item(s)') . " of " . $product->name . ".",
-                    'type' => 'order_update',
+                    'payment_status' => 'unpaid',
+                    'momo_reference' => $referenceId,
                 ]);
             });
+
+            // Call the MoMo API collection request (outside DB transaction)
+            $momoService = new MomoApiService();
+            $momoResult = $momoService->requestToPay(
+                $referenceId,
+                $order->total_price,
+                $request->payment_number,
+                (string) $order->id
+            );
+
+            if (!$momoResult['success']) {
+                // Roll back database changes if API call failed
+                DB::transaction(function () use ($order) {
+                    $product = Product::lockForUpdate()->findOrFail($order->product_id);
+                    $product->increment('quantity', $order->quantity_ordered);
+                    $order->delete();
+                });
+
+                throw ValidationException::withMessages([
+                    'payment_number' => [$momoResult['message'] ?? 'Mobile Money payment initiation failed. Please try again.']
+                ]);
+            }
+
+            $flashMessage = isset($momoResult['simulated']) 
+                ? 'Order initiated! (Simulator Mode: Trigger the webhook callback to confirm payment).'
+                : 'Payment request sent! Please check your phone for the MTN MoMo PIN prompt to authorize.';
+
+            return redirect()->route('buyer.orders.index')->with('message', $flashMessage);
+
         } catch (ValidationException $e) {
             throw $e;
         } catch (\Exception $e) {
+            if ($order) {
+                try {
+                    DB::transaction(function () use ($order) {
+                        $product = Product::lockForUpdate()->findOrFail($order->product_id);
+                        $product->increment('quantity', $order->quantity_ordered);
+                        $order->delete();
+                    });
+                } catch (\Exception $cleanupEx) {
+                    \Illuminate\Support\Facades\Log::error('Order cleanup failure: ' . $cleanupEx->getMessage());
+                }
+            }
             throw ValidationException::withMessages([
                 'quantity_ordered' => ['Failed to place order: ' . $e->getMessage()]
             ]);
         }
-
-        return redirect()->route('buyer.orders.index')->with('message', 'Order placed successfully!');
     }
 
     /**

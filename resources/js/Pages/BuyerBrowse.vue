@@ -328,17 +328,13 @@
                 <div class="input-form-group">
                   <label class="form-input-label">Mobile Money Network</label>
                   <div class="momo-networks-row">
-                    <label class="network-option" :class="{ selected: paymentNetwork === 'MTN' }">
-                      <input type="radio" value="MTN" v-model="paymentNetwork" class="hidden-radio" />
-                      <span>MTN</span>
+                    <label class="network-option selected">
+                      <input type="radio" value="MTN" v-model="paymentNetwork" class="hidden-radio" checked disabled />
+                      <span>MTN MoMo</span>
                     </label>
-                    <label class="network-option" :class="{ selected: paymentNetwork === 'Vodafone' }">
-                      <input type="radio" value="Vodafone" v-model="paymentNetwork" class="hidden-radio" />
-                      <span>Telecel</span>
-                    </label>
-                    <label class="network-option" :class="{ selected: paymentNetwork === 'AirtelTigo' }">
-                      <input type="radio" value="AirtelTigo" v-model="paymentNetwork" class="hidden-radio" />
-                      <span>AT Money</span>
+                    <label class="network-option disabled" style="opacity: 0.6; cursor: not-allowed; pointer-events: none;" title="Telecel locked for next sprint">
+                      <input type="radio" value="Telecel" class="hidden-radio" disabled />
+                      <span>Telecel (Locked)</span>
                     </label>
                   </div>
                 </div>
@@ -352,22 +348,6 @@
                     placeholder="e.g. 0244123456" 
                     class="form-text-input"
                     maxlength="10"
-                    :disabled="processing"
-                  />
-                </div>
-
-                <div class="input-form-group">
-                  <label for="momo-pin" class="form-input-label">4-Digit PIN</label>
-                  <input 
-                    id="momo-pin" 
-                    v-model="paymentPin" 
-                    type="password" 
-                    placeholder="••••" 
-                    class="form-text-input"
-                    maxlength="4"
-                    autocomplete="new-password"
-                    inputmode="numeric"
-                    pattern="[0-9]*"
                     :disabled="processing"
                   />
                 </div>
@@ -556,10 +536,6 @@ export default {
         errorMessage.value = 'Please enter a valid 10-digit Momo Number.';
         return;
       }
-      if (!paymentPin.value || !/^[0-9]{4}$/.test(paymentPin.value)) {
-        errorMessage.value = 'Please enter a valid 4-digit PIN.';
-        return;
-      }
 
       paymentProcessing.value = true;
       processing.value = true;
@@ -581,8 +557,7 @@ export default {
         product_id: selectedProduct.value.id,
         quantity_ordered: orderQuantity.value,
         payment_network: paymentNetwork.value,
-        payment_number: paymentNumber.value,
-        payment_pin: paymentPin.value
+        payment_number: paymentNumber.value
       }, {
         onSuccess: () => {
           document.body.style.overflow = '';
