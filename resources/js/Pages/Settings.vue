@@ -841,12 +841,19 @@ const submitPassword = () => {
   .mobile-nav-item.active {
     color: var(--color-primary);
   }
-  .nav-active-pill {
+  .mobile-nav-item.active .nav-active-pill {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: var(--space-1);
+    background-color: var(--color-primary-subtle);
     color: var(--color-primary);
+    padding: 6px var(--space-3);
+    border-radius: var(--radius-pill);
+  }
+  .mobile-nav-item.active .nav-label {
+    font-size: 10px;
+    margin-top: 0;
   }
   .icon-action-btn {
     background: none;
