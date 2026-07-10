@@ -543,19 +543,14 @@ export default {
     gap: var(--space-2);
   }
   
-  .help-link,
-  .nav-login-btn,
-  .nav-register-btn {
+  .help-link {
     white-space: nowrap;
     font-size: var(--font-size-xs);
   }
   
-  .nav-login-btn {
-    padding: 6px 10px;
-  }
-  
+  .nav-login-btn,
   .nav-register-btn {
-    padding: 6px 12px;
+    display: none;
   }
 }
 </style>
