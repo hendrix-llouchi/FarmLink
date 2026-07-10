@@ -108,6 +108,64 @@ class ProductController extends Controller
     }
 
     /**
+     * Update an existing product listing.
+     */
+    public function update(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+
+        if ($product->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'category' => ['required', 'string', 'in:Vegetable,Leafy Green,Root/Tuber,Other'],
+            'quantity' => ['required', 'integer', 'min:1'],
+            'price' => ['required', 'numeric', 'min:0.01'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
+        ]);
+
+        $updateData = [
+            'name' => $request->name,
+            'category' => $request->category,
+            'quantity' => $request->quantity,
+            'price' => $request->price,
+        ];
+
+        if ($request->hasFile('image')) {
+            $uploaded = \CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::upload($request->file('image')->getRealPath(), [
+                'folder' => 'farmlink/products',
+                'transformation' => [
+                    'quality' => 'auto',
+                    'fetch_format' => 'auto',
+                ],
+            ]);
+            $updateData['image_path'] = $uploaded->getSecurePath();
+        }
+
+        $product->update($updateData);
+
+        return redirect()->route('farmer.dashboard')->with('message', 'Listing updated successfully!');
+    }
+
+    /**
+     * Remove the specified product listing.
+     */
+    public function destroy($id)
+    {
+        $product = Product::findOrFail($id);
+
+        if ($product->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $product->delete();
+
+        return redirect()->route('farmer.dashboard')->with('message', 'Listing deleted successfully!');
+    }
+
+    /**
      * Show the buyer browse listings screen.
      */
     public function buyerBrowse(Request $request)

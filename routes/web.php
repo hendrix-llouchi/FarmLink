@@ -65,6 +65,8 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:farmer')->group(function () {
         Route::get('/farmer/dashboard', [ProductController::class, 'farmerDashboard'])->name('farmer.dashboard');
         Route::post('/farmer/products', [ProductController::class, 'store'])->name('products.store');
+        Route::post('/farmer/products/{id}/update', [ProductController::class, 'update'])->name('products.update');
+        Route::delete('/farmer/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
         Route::get('/farmer/orders', [OrderController::class, 'farmerOrders'])->name('farmer.orders.index');
         Route::post('/farmer/orders/{id}/request-transport', [OrderController::class, 'requestTransport'])->name('orders.request-transport');
     });

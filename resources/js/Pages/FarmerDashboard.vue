@@ -513,11 +513,10 @@ export default {
       imagePreview.value = null;
     };
 
-    // Deletes product from the local list (Frontend Mock)
+    // Deletes product listing (Database persisted)
     const deleteProduct = (productId) => {
-      if (confirm('Are you sure you want to delete this listing? (Frontend Demo Only)')) {
-        localProducts.value = localProducts.value.filter(p => p.id !== productId);
-        alert('Produce listing deleted successfully (Frontend Mock).');
+      if (confirm('Are you sure you want to delete this listing?')) {
+        router.delete(`/farmer/products/${productId}`);
       }
     };
 
@@ -527,28 +526,16 @@ export default {
 
     const submit = () => {
       if (editingProductId.value) {
-        // Frontend Mock Save (Hackathon support)
-        const idx = localProducts.value.findIndex(p => p.id === editingProductId.value);
-        if (idx !== -1) {
-          // If a new photo preview is uploaded, we save it in the local item
-          const newImgPath = imagePreview.value || localProducts.value[idx].image_path;
-          
-          localProducts.value[idx] = {
-            ...localProducts.value[idx],
-            name: form.name,
-            category: form.category,
-            quantity: Number(form.quantity),
-            price: Number(form.price),
-            image_path: (newImgPath.startsWith('/storage/') ? newImgPath.replace('/storage/', '') : newImgPath)
-          };
-        }
-        editingProductId.value = null;
-        form.reset();
-        imagePreview.value = null;
-        if (fileInput.value) {
-          fileInput.value.value = '';
-        }
-        alert('Produce listing updated successfully (Frontend Mock).');
+        form.post(`/farmer/products/${editingProductId.value}/update`, {
+          onSuccess: () => {
+            editingProductId.value = null;
+            form.reset();
+            imagePreview.value = null;
+            if (fileInput.value) {
+              fileInput.value.value = '';
+            }
+          }
+        });
       } else {
         // Original Create flow posting to the backend
         form.post('/farmer/products', {
