@@ -29,6 +29,12 @@ Route::get('/run-seeder-temp-secure', function () {
     return 'Seeder completed successfully with Cloudinary URLs!';
 });
 
+Route::get('/fix-passwords-temp', function () {
+    $hash = \Illuminate\Support\Facades\Hash::make('password123');
+    $count = \Illuminate\Support\Facades\DB::table('users')->update(['password' => $hash]);
+    return "Done! Updated $count users. Hash: " . substr($hash, 0, 20) . '...';
+});
+
 Route::get('/', function () {
     if (auth()->check()) {
         $role = auth()->user()->role;
