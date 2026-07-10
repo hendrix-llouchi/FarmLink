@@ -39,4 +39,20 @@ class Product extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    /**
+     * Get the product's image path, optimized with Cloudinary format/quality/resize transformations on the fly.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getImagePathAttribute($value)
+    {
+        if ($value && str_contains($value, 'res.cloudinary.com')) {
+            if (str_contains($value, '/upload/')) {
+                return str_replace('/upload/', '/upload/f_auto,q_auto,w_600,c_limit/', $value);
+            }
+        }
+        return $value;
+    }
 }
