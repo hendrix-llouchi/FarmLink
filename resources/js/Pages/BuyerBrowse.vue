@@ -332,9 +332,9 @@
                       <input type="radio" value="MTN" v-model="paymentNetwork" class="hidden-radio" checked disabled />
                       <span>MTN MoMo</span>
                     </label>
-                    <label class="network-option disabled" style="opacity: 0.6; cursor: not-allowed; pointer-events: none;" title="Telecel locked for next sprint">
+                    <label class="network-option disabled" style="opacity: 0.6; cursor: not-allowed; pointer-events: none;" title="Telecel coming soon">
                       <input type="radio" value="Telecel" class="hidden-radio" disabled />
-                      <span>Telecel (Locked)</span>
+                      <span>Telecel (Coming Soon)</span>
                     </label>
                   </div>
                 </div>
