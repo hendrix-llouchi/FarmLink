@@ -29,6 +29,12 @@ Route::get('/run-seeder-temp-secure', function () {
     return 'Seeder completed successfully with Cloudinary URLs!';
 });
 
+Route::get('/debug-db', function () {
+    $users    = \Illuminate\Support\Facades\DB::table('users')->select('id','name','phone_number','role')->get();
+    $products = \Illuminate\Support\Facades\DB::table('products')->select('id','user_id','name')->get();
+    return response()->json(['users' => $users, 'products' => $products]);
+});
+
 Route::get('/fix-passwords-temp', function () {
     $hash = \Illuminate\Support\Facades\Hash::make('password123');
     $now  = now();
