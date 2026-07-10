@@ -1,12 +1,74 @@
 <template>
-  <div class="orders-wrapper">
-    <!-- Topbar Header -->
-    <header class="app-header">
-      <div class="app-logo">
-        <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <div class="dashboard-container">
+    <!-- Desktop & Tablet Sidebar Navigation -->
+    <aside class="sidebar-nav">
+      <div class="sidebar-brand">
+        <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="m12 3-1.912 5.886a1 1 0 0 1-.95.686H2.929l4.908 3.566a1 1 0 0 1 .364 1.122L6.29 20.147l4.907-3.565a1 1 0 0 1 1.604 0l4.907 3.565-1.91-5.887a1 1 0 0 1 .364-1.122l4.908-3.566h-6.21a1 1 0 0 1-.95-.686z"/>
         </svg>
-        <span class="app-logo-text">FarmLink</span>
+        <span class="logo-text">FarmLink</span>
+      </div>
+
+      <!-- User Profile Summary in Sidebar -->
+      <div class="sidebar-user">
+        <div class="user-avatar" :class="$page.props.auth?.user?.role">
+          {{ $page.props.auth?.user?.name?.charAt(0).toUpperCase() || 'B' }}
+        </div>
+        <div class="user-info">
+          <span class="user-name">{{ $page.props.auth?.user?.name || 'Buyer' }}</span>
+          <span class="user-role">Buyer Portal</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-menu">
+        <Link href="/buyer/browse" class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+          </svg>
+          <span class="menu-label">Market</span>
+        </Link>
+        <Link href="/buyer/orders" class="menu-item active">
+          <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span class="menu-label">Orders</span>
+        </Link>
+        <Link href="/notifications" class="menu-item">
+          <div class="menu-item-badge-wrap" style="display: flex; align-items: center; width: 100%; gap: var(--space-3);">
+            <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <span class="menu-label" style="display: inline;">Alerts</span>
+            <span v-if="$page.props.auth?.unread_notifications_count > 0" class="badge-count-sidebar" style="margin-left: auto; background-color: var(--color-danger); color: var(--color-white); font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); padding: 2px var(--space-2); border-radius: var(--radius-pill); min-width: 18px; text-align: center;">
+              {{ $page.props.auth.unread_notifications_count }}
+            </span>
+          </div>
+        </Link>
+        <Link href="/settings" class="menu-item">
+          <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span class="menu-label">Profile</span>
+        </Link>
+      </nav>
+
+      <div class="sidebar-footer">
+        <Link href="/logout" method="post" as="button" class="logout-btn-sidebar">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+          </svg>
+          <span class="logout-label">Log Out</span>
+        </Link>
+      </div>
+    </aside>
+
+    <!-- Mobile Top Header -->
+    <header class="mobile-header">
+      <div class="header-brand" style="display: flex; align-items: center; gap: var(--space-2);">
+        <span class="logo-text">FarmLink</span>
+        <span class="mobile-user-name" style="font-size: var(--font-size-xs); color: var(--color-neutral-500); border-left: 1.5px solid var(--color-border); padding-left: var(--space-2); margin-left: var(--space-1); font-weight: var(--font-weight-medium);">
+          {{ $page.props.auth?.user?.name }}
+        </span>
       </div>
       <div class="header-actions">
         <Link href="/notifications" class="icon-action-btn" style="position: relative; display: flex; align-items: center; justify-content: center;">
@@ -25,8 +87,12 @@
       </div>
     </header>
 
+    <!-- Main Content Layout wrapper -->
+    <div class="main-layout">
+      <main class="content-body">
+
     <!-- Main Content Body -->
-    <main class="main-content">
+    <div class="main-content">
       <div class="page-title-row">
         <h1 class="page-title">My Orders</h1>
         <span class="orders-count-badge">{{ orders.length }} order(s) placed</span>
@@ -117,7 +183,9 @@
           </div>
         </div>
       </div>
-    </main>
+    </div>
+      </main>
+    </div>
 
     <!-- Escrow Feedback / Rating Modal Dialog -->
     <div v-if="isModalOpen" class="modal-overlay" @click.self="closeRateModal">
@@ -312,19 +380,15 @@ export default {
 @import "../../css/design-tokens.css";
 
 /* Outer wrapper */
-.orders-wrapper {
-  max-width: 480px;
-  width: 100%;
-  margin: 0 auto;
-  background-color: var(--color-white);
-  min-height: 100vh;
+.dashboard-container {
   display: flex;
   flex-direction: column;
-  position: relative;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-  padding-bottom: calc(var(--bottom-nav-height) + 20px);
-  font-family: var(--font-family);
+  min-height: 100vh;
+  background-color: var(--color-bg-page);
   color: var(--color-neutral-900);
+  font-family: var(--font-family);
+  overflow-x: hidden;
+  width: 100%;
 }
 
 /* Header bar */
@@ -987,5 +1051,313 @@ export default {
 .mobile-nav-item.active .nav-label {
   font-size: 10px;
   margin-top: 0;
+}
+
+/* Sidebar navigation */
+.sidebar-nav {
+  display: none;
+  flex-direction: column;
+  background-color: var(--color-bg-sidebar);
+  border-right: 1px solid var(--color-border);
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  flex-shrink: 0;
+  transition: width var(--transition-base);
+  z-index: 100;
+  overflow-y: auto;
+}
+
+.sidebar-brand {
+  height: var(--topbar-height);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+  overflow: hidden;
+}
+
+.logo-icon {
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+.logo-text {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.5px;
+}
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  margin: var(--space-3);
+  background-color: var(--color-neutral-50);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-base);
+  flex-shrink: 0;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.user-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-role {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  flex: 1;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  color: var(--color-neutral-700);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.menu-item:hover:not(.disabled) {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-900);
+}
+
+.menu-item.active {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary);
+}
+
+.sidebar-footer {
+  padding: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+.logout-btn-sidebar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-3);
+  background: none;
+  border: none;
+  color: var(--color-danger);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.logout-btn-sidebar:hover {
+  background-color: var(--color-danger-light);
+}
+
+/* Mobile top header */
+.mobile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--topbar-height);
+  padding: 0 var(--space-4);
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.mobile-header .logo-text {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.icon-action-btn {
+  background: none;
+  border: none;
+  color: var(--color-neutral-700);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  transition: background-color var(--transition-fast);
+}
+
+.icon-action-btn:hover {
+  background-color: var(--color-neutral-100);
+}
+
+.icon-action-btn.logout-header-btn {
+  color: var(--color-danger);
+}
+
+.icon-action-btn.logout-header-btn:hover {
+  background-color: var(--color-danger-light);
+}
+
+/* Main Content layout wrapper */
+.main-layout {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  width: 100%;
+}
+
+.content-body {
+  flex: 1;
+  padding: var(--space-4);
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding-bottom: calc(var(--bottom-nav-height) + 30px);
+}
+
+/* Responsive Media Queries */
+@media (max-width: 767px) {
+  .dashboard-container {
+    padding-bottom: var(--bottom-nav-height);
+    overflow-x: hidden;
+  }
+  .mobile-bottom-nav {
+    left: 0;
+    right: 0;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  .dashboard-container {
+    flex-direction: row;
+  }
+  .mobile-header {
+    display: none;
+  }
+  .mobile-bottom-nav {
+    display: none;
+  }
+  .sidebar-nav {
+    display: flex;
+    width: var(--sidebar-width-collapsed);
+  }
+  .main-layout {
+    margin-left: var(--sidebar-width-collapsed);
+  }
+  .sidebar-user {
+    padding: var(--space-2);
+    margin: var(--space-2);
+  }
+  .user-info {
+    display: none;
+  }
+  .logo-text, .menu-label, .logout-label {
+    display: none;
+  }
+  .sidebar-brand {
+    justify-content: center;
+  }
+  .menu-item {
+    justify-content: center;
+  }
+  .logout-btn-sidebar {
+    justify-content: center;
+  }
+  
+  .orders-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+  
+  /* Desktop Modal adjustments */
+  .modal-overlay {
+    align-items: center;
+  }
+  .modal-card {
+    border-radius: var(--radius-lg);
+  }
+}
+
+@media (min-width: 1025px) {
+  .sidebar-nav {
+    width: var(--sidebar-width);
+  }
+  .main-layout {
+    margin-left: var(--sidebar-width);
+  }
+  .sidebar-brand {
+    justify-content: flex-start;
+  }
+  .sidebar-user {
+    padding: var(--space-4);
+    margin: var(--space-3);
+  }
+  .user-info {
+    display: flex;
+  }
+  .logo-text, .menu-label, .logout-label {
+    display: inline;
+  }
+  .menu-item {
+    justify-content: flex-start;
+  }
+  .logout-btn-sidebar {
+    justify-content: flex-start;
+  }
+  
+  .orders-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 </style>
