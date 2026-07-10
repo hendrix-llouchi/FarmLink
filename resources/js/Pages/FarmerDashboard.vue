@@ -27,13 +27,12 @@
           </svg>
           <span class="menu-label">Dashboard</span>
         </Link>
-        <a href="#" class="menu-item" @click.prevent="triggerAlert('Incoming Orders: View and confirm pending buyer purchases here. (Scheduled for Phase 5 Shared Screens redesign)')">
+        <Link href="/farmer/orders" class="menu-item">
           <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
           </svg>
           <span class="menu-label">Orders</span>
-          <span class="badge-coming">Soon</span>
-        </a>
+        </Link>
         <Link href="/notifications" class="menu-item">
           <div class="menu-item-badge-wrap" style="display: flex; align-items: center; width: 100%; gap: var(--space-3);">
             <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -234,33 +233,23 @@
               </div>
               
               <div class="orders-list-wrapper">
-                <AppCard v-for="order in [
-                  {
-                    id: '#ORD-2849',
-                    status: 'preparing',
-                    statusLabel: 'PREPARING',
-                    buyer: 'Kojo Enterprises',
-                    details: '15 Crates of Roma Tomatoes • Kumasi Market'
-                  },
-                  {
-                    id: '#ORD-2852',
-                    status: 'awaiting_pickup',
-                    statusLabel: 'AWAITING PICKUP',
-                    buyer: 'Aba\'s Kitchen',
-                    details: '5 Bags of Green Bell Peppers • Accra Central'
-                  }
-                ]" :key="order.id" class="order-item-card" variant="default" paddingSize="md">
+                <div v-if="pendingOrders.length === 0" class="empty-listings-card" style="padding: var(--space-6); text-align: center;">
+                  <div class="empty-icon-box" style="margin-bottom: var(--space-2);">📦</div>
+                  <h3 style="font-size: var(--font-size-sm); margin-bottom: var(--space-1);">No pending orders</h3>
+                  <p style="font-size: var(--font-size-xs); color: var(--color-neutral-500); margin: 0;">Once a buyer places an order, it will appear here.</p>
+                </div>
+                <AppCard v-else v-for="order in pendingOrders" :key="order.id" class="order-item-card" variant="default" paddingSize="md" style="margin-bottom: var(--space-3);">
                   <div class="order-top-row">
-                    <span class="status-pill-badge" :class="order.status">
-                      {{ order.statusLabel }}
+                    <span class="status-pill-badge pending" style="background: #FFF3CD; color: var(--color-secondary-dark); font-size: 10px; font-weight: bold; padding: 2px 8px; border-radius: var(--radius-pill);">
+                      PENDING
                     </span>
-                    <span class="order-number-lbl">{{ order.id }}</span>
+                    <span class="order-number-lbl" style="font-size: var(--font-size-xs); font-weight: bold; color: var(--color-neutral-500);">#{{ order.id }}</span>
                   </div>
-                  <div class="order-middle-row">
-                    <h4 class="buyer-name-title">{{ order.buyer }}</h4>
-                    <p class="order-desc-detail">{{ order.details }}</p>
+                  <div class="order-middle-row" style="margin: var(--space-2) 0;">
+                    <h4 class="buyer-name-title" style="font-size: var(--font-size-sm); font-weight: bold; margin: 0 0 var(--space-1) 0;">{{ order.buyer?.name || 'Local Buyer' }}</h4>
+                    <p class="order-desc-detail" style="font-size: var(--font-size-xs); color: var(--color-neutral-700); margin: 0;">{{ order.quantity_ordered }}x {{ order.product?.name || 'Produce' }} • {{ order.buyer?.location || 'Takoradi' }}</p>
                   </div>
-                  <button class="transport-btn-custom" @click="triggerAlert('Requesting Transport: Broadcasts a cargo pick-up offer to transport providers in Kumasi/Accra. Transporters can then bid on this shipment in Phase 4 Driver portal.')">
+                  <button v-if="!order.transport_requested" class="transport-btn-custom" @click="requestTransport(order.id)">
                     <svg xmlns="http://www.w3.org/2000/svg" class="btn-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <rect x="1" y="3" width="15" height="13" />
                       <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
@@ -269,6 +258,9 @@
                     </svg>
                     <span>Request Transport</span>
                   </button>
+                  <div v-else style="display: flex; align-items: center; gap: 8px; color: var(--color-primary); font-size: var(--font-size-xs); font-weight: bold;">
+                    <span>🚚 Transport Requested</span>
+                  </div>
                 </AppCard>
               </div>
             </div>
@@ -414,14 +406,14 @@
         </div>
       </Link>
 
-      <a href="#" class="mobile-nav-item" @click.prevent="triggerAlert('Orders: Displays your active shipment offers, logistics tracking status, and delivery completion logs (Phase 5 Shared screens).')">
+      <Link href="/farmer/orders" class="mobile-nav-item">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
           <line x1="3" y1="6" x2="21" y2="6"/>
           <path d="M16 10a4 4 0 0 1-8 0"/>
         </svg>
         <span class="nav-label">Orders</span>
-      </a>
+      </Link>
       <Link href="/settings" class="mobile-nav-item">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
@@ -433,7 +425,7 @@
 </template>
 
 <script>
-import { useForm, Link } from '@inertiajs/vue3';
+import { useForm, Link, router } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
 import AppButton from '../Components/UI/AppButton.vue';
 import AppInput from '../Components/UI/AppInput.vue';
@@ -451,6 +443,10 @@ export default {
   },
   props: {
     products: {
+      type: Array,
+      required: true
+    },
+    pendingOrders: {
       type: Array,
       required: true
     },
@@ -584,7 +580,10 @@ export default {
       editProduct,
       cancelEdit,
       deleteProduct,
-      triggerAlert
+      triggerAlert,
+      requestTransport: (orderId) => {
+        router.post(`/farmer/orders/${orderId}/request-transport`);
+      }
     };
   }
 }

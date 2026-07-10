@@ -266,4 +266,91 @@ class OrderController extends Controller
 
         return redirect()->back()->with('message', 'Thank you for your rating!');
     }
+
+    /**
+     * Display a listing of the farmer's received orders.
+     */
+    public function farmerOrders()
+    {
+        $farmerId = auth()->id();
+
+        $orders = Order::whereHas('product', function ($query) use ($farmerId) {
+            $query->where('user_id', $farmerId);
+        })
+        ->with(['buyer', 'product', 'driver', 'ratings'])
+        ->latest()
+        ->get();
+
+        return Inertia::render('FarmerOrders', [
+            'orders' => $orders
+        ]);
+    }
+
+    /**
+     * Request transport for a farmer's order.
+     */
+    public function requestTransport(Request $request, $id)
+    {
+        $farmerId = auth()->id();
+        $order = Order::findOrFail($id);
+
+        // Ensure the order belongs to this farmer's product
+        if ($order->product->user_id !== $farmerId) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        if ($order->transport_requested) {
+            throw ValidationException::withMessages([
+                'order' => ['Transport has already been requested for this order.']
+            ]);
+        }
+
+        try {
+            DB::transaction(function () use ($order, $farmerId) {
+                // Find driver matching the farmer's location, or fall back to the first available driver
+                $farmer = auth()->user();
+                $driver = \App\Models\User::where('role', 'driver')
+                    ->where('location', $farmer->location)
+                    ->first();
+
+                // Fallback to any driver if none is matched in location
+                if (!$driver) {
+                    $driver = \App\Models\User::where('role', 'driver')->first();
+                }
+
+                if (!$driver) {
+                    throw new \Exception('No driver is currently available on the platform.');
+                }
+
+                // Estimate transport cost: flat ₵30.00 base rate + ₵2.00 per quantity
+                $estimatedCost = 30.00 + ($order->quantity_ordered * 2.00);
+
+                $order->update([
+                    'driver_id' => $driver->id,
+                    'transport_requested' => true,
+                    'estimated_transport_cost' => $estimatedCost,
+                    'status' => 'processing',
+                ]);
+
+                // Create notifications
+                \App\Models\Notification::create([
+                    'user_id' => $order->buyer_id,
+                    'message' => "Transport has been requested for your order of " . $order->product->name . ". Driver " . $driver->name . " has been assigned.",
+                    'type' => 'transport_update',
+                ]);
+
+                \App\Models\Notification::create([
+                    'user_id' => $driver->id,
+                    'message' => "New delivery job: Pick up " . $order->quantity_ordered . " unit(s) of " . $order->product->name . " from " . $farmer->name . " (📍 " . $farmer->location . ").",
+                    'type' => 'transport_update',
+                ]);
+            });
+        } catch (\Exception $e) {
+            throw ValidationException::withMessages([
+                'order' => ['Failed to request transport: ' . $e->getMessage()]
+            ]);
+        }
+
+        return redirect()->back()->with('message', 'Transport request sent and driver assigned successfully!');
+    }
 }

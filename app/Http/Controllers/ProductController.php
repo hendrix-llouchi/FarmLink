@@ -48,8 +48,18 @@ class ProductController extends Controller
             ->where('orders.payment_status', 'released')
             ->sum('orders.total_price');
 
+        // Fetch actual pending orders for the dashboard
+        $pendingOrdersList = \App\Models\Order::whereHas('product', function ($query) use ($farmerId) {
+            $query->where('user_id', $farmerId);
+        })
+        ->where('orders.status', 'pending')
+        ->with(['buyer', 'product'])
+        ->latest()
+        ->get();
+
         return Inertia::render('FarmerDashboard', [
             'products' => $products,
+            'pendingOrders' => $pendingOrdersList,
             'metrics' => [
                 'active_listings' => $activeListings,
                 'pending_orders' => $pendingOrders,
