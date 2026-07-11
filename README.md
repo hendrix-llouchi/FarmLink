@@ -73,6 +73,22 @@ FarmLink connects **farmers**, **buyers**, and **drivers** in a single monolithi
 - **Phase 3 (Buyer)**: Redesigned Buyer Browse with full-width product cards, horizontal category scrollbar filter, seasonal promo banners, slide-up Mobile Money payment drawers, and status-bordered order logs.
 - **Phase 4 (Transporter)**: Redesigned Driver Dashboard featuring active trip card progress stages (Farm → Transit → Market), orange "Picked Up" & teal "Delivered" action indicators, nearby jobs list, and bottom navigation.
 
+### ✅ Module 7 — MTN MoMo API Integration & Sandbox Command
+- **MTN MoMo API Service**: Implemented [MomoApiService.php](file:///C:/Users/HP%20Laptop/Downloads/FarmLink/app/Services/MomoApiService.php) to integrate with official MTN MoMo Collection APIs. Handles token generation, number normalization (e.g. prefixing `233`), and `requesttopay` HTTP calls.
+- **Sandbox Configuration CLI**: Created the `php artisan momo:setup-sandbox` console command to automate API User registration, API Key retrieval from MTN, and dynamic local `.env` writing.
+- **Webhook Callback Processing**: Added [MomoWebhookController.php](file:///C:/Users/HP%20Laptop/Downloads/FarmLink/app/Http/Controllers/MomoWebhookController.php) to handle asynchronous callback responses securely, updating order state to `escrow_held` and notifying the farmer.
+- **Interactive PIN Prompt Simulator**: Embedded a `Simulate MoMo PIN Prompt` modal dialog inside [MyOrders.vue](file:///C:/Users/HP%20Laptop/Downloads/FarmLink/resources/js/Pages/MyOrders.vue) for demo presentations, allowing developers to simulate prompt entry and trigger webhook payments instantly.
+
+### ✅ Module 8 — Transport Logistics & Escrow Safety Enhancements
+- **Escrow-Secured Transit Gate**: Restricted the "Request Transport" capability in [OrderController.php](file:///C:/Users/HP%20Laptop/Downloads/FarmLink/app/Http/Controllers/OrderController.php) so that farmers can only request transport for orders whose payment status is `escrow_held`.
+- **Driver Pickup Lifecycle**: Added support for active cargo transitions, allowing drivers to mark accepted orders as "Picked Up", updating status to `in_transit` and triggering notifications.
+- **Transit Progress Tracker**: Embedded progress indicators (Farm → Transit → Market) in the driver dashboard for live trip feedback.
+
+### ✅ Module 9 — Responsive Portals & Interface Polish
+- **Driver Dashboard Responsiveness**: Full layout overhaul of the Driver Portal for web, tablet, and mobile views.
+- **Header Action Alignment**: Cleaned up the notification bells and aligned logout and clear actions consistently.
+- **Payment Method Coming Soon**: Labeled Telecel and other payment networks as "Coming Soon" in the buyer's payment modal.
+
 ---
 
 ## Database Schema (Key Tables)
