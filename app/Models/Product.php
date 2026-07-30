@@ -22,6 +22,10 @@ class Product extends Model
         'quantity',
         'price',
         'image_path',
+        'harvest_date',
+        'quality_grade',
+        'unit',
+        'minimum_order_qty',
     ];
 
     /**

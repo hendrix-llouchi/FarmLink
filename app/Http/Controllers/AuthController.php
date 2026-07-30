@@ -25,20 +25,24 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'phone_number' => ['required', 'string', 'max:20', 'unique:users,phone_number'],
-            'password' => ['required', 'string', 'min:6', 'confirmed'],
-            'role' => ['required', 'string', 'in:farmer,buyer,driver'],
-            'location' => ['required', 'string', 'max:255'],
+            'name'          => ['required', 'string', 'max:255'],
+            'phone_number'  => ['required', 'string', 'max:20', 'unique:users,phone_number'],
+            'password'      => ['required', 'string', 'min:6', 'confirmed'],
+            'role'          => ['required', 'string', 'in:farmer,buyer,driver'],
+            'location'      => ['required', 'string', 'max:255'],
+            'buyer_type'    => ['nullable', 'string', 'in:market_trader,restaurant,individual'],
+            'business_name' => ['nullable', 'string', 'max:255'],
         ]);
 
         $user = User::create([
-            'name' => $request->name,
-            'phone_number' => $request->phone_number,
-            'password' => Hash::make($request->password),
-            'role' => $request->role,
-            'location' => $request->location,
+            'name'          => $request->name,
+            'phone_number'  => $request->phone_number,
+            'password'      => Hash::make($request->password),
+            'role'          => $request->role,
+            'location'      => $request->location,
             'average_rating' => 0.00,
+            'buyer_type'    => $request->buyer_type,
+            'business_name' => $request->business_name,
         ]);
 
         Auth::login($user);

@@ -76,11 +76,15 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'category' => ['required', 'string', 'in:Vegetable,Leafy Green,Root/Tuber,Other'],
-            'quantity' => ['required', 'integer', 'min:1'],
-            'price' => ['required', 'numeric', 'min:0.01'],
-            'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
+            'name'              => ['required', 'string', 'max:255'],
+            'category'          => ['required', 'string', 'in:Vegetable,Leafy Green,Root/Tuber,Other'],
+            'quantity'          => ['required', 'integer', 'min:1'],
+            'price'             => ['required', 'numeric', 'min:0.01'],
+            'image'             => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
+            'harvest_date'      => ['nullable', 'date', 'before_or_equal:today'],
+            'quality_grade'     => ['nullable', 'string', 'in:A,B,C'],
+            'unit'              => ['nullable', 'string', 'in:Crate,Bag,Kg'],
+            'minimum_order_qty' => ['nullable', 'integer', 'min:1'],
         ]);
 
         $imagePath = null;
@@ -96,12 +100,16 @@ class ProductController extends Controller
         }
 
         Product::create([
-            'user_id' => auth()->id(),
-            'name' => $request->name,
-            'category' => $request->category,
-            'quantity' => $request->quantity,
-            'price' => $request->price,
-            'image_path' => $imagePath,
+            'user_id'           => auth()->id(),
+            'name'              => $request->name,
+            'category'          => $request->category,
+            'quantity'          => $request->quantity,
+            'price'             => $request->price,
+            'image_path'        => $imagePath,
+            'harvest_date'      => $request->harvest_date,
+            'quality_grade'     => $request->quality_grade,
+            'unit'              => $request->unit ?? 'Crate',
+            'minimum_order_qty' => $request->minimum_order_qty ?? 1,
         ]);
 
         return redirect()->route('farmer.dashboard')->with('message', 'Listing created successfully!');
@@ -119,18 +127,26 @@ class ProductController extends Controller
         }
 
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'category' => ['required', 'string', 'in:Vegetable,Leafy Green,Root/Tuber,Other'],
-            'quantity' => ['required', 'integer', 'min:1'],
-            'price' => ['required', 'numeric', 'min:0.01'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
+            'name'              => ['required', 'string', 'max:255'],
+            'category'          => ['required', 'string', 'in:Vegetable,Leafy Green,Root/Tuber,Other'],
+            'quantity'          => ['required', 'integer', 'min:1'],
+            'price'             => ['required', 'numeric', 'min:0.01'],
+            'image'             => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
+            'harvest_date'      => ['nullable', 'date', 'before_or_equal:today'],
+            'quality_grade'     => ['nullable', 'string', 'in:A,B,C'],
+            'unit'              => ['nullable', 'string', 'in:Crate,Bag,Kg'],
+            'minimum_order_qty' => ['nullable', 'integer', 'min:1'],
         ]);
 
         $updateData = [
-            'name' => $request->name,
-            'category' => $request->category,
-            'quantity' => $request->quantity,
-            'price' => $request->price,
+            'name'              => $request->name,
+            'category'          => $request->category,
+            'quantity'          => $request->quantity,
+            'price'             => $request->price,
+            'harvest_date'      => $request->harvest_date,
+            'quality_grade'     => $request->quality_grade,
+            'unit'              => $request->unit ?? $product->unit,
+            'minimum_order_qty' => $request->minimum_order_qty ?? $product->minimum_order_qty,
         ];
 
         if ($request->hasFile('image')) {
@@ -187,11 +203,22 @@ class ProductController extends Controller
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        $products = $query->latest()->get();
+        // Phase 2: Filter by quality grade
+        if ($request->filled('quality_grade')) {
+            $query->where('quality_grade', $request->quality_grade);
+        }
+
+        // Phase 2: Compute days_since_harvest for each product
+        $products = $query->latest()->get()->map(function ($product) {
+            $product->days_since_harvest = $product->harvest_date
+                ? now()->startOfDay()->diffInDays(\Carbon\Carbon::parse($product->harvest_date)->startOfDay())
+                : null;
+            return $product;
+        });
 
         return Inertia::render('BuyerBrowse', [
             'products' => $products,
-            'filters' => $request->only(['category', 'location', 'search']),
+            'filters'  => $request->only(['category', 'location', 'search', 'quality_grade']),
         ]);
     }
 }
