@@ -26,6 +26,8 @@ class User extends Authenticatable
         'average_rating',
         'reset_token',
         'reset_token_expires_at',
+        'buyer_type',
+        'business_name',
     ];
 
     /**

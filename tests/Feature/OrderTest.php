@@ -175,11 +175,13 @@ class OrderTest extends TestCase
         ]);
 
         $order = Order::create([
-            'buyer_id' => $buyer->id,
-            'product_id' => $product->id,
-            'quantity_ordered' => 2,
-            'total_price' => 11.00,
-            'status' => 'delivered',
+            'buyer_id'                 => $buyer->id,
+            'product_id'               => $product->id,
+            'quantity_ordered'          => 2,
+            'total_price'              => 11.00,
+            'status'                   => 'delivered',
+            'payment_status'           => 'released',
+            'estimated_transport_cost' => 44.00,
         ]);
 
         $response = $this->actingAs($buyer)
@@ -238,19 +240,23 @@ class OrderTest extends TestCase
         ]);
 
         $order1 = Order::create([
-            'buyer_id' => $buyer1->id,
-            'product_id' => $product->id,
-            'quantity_ordered' => 2,
-            'total_price' => 11.00,
-            'status' => 'delivered',
+            'buyer_id'                 => $buyer1->id,
+            'product_id'               => $product->id,
+            'quantity_ordered'          => 2,
+            'total_price'              => 11.00,
+            'status'                   => 'delivered',
+            'payment_status'           => 'released',
+            'estimated_transport_cost' => 44.00,
         ]);
 
         $order2 = Order::create([
-            'buyer_id' => $buyer2->id,
-            'product_id' => $product->id,
-            'quantity_ordered' => 3,
-            'total_price' => 16.50,
-            'status' => 'delivered',
+            'buyer_id'                 => $buyer2->id,
+            'product_id'               => $product->id,
+            'quantity_ordered'          => 3,
+            'total_price'              => 16.50,
+            'status'                   => 'delivered',
+            'payment_status'           => 'released',
+            'estimated_transport_cost' => 46.00,
         ]);
 
         // Rate 1: 5 stars

@@ -55,18 +55,32 @@ class OrderController extends Controller
                     ]);
                 }
 
+                // Phase 2: Validate minimum order quantity
+                if ($product->minimum_order_qty && $request->quantity_ordered < $product->minimum_order_qty) {
+                    $unit = $product->unit ?? 'unit(s)';
+                    throw ValidationException::withMessages([
+                        'quantity_ordered' => [
+                            "This farmer requires a minimum order of {$product->minimum_order_qty} {$unit}. Please adjust your quantity."
+                        ]
+                    ]);
+                }
+
+                // Phase 2: Calculate estimated transport cost
+                $estimatedTransportCost = 40.00 + ($request->quantity_ordered * 2.00);
+
                 // Deduct stock
                 $product->decrement('quantity', $request->quantity_ordered);
 
                 // Create the order with unpaid status initially
                 $order = Order::create([
-                    'buyer_id' => auth()->id(),
-                    'product_id' => $product->id,
-                    'quantity_ordered' => $request->quantity_ordered,
-                    'total_price' => $product->price * $request->quantity_ordered,
-                    'status' => 'pending',
-                    'payment_status' => 'unpaid',
-                    'momo_reference' => $referenceId,
+                    'buyer_id'                  => auth()->id(),
+                    'product_id'                => $product->id,
+                    'quantity_ordered'           => $request->quantity_ordered,
+                    'total_price'               => $product->price * $request->quantity_ordered,
+                    'status'                    => 'pending',
+                    'payment_status'            => 'unpaid',
+                    'momo_reference'            => $referenceId,
+                    'estimated_transport_cost'  => $estimatedTransportCost,
                 ]);
             });
 
@@ -74,7 +88,7 @@ class OrderController extends Controller
             $momoService = new MomoApiService();
             $momoResult = $momoService->requestToPay(
                 $referenceId,
-                $order->total_price,
+                $order->total_price + $order->estimated_transport_cost,
                 $request->payment_number,
                 (string) $order->id
             );
@@ -252,7 +266,7 @@ class OrderController extends Controller
                 }
 
                 $order->update([
-                    'status' => 'delivered',
+                    'status'         => 'delivered',
                     'payment_status' => 'released',
                 ]);
 
@@ -260,15 +274,24 @@ class OrderController extends Controller
                 Notification::create([
                     'user_id' => $order->buyer_id,
                     'message' => "Your order for " . $order->quantity_ordered . " " . ($order->product->unit ?? 'item(s)') . " of " . $order->product->name . " has been delivered by driver " . auth()->user()->name . "! You can now rate this order.",
-                    'type' => 'order_update',
+                    'type'    => 'order_update',
                 ]);
 
-                // Notify farmer
+                // Notify farmer — Phase 2: explicit payout amount
                 Notification::create([
                     'user_id' => $order->product->user_id,
-                    'message' => "Order #" . $order->id . " has been successfully delivered by " . auth()->user()->name . ". Funds of ₵" . number_format($order->total_price, 2) . " have been released to your account.",
-                    'type' => 'order_update',
+                    'message' => "Order #" . $order->id . " has been delivered by " . auth()->user()->name . ". ₵" . number_format($order->total_price, 2) . " has been released to your account.",
+                    'type'    => 'order_update',
                 ]);
+
+                // Notify driver — Phase 2: transport payout notification (only if driver assigned)
+                if ($order->driver_id) {
+                    Notification::create([
+                        'user_id' => $order->driver_id,
+                        'message' => "Delivery complete for Order #" . $order->id . ". Your transport payout of ₵" . number_format($order->estimated_transport_cost ?? 0, 2) . " has been released.",
+                        'type'    => 'transport_update',
+                    ]);
+                }
             });
         } catch (ValidationException $e) {
             throw $e;
