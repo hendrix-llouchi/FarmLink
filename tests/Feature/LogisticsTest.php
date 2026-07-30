@@ -60,11 +60,13 @@ class LogisticsTest extends TestCase
 
         // Create a pending order
         $this->order = Order::create([
-            'buyer_id' => $this->buyer->id,
-            'product_id' => $this->product->id,
-            'quantity_ordered' => 5,
-            'total_price' => 60.00,
-            'status' => 'pending',
+            'buyer_id'                 => $this->buyer->id,
+            'product_id'               => $this->product->id,
+            'quantity_ordered'          => 5,
+            'total_price'              => 60.00,
+            'status'                   => 'pending',
+            'payment_status'           => 'escrow_held',
+            'estimated_transport_cost' => 50.00,
         ]);
     }
 

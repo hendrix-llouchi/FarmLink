@@ -57,9 +57,10 @@ class OrderController extends Controller
 
                 // Phase 2: Validate minimum order quantity
                 if ($product->minimum_order_qty && $request->quantity_ordered < $product->minimum_order_qty) {
+                    $unit = $product->unit ?? 'unit(s)';
                     throw ValidationException::withMessages([
                         'quantity_ordered' => [
-                            "This farmer requires a minimum order of {$product->minimum_order_qty} {$product->unit ?? 'unit(s)'}. Please adjust your quantity."
+                            "This farmer requires a minimum order of {$product->minimum_order_qty} {$unit}. Please adjust your quantity."
                         ]
                     ]);
                 }
@@ -283,12 +284,14 @@ class OrderController extends Controller
                     'type'    => 'order_update',
                 ]);
 
-                // Notify driver — Phase 2: transport payout notification
-                Notification::create([
-                    'user_id' => $order->driver_id,
-                    'message' => "Delivery complete for Order #" . $order->id . ". Your transport payout of ₵" . number_format($order->estimated_transport_cost, 2) . " has been released.",
-                    'type'    => 'transport_update',
-                ]);
+                // Notify driver — Phase 2: transport payout notification (only if driver assigned)
+                if ($order->driver_id) {
+                    Notification::create([
+                        'user_id' => $order->driver_id,
+                        'message' => "Delivery complete for Order #" . $order->id . ". Your transport payout of ₵" . number_format($order->estimated_transport_cost ?? 0, 2) . " has been released.",
+                        'type'    => 'transport_update',
+                    ]);
+                }
             });
         } catch (ValidationException $e) {
             throw $e;
