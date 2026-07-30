@@ -8,7 +8,7 @@ You are building "FarmLink", a monolithic Laravel + Inertia.js + Vue.js web appl
 - **Incremental Progress:** Build exactly what is requested in the prompt. Do not write ahead or add features out of scope.
 - **UI Consistency:** Follow the Agri-Tech Modern design system for every Vue component. See Section 4 for full token reference.
 - **No Fragmentation:** Keep all frontend and backend code tightly integrated within this monorepo using Laravel Inertia prop injection. Do not write separate API boilerplate routes unless requested.
-- **No Automatic Pushing:** Never push code to remote repositories unless the user has explicitly requested it. Always wait for the user to instruct to push before executing any push commands.
+- **No Automatic Pushing — ABSOLUTE RULE:** NEVER run `git push` to any remote (origin, GitHub, Render, or any other) under any circumstance unless the user has typed an explicit instruction in the current message such as "push", "push to GitHub", or "push to main". Even if a task is complete, even if the branch is ready — DO NOT PUSH. Commit locally only, then STOP and wait.
 
 ## ⛔ ABSOLUTE DATABASE PROTECTION RULES — NEVER VIOLATE
 
@@ -167,3 +167,64 @@ php artisan serve
 # Database — Start MySQL via XAMPP Control Panel manually
 # Then visit: http://127.0.0.1:8000
 ```
+
+---
+
+## 8. Deployment Environment
+
+- **Production URL:** FarmLink is live on **Render** (https://render.com).
+- **Local DB:** MySQL via XAMPP (start manually from XAMPP Control Panel before running migrations).
+- **CRITICAL:** Never run destructive commands (`migrate:fresh`, `db:wipe`, `truncate`) against the production Render database. All schema changes must use additive, nullable migrations only.
+- **Environment files:** `.env` is local only. Render has its own environment variables configured in the Render dashboard. Never commit `.env` to git.
+
+---
+
+## 9. Git & Pull Request Workflow — MANDATORY
+
+This is the required workflow every time code changes are made on a branch. These rules are NON-NEGOTIABLE.
+
+### ⛔ Rule 1 — Never Push Without Explicit Permission
+- **NEVER run `git push`** to any remote (origin, GitHub, Render deploy hooks, or any other destination) unless the user has written an explicit instruction in the current message.
+- Acceptable trigger phrases: "push", "push it", "push to GitHub", "push to main", "push the branch", "go ahead and push".
+- If the user says "commit" — commit only, do NOT push.
+- If the user says "save" or "done" — commit only, do NOT push.
+- **Default behavior after completing code work: commit locally, then STOP. Report what was done. Wait.**
+
+### ✅ Rule 2 — Branch-to-PR Workflow (After Code is Complete)
+When all code for a feature or phase is committed on a branch, the agent MUST follow this sequence:
+
+**Step 1 — Commit** all changes with a clear, descriptive commit message.
+
+**Step 2 — Report** a summary of what was built. Include:
+- Files changed and what changed in each
+- Acceptance criteria met
+- Any pending manual steps (e.g., run migrations, start XAMPP)
+
+**Step 3 — Wait for push permission.** Do not push until the user says so.
+
+**Step 4 — When the user says to push**, push the branch to origin:
+```bash
+git push origin <branch-name>
+```
+
+**Step 5 — Provide a clickable PR creation link** in this exact format so the user can click it and open a pre-filled GitHub PR:
+
+```
+https://github.com/hendrix-llouchi/FarmLink/compare/main...<branch-name>?quick_pull=1&title=<PR+Title>&body=<PR+body+URL+encoded>
+```
+
+Always output the link as a clickable markdown link, for example:
+
+> 🔗 **[Click here to open the Pull Request on GitHub](https://github.com/hendrix-llouchi/FarmLink/compare/main...feature/finals-upgrade?quick_pull=1&title=feat%3A+Phase+A+%E2%80%94+Database+%26+Backend+Foundation&body=...)**
+
+### ✅ Rule 3 — PR Description Requirements
+Every PR link the agent provides MUST include a pre-filled body containing:
+- **What this PR does** — one sentence summary
+- **Files changed** — bullet list
+- **How to test** — step-by-step manual verification
+- **Phase / Feature** — which SRS phase or feature this belongs to
+- **Acceptance criteria met** — checkboxes matching the SRS
+
+### ✅ Rule 4 — Never Merge
+- **NEVER merge any branch into `main`** unless the user explicitly says "merge" or "merge into main".
+- The agent's job ends at providing the PR link. The user reviews and merges.
