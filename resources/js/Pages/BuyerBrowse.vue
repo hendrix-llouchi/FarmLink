@@ -157,6 +157,31 @@
       </button>
     </div>
 
+    <!-- Quality Grade Filter -->
+    <div class="quality-filter-bar">
+      <span class="quality-filter-label">Quality:</span>
+      <button
+        class="quality-pill"
+        :class="{ active: qualityGrade === '' }"
+        @click="qualityGrade = ''; applyFilters();"
+      >All</button>
+      <button
+        class="quality-pill"
+        :class="{ active: qualityGrade === 'A' }"
+        @click="qualityGrade = 'A'; applyFilters();"
+      >Grade A</button>
+      <button
+        class="quality-pill"
+        :class="{ active: qualityGrade === 'B' }"
+        @click="qualityGrade = 'B'; applyFilters();"
+      >Grade B</button>
+      <button
+        class="quality-pill"
+        :class="{ active: qualityGrade === 'C' }"
+        @click="qualityGrade = 'C'; applyFilters();"
+      >Grade C</button>
+    </div>
+
     <!-- Seasonal Promo Banner Card -->
     <div class="promo-banner-card">
       <div class="promo-badge">SEASONAL SPECIAL</div>
@@ -214,11 +239,24 @@
             </div>
 
             <div class="tags-row-flex">
-              <span class="category-pill-tag" :class="product.category.toLowerCase().replace('/', '-')">
+              <span v-if="product.quality_grade" class="quality-grade-badge" :class="'grade-badge-' + product.quality_grade.toLowerCase()">
+                Grade {{ product.quality_grade }}
+              </span>
+              <span v-else class="category-pill-tag" :class="product.category.toLowerCase().replace('/', '-')">
                 {{ product.category }}
               </span>
-              <span class="custom-badge-tag">Grade A Quality</span>
+              <span v-if="product.days_since_harvest !== null && product.days_since_harvest >= 5" class="near-expiry-badge">
+                ⚠️ Near Expiry
+              </span>
             </div>
+
+            <!-- Freshness bar -->
+            <div class="product-freshness-wrap">
+              <FreshnessBar :harvestDate="product.harvest_date" :shelfLifeDays="4" />
+            </div>
+
+            <!-- Min order -->
+            <p class="min-order-note">Min. {{ product.minimum_order_qty ?? 1 }} {{ product.unit ?? 'unit(s)' }}</p>
 
             <button @click="openProductModal(product)" class="place-order-btn">
               Place Order
@@ -433,11 +471,13 @@
 <script>
 import { router, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import FreshnessBar from '@/Components/UI/FreshnessBar.vue';
 
 export default {
   name: 'BuyerBrowse',
   components: {
-    Link
+    Link,
+    FreshnessBar
   },
   props: {
     products: {
@@ -453,6 +493,7 @@ export default {
     const search = ref(props.filters.search || '');
     const category = ref(props.filters.category || '');
     const location = ref(props.filters.location || '');
+    const qualityGrade = ref(props.filters.quality_grade || '');
 
     const selectedProduct = ref(null);
     const orderQuantity = ref(1);
@@ -473,7 +514,8 @@ export default {
       router.get('/buyer/browse', {
         search: search.value,
         category: category.value,
-        location: location.value
+        location: location.value,
+        quality_grade: qualityGrade.value
       }, {
         preserveState: true,
         replace: true
@@ -491,6 +533,7 @@ export default {
       search.value = '';
       category.value = '';
       location.value = '';
+      qualityGrade.value = '';
       router.get('/buyer/browse', {}, {
         preserveState: true,
         replace: true
@@ -594,6 +637,7 @@ export default {
       search,
       category,
       location,
+      qualityGrade,
       selectedProduct,
       orderQuantity,
       errorMessage,
@@ -1853,5 +1897,75 @@ export default {
   .products-list-stacked {
     grid-template-columns: repeat(3, 1fr);
   }
+}
+
+/* ─── Phase B: Quality & Freshness Styles ─── */
+.quality-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-wrap: wrap;
+}
+.quality-filter-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-500);
+  white-space: nowrap;
+}
+.quality-pill {
+  padding: 4px 14px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--color-neutral-300);
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.quality-pill.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
+}
+.quality-grade-badge {
+  display: inline-block;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+}
+.grade-badge-a {
+  background: var(--color-primary-lighter);
+  color: var(--color-primary);
+}
+.grade-badge-b {
+  background: #FFF3E0;
+  color: #E65100;
+}
+.grade-badge-c {
+  background: #FFF3CD;
+  color: var(--color-secondary-dark);
+}
+.near-expiry-badge {
+  display: inline-block;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  background: #FDECEA;
+  color: var(--color-danger);
+}
+.product-freshness-wrap {
+  margin: var(--space-2) 0;
+}
+.min-order-note {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  margin: 0 0 var(--space-2) 0;
 }
 </style>

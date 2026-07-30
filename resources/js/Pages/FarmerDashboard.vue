@@ -201,10 +201,33 @@
                   <div class="product-card-body">
                     <div class="product-info-top">
                       <h3 class="product-title">{{ product.name }}</h3>
-                      <span class="price-pill">₵{{ Number(product.price).toFixed(2) }}/unit</span>
+                      <span class="price-pill">₵{{ Number(product.price).toFixed(2) }}/{{ product.unit || 'unit' }}</span>
                     </div>
-                    <p class="product-avail-text">{{ product.quantity }} units available</p>
-                    
+
+                    <!-- Quality badge + near-expiry warning -->
+                    <div class="product-meta-row">
+                      <span
+                        v-if="product.quality_grade"
+                        class="quality-grade-badge"
+                        :class="'grade-badge-' + product.quality_grade.toLowerCase()"
+                      >
+                        Grade {{ product.quality_grade }}
+                      </span>
+                      <span
+                        v-if="product.days_since_harvest !== null && product.days_since_harvest >= 5"
+                        class="near-expiry-badge"
+                      >
+                        ⚠️ Near Expiry
+                      </span>
+                    </div>
+
+                    <!-- Freshness bar -->
+                    <div class="product-freshness-wrap">
+                      <FreshnessBar :harvestDate="product.harvest_date" :shelfLifeDays="4" />
+                    </div>
+
+                    <p class="product-avail-text">{{ product.quantity }} {{ product.unit ?? 'units' }} available · Min. {{ product.minimum_order_qty ?? 1 }} {{ product.unit ?? 'unit(s)' }}</p>
+
                     <!-- Outlined Action Buttons (Stitch layout) -->
                     <div class="product-actions">
                       <button class="action-btn edit-btn" @click="editProduct(product)">
@@ -357,6 +380,81 @@
                   :error="form.errors.price"
                 />
 
+                <!-- Harvest Date -->
+                <div class="form-group-custom">
+                  <label class="custom-label">Harvest Date</label>
+                  <input
+                    type="date"
+                    v-model="form.harvest_date"
+                    :max="todayDate"
+                    class="custom-date-input"
+                  />
+                  <span class="helper-text">When did you pick this crop?</span>
+                  <span v-if="form.errors.harvest_date" class="error-validation-text">{{ form.errors.harvest_date }}</span>
+                </div>
+
+                <!-- Quality Grade -->
+                <div class="form-group-custom">
+                  <label class="custom-label">Quality Grade</label>
+                  <div class="grade-selector-row">
+                    <button
+                      type="button"
+                      class="grade-card"
+                      :class="{ 'grade-selected-a': form.quality_grade === 'A' }"
+                      @click="form.quality_grade = 'A'"
+                    >
+                      <span class="grade-letter">A</span>
+                      <span class="grade-name">Premium</span>
+                      <span class="grade-desc">Best condition</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="grade-card"
+                      :class="{ 'grade-selected-b': form.quality_grade === 'B' }"
+                      @click="form.quality_grade = 'B'"
+                    >
+                      <span class="grade-letter">B</span>
+                      <span class="grade-name">Standard</span>
+                      <span class="grade-desc">Good condition</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="grade-card"
+                      :class="{ 'grade-selected-c': form.quality_grade === 'C' }"
+                      @click="form.quality_grade = 'C'"
+                    >
+                      <span class="grade-letter">C</span>
+                      <span class="grade-name">Budget</span>
+                      <span class="grade-desc">Quick sale</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Unit of Sale -->
+                <AppInput
+                  id="unit"
+                  v-model="form.unit"
+                  type="select"
+                  label="Unit of Sale"
+                  :error="form.errors.unit"
+                >
+                  <option value="Crate">Crate</option>
+                  <option value="Bag">Bag</option>
+                  <option value="Kg">Kg</option>
+                </AppInput>
+
+                <!-- Minimum Order Quantity -->
+                <AppInput
+                  id="minimum_order_qty"
+                  v-model="form.minimum_order_qty"
+                  type="number"
+                  min="1"
+                  label="Minimum Order Quantity"
+                  placeholder="e.g. 5"
+                  :error="form.errors.minimum_order_qty"
+                />
+                <span class="helper-text" style="margin-top: -8px; display: block;">Minimum units a buyer must order (wholesale)</span>
+
                 <!-- Submit button -->
                 <AppButton
                   type="submit"
@@ -430,6 +528,7 @@
 
 <script>
 import { useForm, Link, router } from '@inertiajs/vue3';
+import FreshnessBar from '@/Components/UI/FreshnessBar.vue';
 import { ref, watch } from 'vue';
 import AppButton from '../Components/UI/AppButton.vue';
 import AppInput from '../Components/UI/AppInput.vue';
@@ -443,7 +542,8 @@ export default {
     AppButton,
     AppInput,
     AppCard,
-    AppBadge
+    AppBadge,
+    FreshnessBar
   },
   props: {
     products: {
@@ -478,8 +578,14 @@ export default {
       category: '',
       quantity: '',
       price: '',
-      image: null
+      image: null,
+      harvest_date: '',
+      quality_grade: '',
+      unit: 'Crate',
+      minimum_order_qty: 1
     });
+
+    const todayDate = new Date().toISOString().split('T')[0];
 
     const triggerFileInput = () => {
       fileInput.value.click();
@@ -504,6 +610,10 @@ export default {
       form.category = product.category;
       form.quantity = String(product.quantity);
       form.price = String(product.price);
+      form.harvest_date = product.harvest_date || '';
+      form.quality_grade = product.quality_grade || '';
+      form.unit = product.unit || 'Crate';
+      form.minimum_order_qty = product.minimum_order_qty || 1;
       imagePreview.value = product.image_path ? (product.image_path.startsWith('data:') || product.image_path.startsWith('http') ? product.image_path : '/storage/' + product.image_path) : null;
       scrollToForm();
     };
@@ -572,6 +682,7 @@ export default {
       cancelEdit,
       deleteProduct,
       triggerAlert,
+      todayDate,
       requestTransport: (orderId) => {
         router.post(`/farmer/orders/${orderId}/request-transport`);
       }
@@ -1583,5 +1694,121 @@ export default {
   .logout-btn-sidebar {
     justify-content: flex-start;
   }
+}
+
+/* ─── Phase B: Quality & Freshness Styles ─── */
+
+.helper-text {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  margin-top: 4px;
+  display: block;
+}
+
+.custom-date-input {
+  width: 100%;
+  height: var(--input-height, 44px);
+  padding: 0 var(--space-3);
+  border: 1.5px solid var(--color-neutral-300);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family);
+  color: var(--color-neutral-900);
+  background: var(--color-white);
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.custom-date-input:focus {
+  border-color: var(--color-primary);
+}
+
+/* Grade selector */
+.grade-selector-row {
+  display: flex;
+  gap: var(--space-2);
+}
+.grade-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-3) var(--space-2);
+  border: 1.5px solid var(--color-neutral-300);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.grade-card:hover {
+  border-color: var(--color-primary-light);
+}
+.grade-letter {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-700);
+}
+.grade-name {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-700);
+}
+.grade-desc {
+  font-size: 10px;
+  color: var(--color-neutral-500);
+}
+.grade-selected-a {
+  border-color: var(--color-primary) !important;
+  background: var(--color-primary-lighter) !important;
+}
+.grade-selected-a .grade-letter { color: var(--color-primary); }
+.grade-selected-b {
+  border-color: #E65100 !important;
+  background: #FFF3E0 !important;
+}
+.grade-selected-b .grade-letter { color: #E65100; }
+.grade-selected-c {
+  border-color: var(--color-secondary-dark) !important;
+  background: #FFF3CD !important;
+}
+.grade-selected-c .grade-letter { color: var(--color-secondary-dark); }
+
+/* Product card enhancements */
+.product-meta-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-2);
+}
+.quality-grade-badge {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+}
+.grade-badge-a {
+  background: var(--color-primary-lighter);
+  color: var(--color-primary);
+}
+.grade-badge-b {
+  background: #FFF3E0;
+  color: #E65100;
+}
+.grade-badge-c {
+  background: #FFF3CD;
+  color: var(--color-secondary-dark);
+}
+.near-expiry-badge {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  background: #FDECEA;
+  color: var(--color-danger);
+}
+.product-freshness-wrap {
+  margin-bottom: var(--space-2);
 }
 </style>
