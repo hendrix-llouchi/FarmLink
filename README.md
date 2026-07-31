@@ -1,6 +1,8 @@
 # 🌾 FarmLink
 
-> A localized farmer-to-buyer marketplace for the Western Region of Ghana (Takoradi / Tarkwa area), built with Laravel 10 + Inertia.js + Vue 3.
+> A localized farmer-to-buyer marketplace connecting smallholder **tomato farmers in Daboase & Beposo** with **market traders at Takoradi Market Circle**, built with Laravel 10 + Inertia.js + Vue 3.
+>
+> **Problem solved:** Farmers are forced into distress sales at day's end because buyers appear only when prices crash. FarmLink enables pre-committed, escrow-secured orders — with transport cost agreed upfront — before harvest day ends.
 
 ---
 
@@ -25,11 +27,13 @@ FarmLink connects **farmers**, **buyers**, and **drivers** in a single monolithi
 
 ## Roles
 
-| Role | Capabilities |
-|---|---|
-| **Farmer** | List produce, view dashboard with own products |
-| **Buyer** | Browse marketplace, place orders, view order history, rate delivered orders |
-| **Driver** | View pending delivery jobs, accept jobs, mark deliveries as completed |
+| Role | Sub-type | Capabilities |
+|---|---|---|
+| **Farmer** | — | List produce with harvest date, quality grade, unit & minimum order qty; view dashboard metrics |
+| **Buyer** | Market Trader 🏪 | Browse marketplace, place wholesale orders, view order history with cost breakdown, rate deliveries |
+| **Buyer** | Restaurant / Chop Bar 🍽️ | Same as above |
+| **Buyer** | Individual Consumer 🧍 | Same as above |
+| **Driver** | Aboboyaa Operator | View available delivery jobs with payout amount, accept, pick up, and complete deliveries |
 
 ---
 
@@ -89,15 +93,39 @@ FarmLink connects **farmers**, **buyers**, and **drivers** in a single monolithi
 - **Header Action Alignment**: Cleaned up the notification bells and aligned logout and clear actions consistently.
 - **Payment Method Coming Soon**: Labeled Telecel and other payment networks as "Coming Soon" in the buyer's payment modal.
 
+### ✅ Module 10 — Phase 2A: Database & Backend Foundation (Finals Upgrade)
+
+Grounded in real field research from Daboase/Beposo farmers, this phase extends the data layer to carry quality, freshness, buyer identity, and transport cost transparency.
+
+- **Product Quality Schema** (`add_quality_fields_to_products_table`): Added `harvest_date`, `quality_grade` (ENUM A/B/C), `unit` (Crate/Bag/Kg), and `minimum_order_qty` as nullable columns to `products`.
+- **Buyer Profile Schema** (`add_buyer_profile_to_users_table`): Added `buyer_type` (market_trader / restaurant / individual) and `business_name` as nullable columns to `users`.
+- **ProductController** — `store()` and `update()` accept and validate all new quality fields; `buyerBrowse()` computes `days_since_harvest` dynamically and supports `quality_grade` filtering.
+- **OrderController** — `store()` now calculates estimated transport cost at order creation time (`₵40 base + ₵2 × qty`), stores it in `estimated_transport_cost`, includes it in the MoMo payment amount, and validates minimum order quantity against the product's `minimum_order_qty`; `completeDelivery()` sends separate payout notifications to the farmer (product amount) and driver (transport amount).
+- **AuthController** — `register()` accepts and stores `buyer_type` and `business_name`.
+
+### ✅ Module 11 — Phase 2B: Quality & Freshness Layer (Finals Upgrade)
+
+Makes quality, freshness, and wholesale terms visible to both farmers and market buyers.
+
+- **`FreshnessBar.vue`** (new shared UI component): Pure presentational component that computes days elapsed since `harvest_date` and renders a color-coded progress bar — **Green** (0–2 days, Fresh), **Yellow** (3–4 days, Use Soon), **Red** (5+ days, Near Expiry), **Grey** (no date provided).
+- **FarmerDashboard** — Post Produce modal extended with four new fields: Harvest Date picker (capped at today), Quality Grade selector (three clickable A/B/C cards), Unit of Sale dropdown, and Minimum Order Quantity input. Product listing cards now display quality grade badge, freshness bar, and a ⚠️ Near Expiry warning when applicable.
+- **BuyerBrowse** — Product cards now show quality grade badge, freshness bar, and minimum order note. A Quality Grade filter pill bar (All / Grade A / Grade B / Grade C) is added above the listing results. The `quality_grade` filter is wired into `applyFilters()` and sent as a query parameter to the backend.
+
 ---
 
 ## Database Schema (Key Tables)
 
 ```
-users           — id, name, phone_number, password, role, location, average_rating
-products        — id, user_id (farmer), name, category, price, quantity, unit
-orders          — id, buyer_id, product_id, driver_id, quantity_ordered, total_price, status, payment_status
-ratings         — id, order_id, rater_id, ratee_id, score, comment
+users       — id, name, phone_number, password, role, location, average_rating,
+              buyer_type, business_name                             ← Phase 2A
+
+products    — id, user_id (farmer), name, category, price, quantity,
+              harvest_date, quality_grade, unit, minimum_order_qty  ← Phase 2A
+
+orders      — id, buyer_id, product_id, driver_id, quantity_ordered, total_price,
+              estimated_transport_cost, status, payment_status
+
+ratings     — id, order_id, rater_id, ratee_id, score, comment
 ```
 
 **Order status lifecycle:**
