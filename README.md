@@ -71,11 +71,13 @@ FarmLink connects **farmers**, **buyers**, and **drivers** in a single monolithi
 - **Farmer revenue card**: the Farmer Dashboard now shows a **Total Revenue** metric card displaying only earnings from `released` orders (i.e. confirmed deliveries)
 - **Scroll UX fix**: background page scroll is locked while the checkout modal is open; modal content scrolls internally on large viewports
 
-### ✅ Module 6 — Agri-Tech Modern Redesign (Phases 1–4)
+### ✅ Module 6 — Agri-Tech Modern Redesign (Phases 1–5)
 - **Phase 1 (Auth)**: Redesigned Login and Register screens with responsive split-screen layouts, color-coded role cards, Forgot Password 6-digit flow, and CSS design tokens setup.
 - **Phase 2 (Farmer)**: Redesigned Farmer Dashboard with sidebar navigation (desktop), collapsible tablet sidebar, bottom navigation capsule (mobile), responsive metrics cards, and listing actions.
 - **Phase 3 (Buyer)**: Redesigned Buyer Browse with full-width product cards, horizontal category scrollbar filter, seasonal promo banners, slide-up Mobile Money payment drawers, and status-bordered order logs.
 - **Phase 4 (Transporter)**: Redesigned Driver Dashboard featuring active trip card progress stages (Farm → Transit → Market), orange "Picked Up" & teal "Delivered" action indicators, nearby jobs list, and bottom navigation.
+- **Phase 5 (Shared)**: Redesigned Settings screen (user profile update, password change, platform rating card) and Notifications feed (in-app alerts list, read/unread states, mark single/all as read).
+
 
 ### ✅ Module 7 — MTN MoMo API Integration & Sandbox Command
 - **MTN MoMo API Service**: Implemented [MomoApiService.php](file:///C:/Users/HP%20Laptop/Downloads/FarmLink/app/Services/MomoApiService.php) to integrate with official MTN MoMo Collection APIs. Handles token generation, number normalization (e.g. prefixing `233`), and `requesttopay` HTTP calls.
@@ -117,15 +119,17 @@ Makes quality, freshness, and wholesale terms visible to both farmers and market
 
 ```
 users       — id, name, phone_number, password, role, location, average_rating,
-              buyer_type, business_name                             ← Phase 2A
+              buyer_type, business_name, reset_token, reset_token_expires_at
 
 products    — id, user_id (farmer), name, category, price, quantity,
-              harvest_date, quality_grade, unit, minimum_order_qty  ← Phase 2A
+              harvest_date, quality_grade, unit, minimum_order_qty
 
 orders      — id, buyer_id, product_id, driver_id, quantity_ordered, total_price,
               estimated_transport_cost, status, payment_status
 
 ratings     — id, order_id, rater_id, ratee_id, score, comment
+
+notifications — id, user_id, type, title, message, is_read, data, created_at, updated_at
 ```
 
 **Order status lifecycle:**
@@ -199,14 +203,27 @@ Visit [http://127.0.0.1:8000](http://127.0.0.1:8000)
 | GET | `/` | any | Role-based redirect |
 | GET/POST | `/login` | guest | Login |
 | GET/POST | `/register` | guest | Register |
-| GET | `/farmer/dashboard` | farmer | View own products |
-| POST | `/farmer/products` | farmer | List a product |
+| GET/POST | `/forgot-password` | guest | Password reset request (6-digit code) |
+| GET/POST | `/reset-password` | guest | Password reset confirmation |
+| GET | `/settings` | auth | View profile & settings page |
+| POST | `/settings/profile` | auth | Update profile information |
+| POST | `/settings/password` | auth | Update account password |
+| GET | `/notifications` | auth | View notifications feed |
+| POST | `/notifications/{id}/read` | auth | Mark notification as read |
+| POST | `/notifications/read-all` | auth | Mark all notifications as read |
+| GET | `/farmer/dashboard` | farmer | View own products & metrics |
+| POST | `/farmer/products` | farmer | List a new product |
+| POST | `/farmer/products/{id}/update` | farmer | Update existing product details |
+| DELETE | `/farmer/products/{id}` | farmer | Delete product listing |
+| GET | `/farmer/orders` | farmer | View incoming buyer orders & escrow status |
+| POST | `/farmer/orders/{id}/request-transport` | farmer | Request transporter for escrow-held order |
 | GET | `/buyer/browse` | buyer | Browse marketplace |
 | POST | `/buyer/orders` | buyer | Place an order |
 | GET | `/buyer/orders` | buyer | View order history |
 | POST | `/buyer/orders/{id}/rate` | buyer | Submit rating |
 | GET | `/driver/dashboard` | driver | View available jobs + active trips |
 | POST | `/driver/orders/{id}/accept` | driver | Accept a delivery |
+| POST | `/driver/orders/{id}/pickup` | driver | Mark cargo as picked up (`in_transit`) |
 | POST | `/driver/orders/{id}/complete` | driver | Mark as delivered (triggers escrow release) |
 
 ---
