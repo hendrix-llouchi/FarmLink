@@ -174,7 +174,7 @@
                   </div>
                 </div>
 
-                <!-- Simple Delivery Flow Steps -->
+                <!-- Delivery Steps -->
                 <div class="progress-steps-row">
                   <div class="progress-step" :class="{ completed: order.status === 'in_transit' || order.status === 'delivered', active: order.status === 'processing' }">
                     <div class="step-icon-circle">
@@ -372,7 +372,7 @@
 
 
           <!-- ══════════════════════════════════════════════════════════════ -->
-          <!-- SCREEN 3: EARNINGS OVERVIEW TAB                                -->
+          <!-- SCREEN 3: EARNINGS OVERVIEW TAB (Using Real Order Data)        -->
           <!-- ══════════════════════════════════════════════════════════════ -->
           <div v-else-if="activeTab === 'earnings'" class="tab-content-view">
             <div class="earnings-header-block">
@@ -402,11 +402,63 @@
                 </div>
               </div>
             </div>
+
+            <!-- Recent Payouts Section (Derived Dynamically from Real Completed Orders) -->
+            <section class="section-block margin-top-lg">
+              <div class="section-header-flex">
+                <h3 class="section-subheading">Recent Payouts</h3>
+                <button v-if="recentPayoutsList.length > 0" class="view-all-link" @click="triggerViewAllPayouts">View All</button>
+              </div>
+
+              <!-- Empty Recent Payouts State -->
+              <div v-if="recentPayoutsList.length === 0" class="empty-state-card">
+                <svg xmlns="http://www.w3.org/2000/svg" class="empty-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <rect x="2" y="6" width="20" height="12" rx="2"/>
+                  <circle cx="12" cy="12" r="2"/>
+                  <path d="M6 12h.01M18 12h.01"/>
+                </svg>
+                <h3 class="empty-title">No Payout Records Yet</h3>
+                <p class="empty-desc">Payout transactions for completed farm deliveries will be recorded here automatically.</p>
+              </div>
+
+              <!-- Real Payout Feed List -->
+              <div v-else class="recent-payouts-feed">
+                <div v-for="(payout, idx) in recentPayoutsList" :key="idx" class="payout-card-item">
+                  <div class="payout-left-box">
+                    <div class="payout-icon-avatar" :class="{ processing: payout.status === 'PROCESSING' }">
+                      <svg v-if="payout.status === 'SETTLED'" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="6" width="20" height="12" rx="2"/>
+                        <circle cx="12" cy="12" r="2"/>
+                        <path d="M6 12h.01M18 12h.01"/>
+                      </svg>
+                      <svg v-else xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="1"/>
+                        <circle cx="17" cy="12" r="1"/>
+                        <circle cx="7" cy="12" r="1"/>
+                      </svg>
+                    </div>
+
+                    <div class="payout-details-col">
+                      <h4 class="payout-trip-id">Trip ID: {{ payout.id }}</h4>
+                      <span class="payout-meta-sub">{{ payout.date }} • {{ payout.method }}</span>
+                    </div>
+                  </div>
+
+                  <div class="payout-right-box">
+                    <div class="payout-amount-text">
+                      <span class="currency-tag">GHS</span>
+                      <span class="amount-number">{{ payout.amount }}</span>
+                    </div>
+                    <span class="status-pill" :class="payout.status.toLowerCase()">{{ payout.status }}</span>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
 
 
           <!-- ══════════════════════════════════════════════════════════════ -->
-          <!-- SCREEN 4: DRIVER PROFILE TAB (Redesigned matching Image 2)     -->
+          <!-- SCREEN 4: DRIVER PROFILE TAB                                   -->
           <!-- ══════════════════════════════════════════════════════════════ -->
           <div v-else-if="activeTab === 'profile'" class="tab-content-view">
             <!-- Driver Header Card -->
@@ -428,7 +480,7 @@
               </div>
             </div>
 
-            <!-- Stats Overview 2-Col Grid (FIXED Text Overlap & Styled matching Image 2) -->
+            <!-- Stats Overview 2-Col Grid -->
             <div class="metrics-two-col margin-top-md">
               <div class="profile-metric-box">
                 <span class="profile-metric-label">Total Earnings</span>
@@ -440,7 +492,7 @@
               </div>
             </div>
 
-            <!-- Document Status Card (Matching Image 2 + Edit Button) -->
+            <!-- Document Status Card -->
             <div class="profile-section-card">
               <div class="card-section-header">
                 <h3 class="card-section-title">Document Status</h3>
@@ -482,7 +534,7 @@
               </div>
             </div>
 
-            <!-- Vehicle Details Grid (Matching Image 2 + Edit trigger) -->
+            <!-- Vehicle Details Grid -->
             <div class="profile-section-card">
               <div class="card-section-header">
                 <h3 class="card-section-title">Vehicle Details</h3>
@@ -682,7 +734,7 @@ export default {
     const historyQuery = ref('');
     const showEditModal = ref(false);
 
-    // Reactive Driver & Vehicle Details (seeded with initial default/dummy data)
+    // Reactive Driver & Vehicle Details
     const driverDetails = reactive({
       name: page.props.auth?.user?.name || 'Emmanuel Mensah',
       model: 'Aboboyaa Motor Tricycle',
@@ -691,7 +743,7 @@ export default {
       fuelType: 'Petrol',
       licenseExpiry: '12 Dec 2026',
       insuranceExpiry: '18 Oct 2026',
-      jobsDone: 9
+      jobsDone: 0
     });
 
     const editForm = reactive({ ...driverDetails });
@@ -708,10 +760,34 @@ export default {
 
     const driverRatingFormatted = computed(() => '5.0');
 
-    // Total earnings calculated dynamically or fallback to formatted
+    const formatDate = (dateStr) => {
+      if (!dateStr) return 'Recently';
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    };
+
+    // REAL DATA: Recent Payouts derived dynamically from driver's actual completed orders
+    const recentPayoutsList = computed(() => {
+      if (!props.completedTrips || props.completedTrips.length === 0) {
+        return [];
+      }
+      return props.completedTrips.map(order => ({
+        id: `#ADG-${order.id}`,
+        date: formatDate(order.updated_at || order.created_at),
+        method: 'Mobile Money',
+        amount: Number(order.estimated_transport_cost || 40.00).toFixed(2),
+        status: order.payment_status === 'released' || order.status === 'delivered' ? 'SETTLED' : 'PROCESSING'
+      }));
+    });
+
+    const triggerViewAllPayouts = () => {
+      alert('Viewing complete Mobile Money & Bank payout history statement...');
+    };
+
+    // Total earnings calculated dynamically from real completed orders
     const totalEarningsCalculated = computed(() => {
       if (!props.completedTrips || props.completedTrips.length === 0) {
-        return '370.00'; // Initial dummy default matching mockup
+        return '0.00';
       }
       const sum = props.completedTrips.reduce((acc, item) => {
         return acc + Number(item.estimated_transport_cost || 40.00);
@@ -745,12 +821,6 @@ export default {
         return produce.includes(q) || pickup.includes(q) || dropoff.includes(q);
       });
     });
-
-    const formatDate = (dateStr) => {
-      if (!dateStr) return 'Recently';
-      const d = new Date(dateStr);
-      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    };
 
     const acceptJob = (orderId) => {
       processingId.value = orderId;
@@ -790,6 +860,8 @@ export default {
       openEditModal,
       saveDriverDetails,
       driverRatingFormatted,
+      recentPayoutsList,
+      triggerViewAllPayouts,
       totalEarningsCalculated,
       todayEarningsCalculated,
       filteredHistory,
@@ -992,6 +1064,10 @@ export default {
   margin-bottom: var(--space-5);
 }
 
+.margin-top-lg {
+  margin-top: var(--space-5);
+}
+
 .section-header-flex {
   display: flex;
   align-items: center;
@@ -999,10 +1075,23 @@ export default {
   margin-bottom: var(--space-3);
 }
 
-.section-title {
+.section-title, .section-subheading {
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   color: var(--color-neutral-900);
+}
+
+.view-all-link {
+  background: none;
+  border: none;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-500);
+  cursor: pointer;
+}
+
+.view-all-link:hover {
+  color: var(--color-primary);
 }
 
 .nearby-badge {
@@ -1012,6 +1101,105 @@ export default {
   font-weight: var(--font-weight-bold);
   padding: 2px 8px;
   border-radius: var(--radius-pill);
+}
+
+.recent-payouts-feed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.payout-card-item {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-xs);
+}
+
+.payout-left-box {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.payout-icon-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  background-color: #E6F4F1;
+  color: #1E7268;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payout-icon-avatar.processing {
+  background-color: #FDF4E7;
+  color: #D97706;
+}
+
+.payout-details-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.payout-trip-id {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+}
+
+.payout-meta-sub {
+  font-size: 11px;
+  color: var(--color-neutral-500);
+  margin-top: 2px;
+}
+
+.payout-right-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.payout-amount-text {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.payout-amount-text .currency-tag {
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+}
+
+.payout-amount-text .amount-number {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+}
+
+.status-pill {
+  font-size: 9px;
+  font-weight: var(--font-weight-bold);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.5px;
+}
+
+.status-pill.settled {
+  background-color: #D1FAE5;
+  color: #065F46;
+}
+
+.status-pill.processing {
+  background-color: #FEF3C7;
+  color: #92400E;
 }
 
 .empty-state-card {
@@ -1445,7 +1633,6 @@ export default {
   margin-top: var(--space-2);
 }
 
-/* FIXED STAT CARDS: No Text Overlap, Clean Column Layout */
 .metrics-two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1473,7 +1660,7 @@ export default {
 }
 
 .metric-value, .profile-metric-val {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   color: var(--color-neutral-900);
   line-height: 1.2;
@@ -1488,7 +1675,6 @@ export default {
   color: var(--color-tertiary);
 }
 
-/* DRIVER PROFILE HERO */
 .driver-profile-hero {
   background-color: var(--color-white);
   border: 1px solid var(--color-border);
@@ -1544,7 +1730,6 @@ export default {
   margin-top: 6px;
 }
 
-/* SECTION CARDS: Document Status & Vehicle Details */
 .profile-section-card {
   background-color: var(--color-white);
   border: 1px solid var(--color-border);
@@ -1580,7 +1765,6 @@ export default {
   text-decoration: underline;
 }
 
-/* Document Status List matching Image 2 */
 .doc-status-list {
   display: flex;
   flex-direction: column;
@@ -1632,7 +1816,7 @@ export default {
 }
 
 .status-verified-badge {
-  background-color: #1B4332; /* Solid dark green chip matching Image 2 */
+  background-color: #1B4332;
   color: var(--color-white);
   font-size: 10px;
   font-weight: var(--font-weight-bold);
@@ -1641,7 +1825,6 @@ export default {
   letter-spacing: 0.5px;
 }
 
-/* Vehicle Specs Grid matching Image 2 */
 .vehicle-specs-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1672,7 +1855,6 @@ export default {
   margin-top: 3px;
 }
 
-/* EDIT MODAL */
 .modal-overlay {
   position: fixed;
   top: 0;
