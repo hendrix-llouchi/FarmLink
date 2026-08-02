@@ -149,9 +149,16 @@ class OrderController extends Controller
             ->latest()
             ->get();
 
+        $completedTrips = Order::where('driver_id', auth()->id())
+            ->where('status', 'delivered')
+            ->with(['buyer', 'product.user', 'ratings'])
+            ->latest()
+            ->get();
+
         return Inertia::render('DriverDashboard', [
-            'orders' => $orders,
-            'activeTrips' => $activeTrips
+            'orders'         => $orders,
+            'activeTrips'    => $activeTrips,
+            'completedTrips' => $completedTrips,
         ]);
     }
 
