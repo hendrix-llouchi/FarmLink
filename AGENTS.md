@@ -183,6 +183,13 @@ php artisan serve
 
 This is the required workflow every time code changes are made on a branch. These rules are NON-NEGOTIABLE.
 
+### ⛔ ABSOLUTE GUARDRAIL — NO DIRECT PUSH OR MERGE TO MAIN
+1. **NEVER run `git merge` into `main`** under any circumstance.
+2. **NEVER run `git push origin main`** or push directly to `main` under any circumstance.
+3. **ALWAYS push ONLY to feature branches** (`git push origin <branch-name>`).
+4. **STOP at providing the pre-filled GitHub PR link** for the user to review and merge manually. The agent's job ends when the PR link is provided.
+5. Even if the user says "push to main" or "push it", push ONLY the feature branch (`git push origin <branch-name>`) and output the GitHub PR comparison link.
+
 ### ⛔ Rule 1 — Never Push Without Explicit Permission
 - **NEVER run `git push`** to any remote (origin, GitHub, Render deploy hooks, or any other destination) unless the user has written an explicit instruction in the current message.
 - Acceptable trigger phrases: "push", "push it", "push to GitHub", "push to main", "push the branch", "go ahead and push".
