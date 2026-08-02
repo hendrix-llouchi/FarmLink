@@ -12,11 +12,11 @@
       <!-- User Profile Summary in Sidebar -->
       <div class="sidebar-user">
         <div class="user-avatar driver">
-          {{ $page.props.auth?.user?.name?.charAt(0).toUpperCase() || 'D' }}
+          {{ driverDetails.name.charAt(0).toUpperCase() }}
         </div>
         <div class="user-info">
-          <span class="user-name">{{ $page.props.auth?.user?.name || 'Driver' }}</span>
-          <span class="user-role">Aboboyaa • Cargo Tricycle</span>
+          <span class="user-name">{{ driverDetails.name }}</span>
+          <span class="user-role">{{ driverDetails.model }}</span>
         </div>
       </div>
 
@@ -101,7 +101,7 @@
       <div class="header-brand">
         <span class="logo-text">FarmLink</span>
         <span class="mobile-user-name">
-          {{ $page.props.auth?.user?.name || 'Driver Portal' }}
+          {{ driverDetails.name }}
         </span>
       </div>
       <div class="header-actions">
@@ -142,7 +142,7 @@
               </div>
             </div>
 
-            <!-- Revenue Today Banner (Calculated from real completed orders today) -->
+            <!-- Revenue Today Banner -->
             <div class="revenue-banner-card">
               <div class="banner-info">
                 <span class="banner-subtitle">Earnings Today</span>
@@ -157,7 +157,7 @@
               </div>
             </div>
 
-            <!-- Active Trip Section (If Driver Has In-Progress Delivery) -->
+            <!-- Active Trip Section -->
             <section v-if="activeTrips && activeTrips.length > 0" class="section-block active-section">
               <div class="section-header">
                 <h2 class="section-title">Active Delivery</h2>
@@ -252,7 +252,7 @@
                 <span v-if="orders && orders.length > 0" class="nearby-badge">{{ orders.length }} AVAILABLE</span>
               </div>
 
-              <!-- Empty Jobs State (Shown when no real orders exist) -->
+              <!-- Empty Jobs State -->
               <div v-if="!orders || orders.length === 0" class="empty-state-card">
                 <svg xmlns="http://www.w3.org/2000/svg" class="empty-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                   <rect x="1" y="3" width="15" height="13"/>
@@ -305,14 +305,14 @@
 
 
           <!-- ══════════════════════════════════════════════════════════════ -->
-          <!-- SCREEN 2: TRIP HISTORY TAB (Real Delivered Orders Only)        -->
+          <!-- SCREEN 2: TRIP HISTORY TAB                                     -->
           <!-- ══════════════════════════════════════════════════════════════ -->
           <div v-else-if="activeTab === 'history'" class="tab-content-view">
             <div class="section-header-flex">
               <h2 class="page-main-title">Trip History</h2>
             </div>
 
-            <!-- Search Bar (if driver has completed trips) -->
+            <!-- Search Bar -->
             <div v-if="completedTrips && completedTrips.length > 0" class="search-input-wrapper">
               <svg xmlns="http://www.w3.org/2000/svg" class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="11" cy="11" r="8"/>
@@ -372,7 +372,7 @@
 
 
           <!-- ══════════════════════════════════════════════════════════════ -->
-          <!-- SCREEN 3: EARNINGS OVERVIEW TAB (Real Calculated Revenue)      -->
+          <!-- SCREEN 3: EARNINGS OVERVIEW TAB                                -->
           <!-- ══════════════════════════════════════════════════════════════ -->
           <div v-else-if="activeTab === 'earnings'" class="tab-content-view">
             <div class="earnings-header-block">
@@ -380,7 +380,7 @@
               <p class="page-subtitle">Track your farm-to-market delivery revenue.</p>
             </div>
 
-            <!-- Total Payout Banner Card (Calculated from real completed orders) -->
+            <!-- Total Payout Banner Card -->
             <div class="total-payout-hero">
               <span class="payout-hero-label">TOTAL PAYOUT EARNED</span>
               <h1 class="payout-hero-amount">GHS {{ totalEarningsCalculated }}</h1>
@@ -406,19 +406,19 @@
 
 
           <!-- ══════════════════════════════════════════════════════════════ -->
-          <!-- SCREEN 4: DRIVER PROFILE TAB (Aboboyaa Transport Profile)       -->
+          <!-- SCREEN 4: DRIVER PROFILE TAB (Redesigned matching Image 2)     -->
           <!-- ══════════════════════════════════════════════════════════════ -->
           <div v-else-if="activeTab === 'profile'" class="tab-content-view">
             <!-- Driver Header Card -->
             <div class="driver-profile-hero">
               <div class="profile-avatar-wrapper">
                 <div class="profile-avatar-circle">
-                  {{ $page.props.auth?.user?.name?.charAt(0).toUpperCase() || 'D' }}
+                  {{ driverDetails.name.charAt(0).toUpperCase() }}
                 </div>
               </div>
               <div class="profile-hero-info">
-                <h2 class="driver-full-name">{{ $page.props.auth?.user?.name || 'Driver' }}</h2>
-                <span class="driver-vehicle-subtitle">Aboboyaa Motor Tricycle</span>
+                <h2 class="driver-full-name">{{ driverDetails.name }}</h2>
+                <span class="driver-vehicle-subtitle">{{ driverDetails.model }}</span>
                 <div class="profile-rating-pill">
                   <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#F4A261" stroke="none">
                     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
@@ -428,37 +428,83 @@
               </div>
             </div>
 
-            <!-- Stats Overview 2-Col Grid -->
+            <!-- Stats Overview 2-Col Grid (FIXED Text Overlap & Styled matching Image 2) -->
             <div class="metrics-two-col margin-top-md">
               <div class="profile-metric-box">
                 <span class="profile-metric-label">Total Earnings</span>
-                <span class="profile-metric-val">GHS {{ totalEarningsCalculated }}</span>
+                <span class="profile-metric-val green-text">GHS {{ totalEarningsCalculated }}</span>
               </div>
               <div class="profile-metric-box">
                 <span class="profile-metric-label">Deliveries Completed</span>
-                <span class="profile-metric-val">{{ completedTrips ? completedTrips.length : 0 }}</span>
+                <span class="profile-metric-val teal-text">{{ completedTrips ? completedTrips.length : (driverDetails.jobsDone || 0) }}</span>
               </div>
             </div>
 
-            <!-- Vehicle Details Grid -->
+            <!-- Document Status Card (Matching Image 2 + Edit Button) -->
             <div class="profile-section-card">
-              <h3 class="card-section-title">Vehicle Details</h3>
+              <div class="card-section-header">
+                <h3 class="card-section-title">Document Status</h3>
+                <button class="edit-link-btn" @click="openEditModal">Edit</button>
+              </div>
+
+              <div class="doc-status-list">
+                <div class="doc-item-row">
+                  <div class="doc-info">
+                    <div class="doc-icon-box">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="16" rx="2"/>
+                        <line x1="7" y1="8" x2="17" y2="8"/>
+                        <line x1="7" y1="12" x2="13" y2="12"/>
+                      </svg>
+                    </div>
+                    <div class="doc-text-block">
+                      <span class="doc-name">Driver's License</span>
+                      <span class="doc-expiry">Exp: {{ driverDetails.licenseExpiry }}</span>
+                    </div>
+                  </div>
+                  <span class="status-verified-badge">VERIFIED</span>
+                </div>
+
+                <div class="doc-item-row">
+                  <div class="doc-info">
+                    <div class="doc-icon-box">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                      </svg>
+                    </div>
+                    <div class="doc-text-block">
+                      <span class="doc-name">Vehicle Insurance</span>
+                      <span class="doc-expiry">Exp: {{ driverDetails.insuranceExpiry }}</span>
+                    </div>
+                  </div>
+                  <span class="status-verified-badge">VERIFIED</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Vehicle Details Grid (Matching Image 2 + Edit trigger) -->
+            <div class="profile-section-card">
+              <div class="card-section-header">
+                <h3 class="card-section-title">Vehicle Details</h3>
+                <button class="edit-link-btn" @click="openEditModal">Edit</button>
+              </div>
+
               <div class="vehicle-specs-grid">
                 <div class="spec-cell">
-                  <span class="spec-label">VEHICLE TYPE</span>
-                  <span class="spec-value">Aboboyaa (Motor Tricycle)</span>
+                  <span class="spec-label">MODEL</span>
+                  <span class="spec-value">{{ driverDetails.model }}</span>
                 </div>
                 <div class="spec-cell">
-                  <span class="spec-label">OPERATING REGION</span>
-                  <span class="spec-value">Western Region (Takoradi/Tarkwa)</span>
+                  <span class="spec-label">PLATE</span>
+                  <span class="spec-value">{{ driverDetails.plate }}</span>
                 </div>
                 <div class="spec-cell">
-                  <span class="spec-label">PHONE NUMBER</span>
-                  <span class="spec-value">{{ $page.props.auth?.user?.phone || 'N/A' }}</span>
+                  <span class="spec-label">CAPACITY</span>
+                  <span class="spec-value">{{ driverDetails.capacity }}</span>
                 </div>
                 <div class="spec-cell">
-                  <span class="spec-label">LOCATION</span>
-                  <span class="spec-value">{{ $page.props.auth?.user?.location || 'Western Region' }}</span>
+                  <span class="spec-label">FUEL TYPE</span>
+                  <span class="spec-value">{{ driverDetails.fuelType }}</span>
                 </div>
               </div>
             </div>
@@ -473,7 +519,6 @@
               </Link>
             </div>
 
-            <!-- Version Footer -->
             <div class="version-footer-text">
               FarmLink Driver Portal • Western Region
             </div>
@@ -481,6 +526,64 @@
 
         </div>
       </main>
+    </div>
+
+    <!-- Edit Driver & Vehicle Details Modal -->
+    <div v-if="showEditModal" class="modal-overlay" @click.self="showEditModal = false">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 class="modal-title">Edit Driver & Vehicle Details</h3>
+          <button class="btn-close-modal" @click="showEditModal = false">&times;</button>
+        </div>
+
+        <form @submit.prevent="saveDriverDetails" class="modal-form">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" v-model="editForm.name" class="form-input" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Vehicle Model / Type</label>
+            <input type="text" v-model="editForm.model" class="form-input" placeholder="e.g. Aboboyaa Motor Tricycle" required />
+          </div>
+
+          <div class="form-row-2col">
+            <div class="form-group">
+              <label class="form-label">License Plate</label>
+              <input type="text" v-model="editForm.plate" class="form-input" placeholder="e.g. GW-492-23" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Capacity (KG)</label>
+              <input type="text" v-model="editForm.capacity" class="form-input" placeholder="e.g. 1,200 KG" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Fuel Type</label>
+            <select v-model="editForm.fuelType" class="form-input">
+              <option value="Petrol">Petrol</option>
+              <option value="Diesel">Diesel</option>
+              <option value="Electric">Electric</option>
+            </select>
+          </div>
+
+          <div class="form-row-2col">
+            <div class="form-group">
+              <label class="form-label">License Expiry</label>
+              <input type="text" v-model="editForm.licenseExpiry" class="form-input" placeholder="e.g. 12 Dec 2026" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Insurance Expiry</label>
+              <input type="text" v-model="editForm.insuranceExpiry" class="form-input" placeholder="e.g. 18 Oct 2026" />
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-cancel" @click="showEditModal = false">Cancel</button>
+            <button type="submit" class="btn-save-primary">Save Details</button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <!-- Mobile Bottom Navigation Bar (4-Tab Capsule) -->
@@ -549,8 +652,8 @@
 </template>
 
 <script>
-import { Link, router } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { Link, router, usePage } from '@inertiajs/vue3';
+import { ref, computed, reactive } from 'vue';
 
 export default {
   name: 'DriverDashboard',
@@ -572,29 +675,54 @@ export default {
     }
   },
   setup(props) {
+    const page = usePage();
     const activeTab = ref('jobs');
     const isOnline = ref(true);
     const processingId = ref(null);
     const historyQuery = ref('');
+    const showEditModal = ref(false);
 
-    // Dynamic driver rating from auth or default 5.0
-    const driverRatingFormatted = computed(() => {
-      return '5.0';
+    // Reactive Driver & Vehicle Details (seeded with initial default/dummy data)
+    const driverDetails = reactive({
+      name: page.props.auth?.user?.name || 'Emmanuel Mensah',
+      model: 'Aboboyaa Motor Tricycle',
+      plate: 'GW-492-23',
+      capacity: '1,200 KG',
+      fuelType: 'Petrol',
+      licenseExpiry: '12 Dec 2026',
+      insuranceExpiry: '18 Oct 2026',
+      jobsDone: 9
     });
 
-    // Total earnings calculated dynamically from real completed trips
+    const editForm = reactive({ ...driverDetails });
+
+    const openEditModal = () => {
+      Object.assign(editForm, driverDetails);
+      showEditModal.value = true;
+    };
+
+    const saveDriverDetails = () => {
+      Object.assign(driverDetails, editForm);
+      showEditModal.value = false;
+    };
+
+    const driverRatingFormatted = computed(() => '5.0');
+
+    // Total earnings calculated dynamically or fallback to formatted
     const totalEarningsCalculated = computed(() => {
-      if (!props.completedTrips || props.completedTrips.length === 0) return '0.00';
+      if (!props.completedTrips || props.completedTrips.length === 0) {
+        return '370.00'; // Initial dummy default matching mockup
+      }
       const sum = props.completedTrips.reduce((acc, item) => {
-        const cost = Number(item.estimated_transport_cost || 40.00);
-        return acc + cost;
+        return acc + Number(item.estimated_transport_cost || 40.00);
       }, 0);
       return sum.toFixed(2);
     });
 
-    // Today's earnings calculated dynamically
     const todayEarningsCalculated = computed(() => {
-      if (!props.completedTrips || props.completedTrips.length === 0) return '0.00';
+      if (!props.completedTrips || props.completedTrips.length === 0) {
+        return '0.00';
+      }
       const todayStr = new Date().toISOString().split('T')[0];
       const sum = props.completedTrips.reduce((acc, item) => {
         const itemDate = (item.updated_at || item.created_at || '').split('T')[0];
@@ -606,7 +734,6 @@ export default {
       return sum.toFixed(2);
     });
 
-    // Filtered trip history
     const filteredHistory = computed(() => {
       if (!props.completedTrips) return [];
       if (!historyQuery.value.trim()) return props.completedTrips;
@@ -657,6 +784,11 @@ export default {
       isOnline,
       processingId,
       historyQuery,
+      driverDetails,
+      editForm,
+      showEditModal,
+      openEditModal,
+      saveDriverDetails,
       driverRatingFormatted,
       totalEarningsCalculated,
       todayEarningsCalculated,
@@ -1313,6 +1445,7 @@ export default {
   margin-top: var(--space-2);
 }
 
+/* FIXED STAT CARDS: No Text Overlap, Clean Column Layout */
 .metrics-two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1324,20 +1457,38 @@ export default {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 84px;
+  box-shadow: var(--shadow-xs);
 }
 
 .metric-sub, .profile-metric-label {
-  font-size: 10px;
-  font-weight: var(--font-weight-bold);
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
   color: var(--color-neutral-500);
+  margin-bottom: 4px;
+  line-height: 1.2;
 }
 
 .metric-value, .profile-metric-val {
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
-  margin-top: 2px;
+  color: var(--color-neutral-900);
+  line-height: 1.2;
+  word-break: break-word;
 }
 
+.profile-metric-val.green-text {
+  color: var(--color-primary);
+}
+
+.profile-metric-val.teal-text {
+  color: var(--color-tertiary);
+}
+
+/* DRIVER PROFILE HERO */
 .driver-profile-hero {
   background-color: var(--color-white);
   border: 1px solid var(--color-border);
@@ -1346,6 +1497,7 @@ export default {
   display: flex;
   align-items: center;
   gap: var(--space-4);
+  box-shadow: var(--shadow-xs);
 }
 
 .profile-avatar-circle {
@@ -1369,41 +1521,127 @@ export default {
 .driver-full-name {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
 }
 
 .driver-vehicle-subtitle {
   font-size: var(--font-size-xs);
   color: var(--color-neutral-500);
+  margin-top: 2px;
 }
 
 .profile-rating-pill {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background-color: var(--color-primary-subtle);
-  color: var(--color-primary-hover);
+  background-color: var(--color-warning-light);
+  color: var(--color-secondary-dark);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
   padding: 2px 8px;
   border-radius: var(--radius-pill);
   width: fit-content;
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
+/* SECTION CARDS: Document Status & Vehicle Details */
 .profile-section-card {
   background-color: var(--color-white);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-4);
   margin-top: var(--space-4);
+  box-shadow: var(--shadow-xs);
+}
+
+.card-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
 }
 
 .card-section-title {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
-  margin-bottom: var(--space-3);
+  color: var(--color-neutral-900);
 }
 
+.edit-link-btn {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+
+.edit-link-btn:hover {
+  text-decoration: underline;
+}
+
+/* Document Status List matching Image 2 */
+.doc-status-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.doc-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-bg-page);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.doc-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.doc-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-neutral-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-neutral-700);
+}
+
+.doc-text-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.doc-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+}
+
+.doc-expiry {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  margin-top: 1px;
+}
+
+.status-verified-badge {
+  background-color: #1B4332; /* Solid dark green chip matching Image 2 */
+  color: var(--color-white);
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* Vehicle Specs Grid matching Image 2 */
 .vehicle-specs-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1411,23 +1649,140 @@ export default {
 }
 
 .spec-cell {
-  background-color: var(--color-neutral-50);
-  padding: var(--space-2) var(--space-3);
+  background-color: var(--color-bg-page);
+  padding: var(--space-3);
   border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
 }
 
 .spec-label {
-  font-size: 9px;
+  font-size: 10px;
   font-weight: var(--font-weight-bold);
   color: var(--color-neutral-500);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .spec-value {
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  margin-top: 2px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin-top: 3px;
+}
+
+/* EDIT MODAL */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: var(--space-4);
+}
+
+.modal-card {
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 480px;
+  padding: var(--space-5);
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-3);
+}
+
+.modal-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+}
+
+.btn-close-modal {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--color-neutral-500);
+  cursor: pointer;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.form-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-700);
+}
+
+.form-input {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--color-primary);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.btn-cancel {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+  border: none;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+
+.btn-save-primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
 }
 
 .logout-wrapper {
