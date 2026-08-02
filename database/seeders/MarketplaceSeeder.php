@@ -79,6 +79,10 @@ class MarketplaceSeeder extends Seeder
             'quantity' => 50,
             'price' => 15.00,
             'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640442/farmlink/products/lzph1vevp9lipswfinqr.jpg',
+            'harvest_date' => now()->subDays(1)->format('Y-m-d'),
+            'quality_grade' => 'A',
+            'unit' => 'Bag',
+            'minimum_order_qty' => 1,
         ]);
 
         Product::create([
@@ -88,6 +92,10 @@ class MarketplaceSeeder extends Seeder
             'quantity' => 100,
             'price' => 25.00,
             'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640523/farmlink/products/nezb33oppjmh3kxw3byg.jpg',
+            'harvest_date' => now()->subDays(2)->format('Y-m-d'),
+            'quality_grade' => 'B',
+            'unit' => 'Crate',
+            'minimum_order_qty' => 1,
         ]);
 
         Product::create([
@@ -97,6 +105,10 @@ class MarketplaceSeeder extends Seeder
             'quantity' => 40,
             'price' => 12.00,
             'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640420/farmlink/products/yinpnwbpaowgfnsxbip0.jpg',
+            'harvest_date' => now()->subDays(1)->format('Y-m-d'),
+            'quality_grade' => 'A',
+            'unit' => 'Basket',
+            'minimum_order_qty' => 1,
         ]);
 
         Product::create([
@@ -106,6 +118,10 @@ class MarketplaceSeeder extends Seeder
             'quantity' => 80,
             'price' => 8.00,
             'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640452/farmlink/products/js6sss7rxva2blmzcsbg.jpg',
+            'harvest_date' => now()->format('Y-m-d'),
+            'quality_grade' => 'A',
+            'unit' => 'Bag',
+            'minimum_order_qty' => 2,
         ]);
 
         Product::create([
@@ -115,6 +131,10 @@ class MarketplaceSeeder extends Seeder
             'quantity' => 35,
             'price' => 15.00,
             'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783644045/farmlink/products/cabbage_heads.jpg',
+            'harvest_date' => now()->subDays(3)->format('Y-m-d'),
+            'quality_grade' => 'C',
+            'unit' => 'Bag',
+            'minimum_order_qty' => 1,
         ]);
 
         // Farmer 2 (Kwesi) Products
@@ -125,6 +145,10 @@ class MarketplaceSeeder extends Seeder
             'quantity' => 20,
             'price' => 120.00,
             'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640411/farmlink/products/wwtlqffgg7gmustawwvz.jpg',
+            'harvest_date' => now()->subDays(2)->format('Y-m-d'),
+            'quality_grade' => 'A',
+            'unit' => 'Bag',
+            'minimum_order_qty' => 1,
         ]);
 
         Product::create([
@@ -134,6 +158,10 @@ class MarketplaceSeeder extends Seeder
             'quantity' => 30,
             'price' => 45.00,
             'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640531/farmlink/products/hax4ri16u3iss1pxlhj3.jpg',
+            'harvest_date' => now()->subDays(4)->format('Y-m-d'),
+            'quality_grade' => 'B',
+            'unit' => 'Bag',
+            'minimum_order_qty' => 1,
         ]);
 
         Product::create([
@@ -143,6 +171,10 @@ class MarketplaceSeeder extends Seeder
             'quantity' => 15,
             'price' => 35.00,
             'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640509/farmlink/products/of0yj2pn0rgadrsvtzqe.jpg',
+            'harvest_date' => now()->subDays(1)->format('Y-m-d'),
+            'quality_grade' => 'A',
+            'unit' => 'Crate',
+            'minimum_order_qty' => 1,
         ]);
 
         Product::create([
@@ -152,6 +184,10 @@ class MarketplaceSeeder extends Seeder
             'quantity' => 60,
             'price' => 18.00,
             'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640478/farmlink/products/cdwin6xxdclixdajy2sq.jpg',
+            'harvest_date' => now()->subDays(3)->format('Y-m-d'),
+            'quality_grade' => 'B',
+            'unit' => 'Bag',
+            'minimum_order_qty' => 1,
         ]);
 
         Product::create([
@@ -161,6 +197,10 @@ class MarketplaceSeeder extends Seeder
             'quantity' => 25,
             'price' => 30.00,
             'image_path' => 'https://res.cloudinary.com/ecbxhk3w/image/upload/v1783640519/farmlink/products/pj5lxspgp9rhj22vrrbx.jpg',
+            'harvest_date' => now()->subDays(5)->format('Y-m-d'),
+            'quality_grade' => 'C',
+            'unit' => 'Bag',
+            'minimum_order_qty' => 1,
         ]);
     }
 }
