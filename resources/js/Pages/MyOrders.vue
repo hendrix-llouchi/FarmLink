@@ -163,6 +163,35 @@
             </div>
           </div>
 
+          <!-- Driver Details (expandable, shown when driver is assigned) -->
+          <div v-if="order.driver" class="driver-details-section">
+            <button
+              class="driver-toggle-btn"
+              @click="toggleDriverDetails(order.id)"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" /><polygon points="16 8 20 8 23 11 23 16 16 16 16 8" /><circle cx="5.5" cy="18.5" r="2.5" /><circle cx="18.5" cy="18.5" r="2.5" /></svg>
+              <span>Driver Assigned — {{ expandedDriverOrderId === order.id ? 'Hide Details' : 'View Details' }}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" :style="expandedDriverOrderId === order.id ? 'transform: rotate(180deg)' : ''" style="transition: transform 0.2s; margin-left: auto;"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div v-if="expandedDriverOrderId === order.id" class="driver-details-card">
+              <div class="driver-avatar-circle">
+                {{ order.driver.name?.charAt(0).toUpperCase() }}
+              </div>
+              <div class="driver-info-block">
+                <span class="driver-name-lbl">{{ order.driver.name }}</span>
+                <span class="driver-role-lbl">Aboboyaa Operator</span>
+                <div class="driver-contact-row">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  <span>{{ order.driver.phone_number }}</span>
+                </div>
+                <div class="driver-location-row">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>{{ order.driver.location || 'Takoradi' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Rating Action Row (Delivered orders) -->
           <div v-if="order.status === 'delivered'" class="order-actions-row">
             <div v-if="order.buyer_rating" class="rating-display-box">
@@ -294,6 +323,7 @@ export default {
     const isModalOpen = ref(false);
     const selectedOrder = ref(null);
     const isSubmitting = ref(false);
+    const expandedDriverOrderId = ref(null);
     const errors = reactive({
       score: null,
       comment: null
@@ -363,6 +393,10 @@ export default {
       alert(msg);
     };
 
+    const toggleDriverDetails = (orderId) => {
+      expandedDriverOrderId.value = expandedDriverOrderId.value === orderId ? null : orderId;
+    };
+
     const triggerDemoPrompt = (order) => {
       const pin = prompt(`[MTN MoMo Sandbox Prompt]\n\nAuthorize payment of GH₵ ${Number(order.total_price).toFixed(2)} to FarmLink for Order #${order.id}?\n\nEnter 4-digit MoMo PIN to complete:`);
       if (pin) {
@@ -409,7 +443,9 @@ export default {
       closeRateModal,
       submitRating,
       triggerAlert,
-      triggerDemoPrompt
+      triggerDemoPrompt,
+      expandedDriverOrderId,
+      toggleDriverDetails
     };
   }
 }
@@ -1398,5 +1434,85 @@ export default {
   .orders-list {
     grid-template-columns: repeat(3, 1fr);
   }
+}
+
+/* ─── Driver Details Section ─── */
+.driver-details-section {
+  border-top: 1px solid var(--color-neutral-100);
+  margin-top: var(--space-3);
+  padding-top: var(--space-2);
+}
+
+.driver-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-tertiary);
+  padding: var(--space-1) 0;
+  text-align: left;
+  font-family: var(--font-family);
+  transition: color 0.15s;
+}
+.driver-toggle-btn:hover {
+  color: var(--color-primary);
+}
+
+.driver-details-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  background: var(--color-neutral-50);
+  border: 1px solid var(--color-neutral-100);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.driver-avatar-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-tertiary);
+  color: var(--color-white);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.driver-info-block {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.driver-name-lbl {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+}
+
+.driver-role-lbl {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+}
+
+.driver-contact-row,
+.driver-location-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-700);
+  margin-top: 2px;
 }
 </style>
