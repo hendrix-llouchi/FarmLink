@@ -64,9 +64,9 @@ export default {
     },
     statusLabel() {
       if (!this.harvestDate) return '—';
-      if (this.percentElapsed <= 40) return 'Fresh';
-      if (this.percentElapsed <= 75) return 'Use Soon';
-      return 'Near Expiry';
+      if (this.percentElapsed <= 40) return 'Fresh Harvest';
+      if (this.percentElapsed <= 75) return 'Good Condition';
+      return 'Fast Sale';
     },
     statusClass() {
       if (!this.harvestDate) return 'status-neutral';
