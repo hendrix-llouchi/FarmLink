@@ -143,10 +143,10 @@ class ProductController extends Controller
             'category'          => $request->category,
             'quantity'          => $request->quantity,
             'price'             => $request->price,
-            'harvest_date'      => $request->harvest_date ?: null,
-            'quality_grade'     => $request->quality_grade ?: $product->quality_grade,
-            'unit'              => $request->unit ?: $product->unit,
-            'minimum_order_qty' => $request->minimum_order_qty ?: $product->minimum_order_qty,
+            'harvest_date'      => $request->harvest_date ?? null,
+            'quality_grade'     => $request->filled('quality_grade') ? $request->quality_grade : $product->quality_grade,
+            'unit'              => $request->filled('unit') ? $request->unit : $product->unit,
+            'minimum_order_qty' => $request->filled('minimum_order_qty') ? $request->minimum_order_qty : $product->minimum_order_qty,
         ];
 
         if ($request->hasFile('image')) {
