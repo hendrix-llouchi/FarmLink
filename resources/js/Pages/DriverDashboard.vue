@@ -372,7 +372,7 @@
 
 
           <!-- ══════════════════════════════════════════════════════════════ -->
-          <!-- SCREEN 3: EARNINGS OVERVIEW TAB (Includes Recent Payouts)      -->
+          <!-- SCREEN 3: EARNINGS OVERVIEW TAB (Using Real Order Data)        -->
           <!-- ══════════════════════════════════════════════════════════════ -->
           <div v-else-if="activeTab === 'earnings'" class="tab-content-view">
             <div class="earnings-header-block">
@@ -403,14 +403,26 @@
               </div>
             </div>
 
-            <!-- Recent Payouts Section (Matching Image Request) -->
+            <!-- Recent Payouts Section (Derived Dynamically from Real Completed Orders) -->
             <section class="section-block margin-top-lg">
               <div class="section-header-flex">
                 <h3 class="section-subheading">Recent Payouts</h3>
-                <button class="view-all-link" @click="triggerViewAllPayouts">View All</button>
+                <button v-if="recentPayoutsList.length > 0" class="view-all-link" @click="triggerViewAllPayouts">View All</button>
               </div>
 
-              <div class="recent-payouts-feed">
+              <!-- Empty Recent Payouts State -->
+              <div v-if="recentPayoutsList.length === 0" class="empty-state-card">
+                <svg xmlns="http://www.w3.org/2000/svg" class="empty-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <rect x="2" y="6" width="20" height="12" rx="2"/>
+                  <circle cx="12" cy="12" r="2"/>
+                  <path d="M6 12h.01M18 12h.01"/>
+                </svg>
+                <h3 class="empty-title">No Payout Records Yet</h3>
+                <p class="empty-desc">Payout transactions for completed farm deliveries will be recorded here automatically.</p>
+              </div>
+
+              <!-- Real Payout Feed List -->
+              <div v-else class="recent-payouts-feed">
                 <div v-for="(payout, idx) in recentPayoutsList" :key="idx" class="payout-card-item">
                   <div class="payout-left-box">
                     <div class="payout-icon-avatar" :class="{ processing: payout.status === 'PROCESSING' }">
@@ -731,7 +743,7 @@ export default {
       fuelType: 'Petrol',
       licenseExpiry: '12 Dec 2026',
       insuranceExpiry: '18 Oct 2026',
-      jobsDone: 9
+      jobsDone: 0
     });
 
     const editForm = reactive({ ...driverDetails });
@@ -748,21 +760,34 @@ export default {
 
     const driverRatingFormatted = computed(() => '5.0');
 
-    // Recent Payouts dataset matching user image request
-    const recentPayoutsList = ref([
-      { id: '#ADG-8821', date: 'Oct 24, 2023', method: 'Mobile Money', amount: '150.00', status: 'SETTLED' },
-      { id: '#ADG-8794', date: 'Oct 22, 2023', method: 'Bank Transfer', amount: '320.00', status: 'SETTLED' },
-      { id: '#ADG-8702', date: 'Oct 21, 2023', method: 'Mobile Money', amount: '210.00', status: 'PROCESSING' }
-    ]);
+    const formatDate = (dateStr) => {
+      if (!dateStr) return 'Recently';
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    };
+
+    // REAL DATA: Recent Payouts derived dynamically from driver's actual completed orders
+    const recentPayoutsList = computed(() => {
+      if (!props.completedTrips || props.completedTrips.length === 0) {
+        return [];
+      }
+      return props.completedTrips.map(order => ({
+        id: `#ADG-${order.id}`,
+        date: formatDate(order.updated_at || order.created_at),
+        method: 'Mobile Money',
+        amount: Number(order.estimated_transport_cost || 40.00).toFixed(2),
+        status: order.payment_status === 'released' || order.status === 'delivered' ? 'SETTLED' : 'PROCESSING'
+      }));
+    });
 
     const triggerViewAllPayouts = () => {
       alert('Viewing complete Mobile Money & Bank payout history statement...');
     };
 
-    // Total earnings calculated dynamically or fallback to formatted
+    // Total earnings calculated dynamically from real completed orders
     const totalEarningsCalculated = computed(() => {
       if (!props.completedTrips || props.completedTrips.length === 0) {
-        return '370.00';
+        return '0.00';
       }
       const sum = props.completedTrips.reduce((acc, item) => {
         return acc + Number(item.estimated_transport_cost || 40.00);
@@ -796,12 +821,6 @@ export default {
         return produce.includes(q) || pickup.includes(q) || dropoff.includes(q);
       });
     });
-
-    const formatDate = (dateStr) => {
-      if (!dateStr) return 'Recently';
-      const d = new Date(dateStr);
-      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    };
 
     const acceptJob = (orderId) => {
       processingId.value = orderId;
@@ -1084,7 +1103,6 @@ export default {
   border-radius: var(--radius-pill);
 }
 
-/* RECENT PAYOUTS CARDS (Matching user image request) */
 .recent-payouts-feed {
   display: flex;
   flex-direction: column;
@@ -1642,7 +1660,7 @@ export default {
 }
 
 .metric-value, .profile-metric-val {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   color: var(--color-neutral-900);
   line-height: 1.2;
