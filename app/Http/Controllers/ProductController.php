@@ -81,9 +81,9 @@ class ProductController extends Controller
             'quantity'          => ['required', 'integer', 'min:1'],
             'price'             => ['required', 'numeric', 'min:0.01'],
             'image'             => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
-            'harvest_date'      => ['nullable', 'date', 'before_or_equal:today'],
+            'harvest_date'      => ['nullable', 'date'],
             'quality_grade'     => ['nullable', 'string', 'in:A,B,C'],
-            'unit'              => ['nullable', 'string', 'in:Crate,Bag,Kg'],
+            'unit'              => ['nullable', 'string', 'max:50'],
             'minimum_order_qty' => ['nullable', 'integer', 'min:1'],
         ]);
 
@@ -107,7 +107,7 @@ class ProductController extends Controller
             'price'             => $request->price,
             'image_path'        => $imagePath,
             'harvest_date'      => $request->harvest_date,
-            'quality_grade'     => $request->quality_grade,
+            'quality_grade'     => $request->quality_grade ?? 'A',
             'unit'              => $request->unit ?? 'Crate',
             'minimum_order_qty' => $request->minimum_order_qty ?? 1,
         ]);
@@ -132,9 +132,9 @@ class ProductController extends Controller
             'quantity'          => ['required', 'integer', 'min:1'],
             'price'             => ['required', 'numeric', 'min:0.01'],
             'image'             => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
-            'harvest_date'      => ['nullable', 'date', 'before_or_equal:today'],
+            'harvest_date'      => ['nullable', 'date'],
             'quality_grade'     => ['nullable', 'string', 'in:A,B,C'],
-            'unit'              => ['nullable', 'string', 'in:Crate,Bag,Kg'],
+            'unit'              => ['nullable', 'string', 'max:50'],
             'minimum_order_qty' => ['nullable', 'integer', 'min:1'],
         ]);
 
@@ -143,10 +143,10 @@ class ProductController extends Controller
             'category'          => $request->category,
             'quantity'          => $request->quantity,
             'price'             => $request->price,
-            'harvest_date'      => $request->harvest_date,
-            'quality_grade'     => $request->quality_grade,
-            'unit'              => $request->unit ?? $product->unit,
-            'minimum_order_qty' => $request->minimum_order_qty ?? $product->minimum_order_qty,
+            'harvest_date'      => $request->harvest_date ?: null,
+            'quality_grade'     => $request->quality_grade ?: $product->quality_grade,
+            'unit'              => $request->unit ?: $product->unit,
+            'minimum_order_qty' => $request->minimum_order_qty ?: $product->minimum_order_qty,
         ];
 
         if ($request->hasFile('image')) {

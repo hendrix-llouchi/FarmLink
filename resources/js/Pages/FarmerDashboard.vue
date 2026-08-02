@@ -420,6 +420,7 @@
                       <span class="grade-desc">Quick sale</span>
                     </button>
                   </div>
+                  <span v-if="form.errors.quality_grade" class="error-validation-text">{{ form.errors.quality_grade }}</span>
                 </div>
 
                 <!-- Unit of Sale -->
@@ -433,6 +434,7 @@
                   <option value="Crate">Crate</option>
                   <option value="Bag">Bag</option>
                   <option value="Kg">Kg</option>
+                  <option value="Basket">Basket</option>
                 </AppInput>
 
                 <!-- Minimum Order Quantity -->
@@ -602,8 +604,8 @@ export default {
       form.category = product.category;
       form.quantity = String(product.quantity);
       form.price = String(product.price);
-      form.harvest_date = product.harvest_date || '';
-      form.quality_grade = product.quality_grade || '';
+      form.harvest_date = product.harvest_date ? String(product.harvest_date).split('T')[0].split(' ')[0] : '';
+      form.quality_grade = product.quality_grade || 'A';
       form.unit = product.unit || 'Crate';
       form.minimum_order_qty = product.minimum_order_qty || 1;
       imagePreview.value = product.image_path ? (product.image_path.startsWith('data:') || product.image_path.startsWith('http') ? product.image_path : '/storage/' + product.image_path) : null;
