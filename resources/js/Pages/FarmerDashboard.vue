@@ -631,7 +631,22 @@ export default {
 
     const submit = () => {
       if (editingProductId.value) {
-        form.post(`/farmer/products/${editingProductId.value}/update`, {
+        // Use transform to cleanly strip null image so backend doesn't fail
+        // when no new image is being uploaded during an edit
+        const payload = {
+          name: form.name,
+          category: form.category,
+          quantity: form.quantity,
+          price: form.price,
+          harvest_date: form.harvest_date || null,
+          quality_grade: form.quality_grade || null,
+          unit: form.unit || null,
+          minimum_order_qty: form.minimum_order_qty || null,
+        };
+        if (form.image) {
+          payload.image = form.image;
+        }
+        form.transform(() => payload).post(`/farmer/products/${editingProductId.value}/update`, {
           onSuccess: () => {
             editingProductId.value = null;
             form.reset();
