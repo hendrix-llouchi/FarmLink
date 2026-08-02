@@ -68,7 +68,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/farmer/products/{id}/update', [ProductController::class, 'update'])->name('products.update');
         Route::delete('/farmer/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
         Route::get('/farmer/orders', [OrderController::class, 'farmerOrders'])->name('farmer.orders.index');
-        Route::post('/farmer/orders/{id}/request-transport', [OrderController::class, 'requestTransport'])->name('orders.request-transport');
     });
 
     // Buyer Routes
