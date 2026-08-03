@@ -349,7 +349,7 @@
 
 <script>
 import { Link, router } from '@inertiajs/vue3';
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted, onUnmounted } from 'vue';
 
 export default {
   name: 'MyOrders',
@@ -370,6 +370,18 @@ export default {
     const errors = reactive({
       score: null,
       comment: null
+    });
+
+    let pollInterval = null;
+
+    onMounted(() => {
+      pollInterval = setInterval(() => {
+        router.reload({ preserveScroll: true, only: ['orders'] });
+      }, 5000);
+    });
+
+    onUnmounted(() => {
+      if (pollInterval) clearInterval(pollInterval);
     });
 
     const ratingForm = reactive({

@@ -523,7 +523,7 @@
 <script>
 import { useForm, Link, router } from '@inertiajs/vue3';
 import FreshnessBar from '@/Components/UI/FreshnessBar.vue';
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted, onUnmounted } from 'vue';
 import AppButton from '../Components/UI/AppButton.vue';
 import AppInput from '../Components/UI/AppInput.vue';
 import AppCard from '../Components/UI/AppCard.vue';
@@ -557,6 +557,18 @@ export default {
     const fileInput = ref(null);
     const imagePreview = ref(null);
     const addFormSection = ref(null);
+
+    let pollInterval = null;
+
+    onMounted(() => {
+      pollInterval = setInterval(() => {
+        router.reload({ preserveScroll: true, only: ['products', 'pendingOrders', 'metrics'] });
+      }, 5000);
+    });
+
+    onUnmounted(() => {
+      if (pollInterval) clearInterval(pollInterval);
+    });
 
     // Frontend Reactive copy of products to support mock edit/delete in prototype
     const localProducts = ref([...props.products]);
