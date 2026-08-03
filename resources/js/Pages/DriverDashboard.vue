@@ -290,6 +290,10 @@
                     </div>
                   </div>
 
+                  <div class="driver-payout-line">
+                    <span>🛺 Your payout for this trip: <strong>Est. ₵{{ order.estimated_transport_cost ? Number(order.estimated_transport_cost).toFixed(2) : '40.00' }}</strong></span>
+                  </div>
+
                   <button 
                     @click="acceptJob(order.id)" 
                     :disabled="processingId === order.id" 
@@ -1503,6 +1507,16 @@ export default {
   height: 10px;
   background-color: var(--color-neutral-300);
   margin-left: 3px;
+}
+
+.driver-payout-line {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-primary);
+  background-color: var(--color-primary-subtle);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-2);
 }
 
 .btn-accept-primary {

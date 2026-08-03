@@ -207,6 +207,76 @@
             <span v-if="form.errors.role" class="error-text">{{ form.errors.role }}</span>
           </div>
 
+          <!-- ── Section: Buyer Type (Conditional) ── -->
+          <div v-if="form.role === 'buyer'" class="form-section">
+            <p class="section-label">What type of buyer are you?</p>
+            <div class="buyer-type-grid">
+              <button
+                type="button"
+                class="buyer-type-card"
+                :class="{ 'selected': form.buyer_type === 'market_trader' }"
+                @click="form.buyer_type = 'market_trader'"
+              >
+                <span class="buyer-type-emoji">🏪</span>
+                <div class="buyer-type-text">
+                  <span class="buyer-type-title">Market Trader</span>
+                  <span class="buyer-type-sub">I buy in bulk to resell</span>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                class="buyer-type-card"
+                :class="{ 'selected': form.buyer_type === 'restaurant' }"
+                @click="form.buyer_type = 'restaurant'"
+              >
+                <span class="buyer-type-emoji">🍽️</span>
+                <div class="buyer-type-text">
+                  <span class="buyer-type-title">Restaurant / Chop Bar</span>
+                  <span class="buyer-type-sub">I buy for my business</span>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                class="buyer-type-card"
+                :class="{ 'selected': form.buyer_type === 'individual' }"
+                @click="form.buyer_type = 'individual'"
+              >
+                <span class="buyer-type-emoji">🧍</span>
+                <div class="buyer-type-text">
+                  <span class="buyer-type-title">Individual Consumer</span>
+                  <span class="buyer-type-sub">I buy for personal use</span>
+                </div>
+              </button>
+            </div>
+
+            <!-- Business Name Field (Shown for market_trader & restaurant) -->
+            <div
+              v-if="form.buyer_type === 'market_trader' || form.buyer_type === 'restaurant'"
+              class="field-group"
+              style="margin-top: var(--space-4);"
+            >
+              <label for="business_name" class="field-label">Business Name</label>
+              <div class="input-wrapper" :class="{ 'has-error': form.errors.business_name }">
+                <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 21h18"/>
+                  <path d="M5 21V7l8-4v18"/>
+                  <path d="M19 21V11l-6-3"/>
+                </svg>
+                <input
+                  id="business_name"
+                  v-model="form.business_name"
+                  type="text"
+                  class="field-input"
+                  placeholder="e.g. Ama's Fresh Produce Stall"
+                  :class="{ 'input-error': form.errors.business_name }"
+                />
+              </div>
+              <span v-if="form.errors.business_name" class="error-text">{{ form.errors.business_name }}</span>
+            </div>
+          </div>
+
           <!-- ── Section: Location & Password ── -->
           <div class="form-section">
             <p class="section-label">Location & Security</p>
@@ -310,6 +380,8 @@ export default {
       name: '',
       phone_number: '',
       role: 'farmer', // default to farmer
+      buyer_type: '',
+      business_name: '',
       location: '',
       password: '',
       password_confirmation: '',
@@ -748,6 +820,56 @@ export default {
   transition: color var(--transition-fast);
 }
 .cta-link:hover { color: var(--color-primary-hover); }
+
+/* ── Buyer Type Selection Cards ── */
+.buyer-type-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.buyer-type-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-white);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.buyer-type-card:hover {
+  border-color: var(--color-primary-light);
+  background-color: var(--color-neutral-50);
+}
+
+.buyer-type-card.selected {
+  border: 2px solid var(--color-primary);
+  background-color: var(--color-primary-subtle);
+}
+
+.buyer-type-emoji {
+  font-size: 20px;
+}
+
+.buyer-type-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.buyer-type-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+}
+
+.buyer-type-sub {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+}
 
 /* ── Responsive ──────────────────────────────────────────── */
 @media (min-width: 768px) {

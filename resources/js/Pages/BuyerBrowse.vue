@@ -357,11 +357,25 @@
                     <span>Order:</span>
                     <span>{{ orderQuantity }}x {{ selectedProduct.name }}</span>
                   </div>
-                  <div class="summary-line total">
-                    <span>Total Amount:</span>
-                    <span>GH₵ {{ Number(selectedProduct.price * orderQuantity).toFixed(2) }}</span>
+                  <div class="summary-line">
+                    <span>Product Cost:</span>
+                    <span>₵ {{ Number(selectedProduct.price * orderQuantity).toFixed(2) }}</span>
+                  </div>
+                  <div class="summary-line transport-line">
+                    <span>Estimated Transport <span class="est-tag">Est.</span>:</span>
+                    <span>₵ {{ (40.00 + (orderQuantity * 2.00)).toFixed(2) }}</span>
+                  </div>
+                  <div class="route-hint-sub">(Daboase → Market Circle)</div>
+                  <div class="summary-line total border-top">
+                    <span>Total in Escrow:</span>
+                    <span class="total-escrow-amount">₵ {{ ((selectedProduct.price * orderQuantity) + 40.00 + (orderQuantity * 2.00)).toFixed(2) }}</span>
                   </div>
                 </div>
+
+                <!-- Caption Note -->
+                <p class="escrow-caption-note">
+                  Your product payment goes to the farmer. Transport is released to the driver on confirmed delivery. Transport cost is an estimate for this route.
+                </p>
 
                 <div class="input-form-group">
                   <label class="form-input-label">Mobile Money Network</label>
@@ -401,7 +415,7 @@
                     class="btn-checkout-primary"
                     :disabled="processing"
                   >
-                    Pay GH₵ {{ Number(selectedProduct.price * orderQuantity).toFixed(2) }}
+                    Pay ₵ {{ ((selectedProduct.price * orderQuantity) + 40.00 + (orderQuantity * 2.00)).toFixed(2) }}
                   </button>
                   <button 
                     @click="checkoutStep = 1" 
@@ -1416,6 +1430,36 @@ export default {
   border-top: 1px dashed var(--color-primary-light);
   padding-top: var(--space-2);
   margin-top: 2px;
+}
+
+.route-hint-sub {
+  font-size: 10px;
+  color: var(--color-neutral-500);
+  margin-top: -2px;
+  margin-bottom: 2px;
+}
+
+.est-tag {
+  font-size: 9px;
+  background-color: var(--color-neutral-200);
+  color: var(--color-neutral-700);
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.total-escrow-amount {
+  color: var(--color-primary);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+}
+
+.escrow-caption-note {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-3);
+  line-height: 1.35;
 }
 
 /* Radio buttons momo networks */

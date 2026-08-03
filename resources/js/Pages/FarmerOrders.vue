@@ -147,12 +147,38 @@
               <div class="buyer-meta">
                 <span class="buyer-label">Buyer:</span>
                 <span class="buyer-name">{{ order.buyer?.name || 'Local Buyer' }}</span>
+
+                <!-- Buyer type badge -->
+                <span
+                  v-if="order.buyer?.buyer_type === 'market_trader'"
+                  class="buyer-type-pill trader-pill"
+                >
+                  Market Trader 🏪
+                </span>
+                <span
+                  v-else-if="order.buyer?.buyer_type === 'restaurant'"
+                  class="buyer-type-pill restaurant-pill"
+                >
+                  Restaurant 🍽️
+                </span>
+                <span
+                  v-else-if="order.buyer?.buyer_type === 'individual'"
+                  class="buyer-type-pill individual-pill"
+                >
+                  Individual 🧍
+                </span>
+
                 <span class="buyer-location">📍 {{ order.buyer?.location || 'Takoradi' }}</span>
               </div>
               <div class="total-paid-meta">
                 <span class="total-label">Payout:</span>
                 <span class="total-value">GH₵ {{ Number(order.total_price).toFixed(2) }}</span>
               </div>
+            </div>
+
+            <!-- Transport Line (arranged by FarmLink) -->
+            <div class="transport-arranged-line">
+              <span>🛺 Est. Transport: ₵{{ order.estimated_transport_cost ? Number(order.estimated_transport_cost).toFixed(2) : '—' }} — arranged by FarmLink</span>
             </div>
 
             <!-- Logistics Info & Action Row -->
@@ -534,6 +560,39 @@ export default {
   border-radius: var(--radius-pill);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
+}
+
+.buyer-type-pill {
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.trader-pill {
+  background-color: var(--color-primary-lighter);
+  color: var(--color-primary);
+}
+
+.restaurant-pill {
+  background-color: #FEF3C7;
+  color: #92400E;
+}
+
+.individual-pill {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+}
+
+.transport-arranged-line {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-neutral-50);
+  border-top: 1px dashed var(--color-border);
 }
 
 /* Flash alerts */

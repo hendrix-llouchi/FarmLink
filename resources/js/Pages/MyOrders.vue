@@ -136,6 +136,49 @@
             </div>
           </div>
 
+          <!-- Enriched Order Detail Block (Phase C) -->
+          <div class="order-enrichment-block">
+            <div class="enrichment-row">
+              <div class="enrichment-item">
+                <span class="enrichment-label">Crop Quality:</span>
+                <span v-if="order.product?.quality_grade" class="quality-grade-badge" :class="'grade-' + order.product.quality_grade.toLowerCase()">
+                  Grade {{ order.product.quality_grade }}
+                </span>
+                <span v-else class="enrichment-val-sub">Not specified</span>
+              </div>
+
+              <div class="enrichment-item">
+                <span class="enrichment-label">Harvested:</span>
+                <span class="enrichment-val-sub">
+                  {{ order.product?.harvest_date ? formatDate(order.product.harvest_date) : 'Not specified' }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Payment Breakdown -->
+            <div class="payment-breakdown-box">
+              <span class="breakdown-title">Payment Breakdown</span>
+              <div class="breakdown-row">
+                <span>Product Cost:</span>
+                <span>₵ {{ Number(order.total_price).toFixed(2) }}</span>
+              </div>
+              <div class="breakdown-row">
+                <span>Transport Fee:</span>
+                <span>₵ {{ order.estimated_transport_cost ? Number(order.estimated_transport_cost).toFixed(2) : '—' }}</span>
+              </div>
+              <div class="breakdown-row total-escrow">
+                <span>Total in Escrow:</span>
+                <span>₵ {{ (Number(order.total_price) + Number(order.estimated_transport_cost || 0)).toFixed(2) }}</span>
+              </div>
+            </div>
+
+            <!-- Driver Assignment Line -->
+            <div v-if="order.driver_id || order.driver" class="driver-assigned-line">
+              <span class="enrichment-label">Assigned Driver:</span>
+              <span class="driver-assigned-val">🛺 {{ order.driver?.name || 'Aboboyaa Driver Assigned' }}</span>
+            </div>
+          </div>
+
           <div class="card-divider"></div>
 
           <!-- Farmer details & Total payment -->
@@ -602,6 +645,111 @@ export default {
 
 .browse-btn-link:hover {
   background-color: var(--color-primary-hover);
+}
+
+/* ── Order Detail Enrichment (Phase C) ── */
+.order-enrichment-block {
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-neutral-50);
+  border-radius: var(--radius-md);
+  margin: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border: 1px solid var(--color-border);
+}
+
+.enrichment-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.enrichment-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.enrichment-label {
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.enrichment-val-sub {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+}
+
+.quality-grade-badge {
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  width: fit-content;
+}
+
+.quality-grade-badge.grade-a {
+  background-color: var(--color-primary-lighter);
+  color: var(--color-primary);
+}
+
+.quality-grade-badge.grade-b {
+  background-color: #FFF3CD;
+  color: #856404;
+}
+
+.quality-grade-badge.grade-c {
+  background-color: #F8D7DA;
+  color: #721C24;
+}
+
+.payment-breakdown-box {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.breakdown-title {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin-bottom: 2px;
+}
+
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-700);
+}
+
+.breakdown-row.total-escrow {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  border-top: 1px dashed var(--color-border);
+  padding-top: 4px;
+  margin-top: 2px;
+}
+
+.driver-assigned-line {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.driver-assigned-val {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
 }
 
 /* Stacked Orders List */
