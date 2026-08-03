@@ -39,6 +39,7 @@ class OrderController extends Controller
             'quantity_ordered' => ['required', 'integer', 'min:1'],
             'payment_network' => ['required', 'string', 'in:MTN'],
             'payment_number' => ['required', 'string', 'regex:/^[0-9]{10}$/'],
+            'delivery_address' => ['nullable', 'string', 'max:255'],
         ]);
 
         $referenceId = (string) \Illuminate\Support\Str::uuid();
@@ -81,6 +82,7 @@ class OrderController extends Controller
                     'payment_status'            => 'unpaid',
                     'momo_reference'            => $referenceId,
                     'estimated_transport_cost'  => $estimatedTransportCost,
+                    'delivery_address'          => $request->delivery_address ?: (auth()->user()->location ?? 'Takoradi'),
                 ]);
             });
 

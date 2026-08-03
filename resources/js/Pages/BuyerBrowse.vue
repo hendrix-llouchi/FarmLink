@@ -404,6 +404,19 @@
                   />
                 </div>
 
+                <div class="input-form-group">
+                  <label for="delivery-addr" class="form-input-label">Delivery / Drop-off Address</label>
+                  <input 
+                    id="delivery-addr" 
+                    v-model="deliveryAddress" 
+                    type="text" 
+                    placeholder="e.g. Takoradi Market Circle, Stall B4 or Anaji Estate" 
+                    class="form-text-input"
+                    :disabled="processing"
+                  />
+                  <span class="delivery-address-hint" style="font-size: 11px; color: var(--color-neutral-500); margin-top: 2px;">This address will be provided to your Aboboyaa driver for drop-off.</span>
+                </div>
+
                 <!-- Error Display -->
                 <div v-if="errorMessage" class="error-alert-text">
                   {{ errorMessage }}
@@ -521,6 +534,7 @@ export default {
     const paymentPin = ref('');
     const paymentProcessing = ref(false);
     const paymentSuccess = ref(false);
+    const deliveryAddress = ref(page.props.auth?.user?.location || 'Takoradi Market Circle');
 
     let searchTimeout = null;
 
@@ -614,7 +628,8 @@ export default {
         product_id: selectedProduct.value.id,
         quantity_ordered: orderQuantity.value,
         payment_network: paymentNetwork.value,
-        payment_number: paymentNumber.value
+        payment_number: paymentNumber.value,
+        delivery_address: deliveryAddress.value
       }, {
         onSuccess: () => {
           document.body.style.overflow = '';

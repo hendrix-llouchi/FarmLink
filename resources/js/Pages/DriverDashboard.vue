@@ -211,8 +211,12 @@
                   <div class="route-row">
                     <span class="route-type-tag dropoff-tag">DROP-OFF</span>
                     <div class="route-detail">
-                      <span class="route-location">{{ order.buyer?.location || 'Buyer Location' }}</span>
-                      <span class="route-party">Buyer: {{ order.buyer?.name || 'Local Buyer' }}</span>
+                      <span class="route-location">{{ order.delivery_address || order.buyer?.location || 'Takoradi' }}</span>
+                      <span class="route-party">Buyer: <strong>{{ order.buyer?.name || 'Local Buyer' }}</strong></span>
+                      <div v-if="order.buyer?.phone_number" class="buyer-contact-row" style="margin-top: 6px; display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: var(--font-size-xs); font-weight: bold; color: var(--color-primary);">📞 {{ order.buyer.phone_number }}</span>
+                        <a :href="'tel:' + order.buyer.phone_number" class="btn-call-buyer" style="background-color: var(--color-primary); color: white; border-radius: var(--radius-sm); font-size: 11px; font-weight: bold; padding: 3px 10px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">Call Buyer</a>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -286,7 +290,7 @@
                     <div class="route-dot-connector"></div>
                     <div class="route-pin-item">
                       <span class="pin-dot orange"></span>
-                      <span class="pin-text">Drop-off: {{ order.buyer?.location || 'Buyer Location' }} (Buyer: {{ order.buyer?.name }})</span>
+                      <span class="pin-text">Drop-off: {{ order.delivery_address || order.buyer?.location || 'Takoradi' }} (Buyer: {{ order.buyer?.name }})</span>
                     </div>
                   </div>
 
