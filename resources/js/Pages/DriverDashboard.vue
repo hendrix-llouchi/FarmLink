@@ -1044,12 +1044,14 @@ export default {
 
 .banner-subtitle {
   font-size: var(--font-size-xs);
-  opacity: 0.85;
+  color: var(--color-primary-lighter);
+  font-weight: var(--font-weight-medium);
 }
 
 .banner-amount {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
+  color: #FFFFFF !important;
   margin-top: 4px;
 }
 
@@ -1623,13 +1625,15 @@ export default {
 
 .payout-hero-label {
   font-size: var(--font-size-xs);
-  opacity: 0.85;
+  color: var(--color-primary-lighter);
   font-weight: var(--font-weight-bold);
+  letter-spacing: 0.5px;
 }
 
 .payout-hero-amount {
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
+  color: #FFFFFF !important;
   margin-top: var(--space-2);
 }
 
