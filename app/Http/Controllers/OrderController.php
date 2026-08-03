@@ -139,6 +139,7 @@ class OrderController extends Controller
     {
         $orders = Order::whereNull('driver_id')
             ->where('status', 'pending')
+            ->where('payment_status', '!=', 'unpaid')
             ->with(['buyer', 'product.user'])
             ->latest()
             ->get();
@@ -171,6 +172,12 @@ class OrderController extends Controller
             DB::transaction(function () use ($id) {
                 // Lock the order for update to prevent concurrent assignment
                 $order = Order::lockForUpdate()->findOrFail($id);
+
+                if ($order->payment_status === 'unpaid') {
+                    throw ValidationException::withMessages([
+                        'order' => ['This order has not been paid for by the buyer yet. Transport can only be accepted once payment is locked in escrow.']
+                    ]);
+                }
 
                 if ($order->driver_id !== null) {
                     throw ValidationException::withMessages([
