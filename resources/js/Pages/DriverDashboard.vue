@@ -709,7 +709,7 @@
 
 <script>
 import { Link, router, usePage } from '@inertiajs/vue3';
-import { ref, computed, reactive } from 'vue';
+import { ref, computed, reactive, onMounted, onUnmounted } from 'vue';
 
 export default {
   name: 'DriverDashboard',
@@ -737,6 +737,18 @@ export default {
     const processingId = ref(null);
     const historyQuery = ref('');
     const showEditModal = ref(false);
+
+    let pollInterval = null;
+
+    onMounted(() => {
+      pollInterval = setInterval(() => {
+        router.reload({ preserveScroll: true, only: ['orders', 'activeTrips', 'completedTrips'] });
+      }, 5000);
+    });
+
+    onUnmounted(() => {
+      if (pollInterval) clearInterval(pollInterval);
+    });
 
     // Reactive Driver & Vehicle Details
     const driverDetails = reactive({
