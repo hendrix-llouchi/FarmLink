@@ -235,3 +235,15 @@ Every PR link the agent provides MUST include a pre-filled body containing:
 ### ✅ Rule 4 — Never Merge
 - **NEVER merge any branch into `main`** unless the user explicitly says "merge" or "merge into main".
 - The agent's job ends at providing the PR link. The user reviews and merges.
+
+---
+
+## 10. Future Roadmap / Do Later Backlog
+
+The following features are explicitly put on hold by the user to be implemented in a future phase:
+
+- **Offline Driver SMS / Push Notification Alert Service (Item 2)**:
+  - *Context*: Alerting Aboboyaa drivers via SMS/Push when a new paid delivery order is listed in their area.
+  - *Status*: **ON HOLD / DO LATER**.
+  - *Planned Approach*: Simulated SMS dispatch logging in dev (`SmsService`) + HTTP API call to Ghana SMS providers (e.g. Arkesel/Hubtel) in production + database alert records.
+

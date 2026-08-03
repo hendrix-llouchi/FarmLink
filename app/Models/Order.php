@@ -25,6 +25,7 @@ class Order extends Model
         'transport_requested',
         'estimated_transport_cost',
         'payment_status',
+        'delivery_address',
     ];
 
     /**
