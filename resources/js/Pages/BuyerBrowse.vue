@@ -496,7 +496,7 @@
 </template>
 
 <script>
-import { router, Link } from '@inertiajs/vue3';
+import { router, Link, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import FreshnessBar from '@/Components/UI/FreshnessBar.vue';
 
@@ -517,6 +517,7 @@ export default {
     }
   },
   setup(props) {
+    const page = usePage();
     const search = ref(props.filters.search || '');
     const category = ref(props.filters.category || '');
     const location = ref(props.filters.location || '');
