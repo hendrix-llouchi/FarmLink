@@ -182,11 +182,22 @@
       >Grade C</button>
     </div>
 
-    <!-- Seasonal Promo Banner Card -->
-    <div class="promo-banner-card">
-      <div class="promo-badge">SEASONAL SPECIAL</div>
-      <h3 class="promo-title">Bountiful Harvest: Up to 20% Off Bulk Grains</h3>
-      <p class="promo-subtitle">Limited time offers from the Western Region.</p>
+    <!-- Focus Corridor Banner Card -->
+    <div class="promo-banner-card focus-corridor-banner">
+      <div class="corridor-banner-left">
+        <div class="corridor-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>PILOT CORRIDOR</span>
+        </div>
+        <p class="corridor-text">
+          Connecting Daboase &amp; Beposo tomato farmers to Takoradi Market Circle — fresh produce, agreed prices, secured payment.
+        </p>
+      </div>
+      <div class="corridor-stat-pills">
+        <span class="stat-pill">🍅 Tomatoes — Primary Crop</span>
+        <span class="stat-pill">📅 Market Days — Tuesdays</span>
+        <span class="stat-pill">🛺 Aboboyaa — Est. Transport Included</span>
+      </div>
     </div>
 
     <!-- Main Results Section -->
@@ -837,43 +848,79 @@ export default {
   color: var(--color-white);
 }
 
-/* Promo Banner Card */
+/* Focus Corridor Banner Card */
 .promo-banner-card {
   margin: var(--space-3) var(--space-4);
-  padding: var(--space-5) var(--space-4);
+  padding: var(--space-5) var(--space-6);
   border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, rgba(27, 67, 50, 0.95), rgba(45, 106, 79, 0.8)), url('/images/welcome_hero_banner.png');
-  background-size: cover;
-  background-position: center;
+  background-color: var(--color-primary);
   color: var(--color-white);
   box-shadow: var(--shadow-sm);
   display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+}
+
+.corridor-banner-left {
+  display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: var(--space-2);
+  max-width: 650px;
 }
 
-.promo-badge {
-  font-size: 9px;
+.corridor-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: 10px;
   font-weight: var(--font-weight-bold);
-  background-color: var(--color-secondary);
-  color: var(--color-secondary-dark);
-  padding: 2px var(--space-2);
-  border-radius: var(--radius-sm);
+  background-color: rgba(255, 255, 255, 0.2);
+  color: var(--color-white);
+  padding: 3px var(--space-3);
+  border-radius: var(--radius-pill);
   letter-spacing: 0.5px;
+  width: fit-content;
 }
 
-.promo-title {
+.corridor-text {
   font-size: var(--font-size-base);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-tight);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-base);
+  color: var(--color-white);
   margin: 0;
 }
 
-.promo-subtitle {
+.corridor-stat-pills {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.stat-pill {
   font-size: var(--font-size-xs);
-  color: rgba(255, 255, 255, 0.85);
-  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  background-color: rgba(255, 255, 255, 0.15);
+  color: var(--color-white);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .promo-banner-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--space-4);
+  }
+
+  .corridor-stat-pills {
+    display: none;
+  }
 }
 
 /* Main Content Body */
