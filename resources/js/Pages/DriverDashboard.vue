@@ -205,6 +205,10 @@
                     <div class="route-detail">
                       <span class="route-location">{{ order.product?.user?.location || 'Farm Location' }}</span>
                       <span class="route-party">Farmer: {{ order.product?.user?.name || 'Local Farmer' }}</span>
+                      <div v-if="order.product?.user?.phone_number" class="farmer-contact-row" style="margin-top: 6px; display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: var(--font-size-xs); font-weight: bold; color: var(--color-primary);">📞 {{ order.product.user.phone_number }}</span>
+                        <a :href="'tel:' + order.product.user.phone_number" class="btn-call-farmer" style="background-color: var(--color-primary); color: white; border-radius: var(--radius-sm); font-size: 11px; font-weight: bold; padding: 3px 10px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">Call Farmer</a>
+                      </div>
                     </div>
                   </div>
                   <div class="route-connector-line"></div>
