@@ -164,87 +164,87 @@
         <div class="section-container">
           <div class="section-header-text">
             <h2 class="section-title">How Produce Moves</h2>
-            <p class="section-subtitle">A transparent digital corridor connecting farm gate in Daboase &amp; Beposo to Takoradi Market Circle.</p>
+            <p class="section-subtitle">From harvest to market in 4 steps — pricing locked before the truck leaves.</p>
           </div>
 
           <div class="chain-diagram-flex">
             <!-- Step 1 -->
             <div class="chain-step-card">
-              <div class="chain-icon-box green-box">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <div class="chain-icon-circle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 2 2 4v4a4 4 0 0 1-4 4h-2a3 3 0 0 0-3 3v3z"/>
                   <path d="M9 22v-4H7a2 2 0 0 1-2-2V8"/>
                 </svg>
               </div>
-              <span class="chain-step-number">Step 1</span>
-              <h4 class="chain-step-title">Farm — Daboase / Beposo</h4>
+              <span class="chain-step-number">STEP 1</span>
+              <h4 class="chain-step-title">Farm Gate</h4>
               <p class="chain-step-desc">
-                Farmer harvests tomatoes and lists them on FarmLink with harvest date, unit, and quality grade.
+                Farmer lists harvest date, quantity, and grade.
               </p>
             </div>
 
             <!-- Arrow 1 -->
             <div class="chain-arrow">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-desktop"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-mobile"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
+              <span class="arrow-symbol desktop-arrow">→</span>
+              <span class="arrow-symbol mobile-arrow">↓</span>
             </div>
 
             <!-- Step 2 -->
             <div class="chain-step-card">
-              <div class="chain-icon-box amber-box">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <div class="chain-icon-circle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                   <path d="m9 12 2 2 4-4"/>
                 </svg>
               </div>
-              <span class="chain-step-number">Step 2</span>
-              <h4 class="chain-step-title">FarmLink Match</h4>
+              <span class="chain-step-number">STEP 2</span>
+              <h4 class="chain-step-title">Escrow Commit</h4>
               <p class="chain-step-desc">
-                Market trader browses, commits to a purchase — product price + estimated transport cost locked in escrow.
+                Trader commits to purchase with Mobile Money escrow.
               </p>
             </div>
 
             <!-- Arrow 2 -->
             <div class="chain-arrow">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-desktop"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-mobile"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
+              <span class="arrow-symbol desktop-arrow">→</span>
+              <span class="arrow-symbol mobile-arrow">↓</span>
             </div>
 
             <!-- Step 3 -->
             <div class="chain-step-card">
-              <div class="chain-icon-box teal-box">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <div class="chain-icon-circle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="1" y="3" width="15" height="13" rx="2"/>
                   <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
                   <circle cx="5.5" cy="18.5" r="2.5"/>
                   <circle cx="18.5" cy="18.5" r="2.5"/>
                 </svg>
               </div>
-              <span class="chain-step-number">Step 3</span>
+              <span class="chain-step-number">STEP 3</span>
               <h4 class="chain-step-title">Aboboyaa Transit</h4>
               <p class="chain-step-desc">
-                FarmLink assigns an aboboyaa driver. Pickup confirmed digitally with full transport accountability.
+                Aboboyaa driver assigned with pre-paid delivery.
               </p>
             </div>
 
             <!-- Arrow 3 -->
             <div class="chain-arrow">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-desktop"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-mobile"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
+              <span class="arrow-symbol desktop-arrow">→</span>
+              <span class="arrow-symbol mobile-arrow">↓</span>
             </div>
 
             <!-- Step 4 -->
             <div class="chain-step-card">
-              <div class="chain-icon-box blue-box">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <div class="chain-icon-circle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
                   <polyline points="9 22 9 12 15 12 15 22"/>
                 </svg>
               </div>
-              <span class="chain-step-number">Step 4</span>
+              <span class="chain-step-number">STEP 4</span>
               <h4 class="chain-step-title">Market Circle</h4>
               <p class="chain-step-desc">
-                Market trader receives fresh tomatoes. Farmer paid. Driver paid. Zero distress sales.
+                Produce delivered, funds released instantly.
               </p>
             </div>
           </div>
@@ -864,80 +864,113 @@ export default {
   margin: 0;
 }
 
-/* Section 3 — The Supply Chain */
+/* Section 3 — The Supply Chain (Dark Green Aesthetic #1B4332) */
 .supply-chain-section {
-  background-color: var(--color-neutral-50);
-  border-bottom: 1px solid var(--color-neutral-100);
+  background: linear-gradient(165deg, #1B4332 0%, #143527 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--color-white);
+}
+
+.supply-chain-section .section-container {
+  padding: 56px var(--space-6);
+}
+
+.supply-chain-section .section-title {
+  font-size: 28px !important;
+  font-weight: 800 !important;
+  color: #FFFFFF !important;
+  margin: 0 0 10px 0 !important;
+  letter-spacing: -0.5px;
+}
+
+.supply-chain-section .section-subtitle {
+  font-size: 14px !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  margin: 0 auto !important;
+  max-width: 540px;
+  line-height: 1.6;
 }
 
 .chain-diagram-flex {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-3);
+  gap: 12px;
+  margin-top: 40px;
 }
 
 .chain-step-card {
   flex: 1;
-  background-color: var(--color-white);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5);
-  box-shadow: var(--shadow-xs);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 24px 20px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  min-height: 210px;
+  min-height: 200px;
+  transition: transform var(--transition-base), background var(--transition-base);
 }
 
-.chain-icon-box {
+.chain-step-card:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.chain-icon-circle {
   width: 42px;
   height: 42px;
-  border-radius: var(--radius-md);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: var(--space-3);
+  margin-bottom: 16px;
+  color: #FFFFFF;
 }
 
-.green-box { background-color: var(--color-primary-subtle); color: var(--color-primary); }
-.amber-box { background-color: var(--color-warning-light); color: var(--color-secondary-dark); }
-.teal-box { background-color: var(--color-tertiary-subtle); color: var(--color-tertiary); }
-.blue-box { background-color: #E0F2FE; color: #0284C7; }
-
 .chain-step-number {
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: rgba(255, 255, 255, 0.45) !important;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: var(--space-1);
+  letter-spacing: 1px;
+  margin-bottom: 4px;
 }
 
 .chain-step-title {
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-neutral-900);
-  margin: 0 0 var(--space-2) 0;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: #FFFFFF !important;
+  margin: 0 0 8px 0 !important;
+  line-height: 1.3;
 }
 
 .chain-step-desc {
-  font-size: var(--font-size-xs);
-  color: var(--color-neutral-500);
-  line-height: var(--line-height-base);
+  font-size: 13.5px !important;
+  color: rgba(255, 255, 255, 0.72) !important;
+  line-height: 1.5 !important;
   margin: 0;
 }
 
 .chain-arrow {
-  color: var(--color-primary-light);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-.arrow-desktop { display: block; }
-.arrow-mobile { display: none; }
+.arrow-symbol {
+  font-size: 20px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.desktop-arrow { display: inline-block; }
+.mobile-arrow { display: none; }
 
 /* Section 4 — How It Works */
 .how-it-works-section {
@@ -1247,22 +1280,29 @@ export default {
     grid-template-columns: 1fr;
   }
 
+  .supply-chain-section .section-container {
+    padding: 36px 16px;
+  }
+
+  .supply-chain-section .section-title {
+    font-size: 26px !important;
+    margin-bottom: 8px !important;
+  }
+
   .chain-diagram-flex {
     flex-direction: column;
-    gap: var(--space-4);
+    gap: 16px;
+    margin-top: 28px;
   }
-
-  .chain-arrow {
-    margin: var(--space-2) 0;
-  }
-
-  .arrow-desktop { display: none; }
-  .arrow-mobile { display: block; }
 
   .chain-step-card {
     width: 100%;
     min-height: auto;
+    padding: 20px 18px;
   }
+
+  .desktop-arrow { display: none; }
+  .mobile-arrow { display: inline-block; }
 
   .integrated-cta-box {
     flex-direction: column;
