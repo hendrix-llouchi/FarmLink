@@ -1,4 +1,5 @@
 <template>
+  <Head title="FarmLink — Western Region Tomato Corridor" />
   <div class="welcome-container">
     <!-- Header Bar -->
     <header class="app-header">
@@ -328,12 +329,13 @@
 </template>
 
 <script>
-import { Link } from '@inertiajs/vue3';
+import { Link, Head } from '@inertiajs/vue3';
 
 export default {
   name: 'Welcome',
   components: {
-    Link
+    Link,
+    Head
   },
   methods: {
     triggerAlert(msg) {
