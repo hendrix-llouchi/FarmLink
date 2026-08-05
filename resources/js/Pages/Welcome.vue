@@ -4,7 +4,7 @@
     <header class="app-header">
       <div class="header-inner">
         <Link href="/" class="app-logo">
-          <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <svg xmlns="http://www.w3.org/2000/svg" class="logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="m12 3-1.912 5.886a1 1 0 0 1-.95.686H2.929l4.908 3.566a1 1 0 0 1 .364 1.122L6.29 20.147l4.907-3.565a1 1 0 0 1 1.604 0l4.907 3.565-1.91-5.887a1 1 0 0 1 .364-1.122l4.908-3.566h-6.21a1 1 0 0 1-.95-.686z"/>
           </svg>
           <span class="app-logo-text">FarmLink</span>
@@ -19,45 +19,33 @@
 
     <!-- Main Content Area -->
     <main class="main-content">
-      <!-- Section 1 — Hero Split Section -->
+      <!-- Section 1 — Hero Section (Farmer Background Image behind Text) -->
       <section class="hero-section">
         <div class="hero-inner hero-animate">
-          <div class="hero-text-col">
-            <div class="hero-pill-badge">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M12 12 2.1 10.5"/><path d="M12 12V22"/></svg>
-              <span>Western Region, Ghana</span>
-            </div>
-
-            <h1 class="hero-headline">
-              From Daboase &amp; Beposo Farms to Takoradi Market
-              <span class="hero-headline-sub">— Fresh. Committed. Secured.</span>
-            </h1>
-
-            <p class="hero-subheadline">
-              FarmLink connects smallholder tomato farmers in Daboase and Beposo directly to market women at Takoradi Market Circle — eliminating distress sales through pre-committed, escrow-secured orders.
-            </p>
-
-            <div class="hero-cta-group">
-              <Link href="/register" class="btn-hero-primary">
-                <span>Get Started</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </Link>
-              <Link href="/login" class="btn-hero-secondary">
-                Log In
-              </Link>
-            </div>
+          <div class="hero-pill-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/>
+            </svg>
+            <span>Western Region, Ghana</span>
           </div>
 
-          <!-- Hero Visual Side Image -->
-          <div class="hero-visual-col">
-            <div class="hero-image-frame">
-              <img src="/images/welcome_hero_banner.png" alt="Daboase & Beposo Farmers Market Link" class="hero-img" />
-              <div class="hero-image-overlay"></div>
-              <div class="hero-floating-tag">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                <span>Daboase &amp; Beposo Pilot Corridor</span>
-              </div>
-            </div>
+          <h1 class="hero-headline">
+            From Daboase &amp; Beposo Farms to Takoradi Market
+            <span class="hero-headline-sub">— Fresh. Committed. Secured.</span>
+          </h1>
+
+          <p class="hero-subheadline">
+            FarmLink connects smallholder tomato farmers in Daboase and Beposo directly to market women at Takoradi Market Circle — eliminating distress sales through pre-committed, escrow-secured orders.
+          </p>
+
+          <div class="hero-cta-group">
+            <Link href="/register" class="btn-hero-primary">
+              <span>Get Started</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </Link>
+            <Link href="/login" class="btn-hero-secondary">
+              Log In
+            </Link>
           </div>
         </div>
       </section>
@@ -74,7 +62,11 @@
             <!-- Card 1 -->
             <div class="problem-card card-accent-green">
               <div class="problem-icon-wrapper green-icon-bg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22C6.5 22 2 17.5 2 12S6.5 2 12 2s10 4.5 10 10-4.5 10-10 10z"/>
+                  <path d="M12 6v6l4 2"/>
+                  <path d="M16 2v4"/>
+                </svg>
               </div>
               <h3 class="problem-card-title">Produce Lost Every Tuesday</h3>
               <p class="problem-card-body">
@@ -85,7 +77,11 @@
             <!-- Card 2 -->
             <div class="problem-card card-accent-amber">
               <div class="problem-icon-wrapper amber-icon-bg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="5" width="20" height="14" rx="2"/>
+                  <line x1="2" y1="10" x2="22" y2="10"/>
+                  <path d="M12 14h.01"/>
+                </svg>
               </div>
               <h3 class="problem-card-title">The Distress Sale Trap</h3>
               <p class="problem-card-body">
@@ -96,7 +92,12 @@
             <!-- Card 3 -->
             <div class="problem-card card-accent-teal">
               <div class="problem-icon-wrapper teal-icon-bg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="1" y="3" width="15" height="13" rx="2"/>
+                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                  <circle cx="5.5" cy="18.5" r="2.5"/>
+                  <circle cx="18.5" cy="18.5" r="2.5"/>
+                </svg>
               </div>
               <h3 class="problem-card-title">Transport Cost Disputes</h3>
               <p class="problem-card-body">
@@ -119,7 +120,10 @@
             <!-- Step 1 -->
             <div class="chain-step-card">
               <div class="chain-icon-box green-box">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 2 2 4v4a4 4 0 0 1-4 4h-2a3 3 0 0 0-3 3v3z"/><path d="M9 22v-4H7a2 2 0 0 1-2-2V8"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 2 2 4v4a4 4 0 0 1-4 4h-2a3 3 0 0 0-3 3v3z"/>
+                  <path d="M9 22v-4H7a2 2 0 0 1-2-2V8"/>
+                </svg>
               </div>
               <span class="chain-step-number">Step 1</span>
               <h4 class="chain-step-title">Farm — Daboase / Beposo</h4>
@@ -130,14 +134,17 @@
 
             <!-- Arrow 1 -->
             <div class="chain-arrow">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-desktop"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-mobile"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-desktop"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-mobile"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
             </div>
 
             <!-- Step 2 -->
             <div class="chain-step-card">
               <div class="chain-icon-box amber-box">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path d="m9 12 2 2 4-4"/>
+                </svg>
               </div>
               <span class="chain-step-number">Step 2</span>
               <h4 class="chain-step-title">FarmLink Match</h4>
@@ -148,14 +155,19 @@
 
             <!-- Arrow 2 -->
             <div class="chain-arrow">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-desktop"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-mobile"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-desktop"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-mobile"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
             </div>
 
             <!-- Step 3 -->
             <div class="chain-step-card">
               <div class="chain-icon-box teal-box">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="1" y="3" width="15" height="13" rx="2"/>
+                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                  <circle cx="5.5" cy="18.5" r="2.5"/>
+                  <circle cx="18.5" cy="18.5" r="2.5"/>
+                </svg>
               </div>
               <span class="chain-step-number">Step 3</span>
               <h4 class="chain-step-title">Aboboyaa Transit</h4>
@@ -166,14 +178,17 @@
 
             <!-- Arrow 3 -->
             <div class="chain-arrow">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-desktop"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-mobile"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-desktop"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-mobile"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
             </div>
 
             <!-- Step 4 -->
             <div class="chain-step-card">
               <div class="chain-icon-box blue-box">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                  <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
               </div>
               <span class="chain-step-number">Step 4</span>
               <h4 class="chain-step-title">Market Circle</h4>
@@ -243,7 +258,10 @@
             <div class="glass-card">
               <div class="glass-card-header">
                 <div class="glass-icon-circle">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 2 2 4v4a4 4 0 0 1-4 4h-2a3 3 0 0 0-3 3v3z"/><path d="M9 22v-4H7a2 2 0 0 1-2-2V8"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 2 2 4v4a4 4 0 0 1-4 4h-2a3 3 0 0 0-3 3v3z"/>
+                    <path d="M9 22v-4H7a2 2 0 0 1-2-2V8"/>
+                  </svg>
                 </div>
                 <h3>Farmers</h3>
               </div>
@@ -256,7 +274,10 @@
             <div class="glass-card">
               <div class="glass-card-header">
                 <div class="glass-icon-circle">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                  </svg>
                 </div>
                 <h3>Market Traders</h3>
               </div>
@@ -269,7 +290,12 @@
             <div class="glass-card">
               <div class="glass-card-header">
                 <div class="glass-icon-circle">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="1" y="3" width="15" height="13" rx="2"/>
+                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                    <circle cx="5.5" cy="18.5" r="2.5"/>
+                    <circle cx="18.5" cy="18.5" r="2.5"/>
+                  </svg>
                 </div>
                 <h3>Aboboyaa Drivers</h3>
               </div>
@@ -295,14 +321,8 @@
     <!-- Footer -->
     <footer class="welcome-footer">
       <div class="footer-inner">
-        <div class="footer-left">
-          <span class="footer-brand">FarmLink</span>
-          <span class="footer-copy">• Daboase &amp; Beposo Tomato Corridor Pilot • Team Mythos</span>
-        </div>
-        <div class="footer-links">
-          <Link href="/login" class="footer-link">Log In</Link>
-          <Link href="/register" class="footer-link">Register</Link>
-        </div>
+        <span class="footer-brand-text">FarmLink</span>
+        <span class="footer-copy-text">Daboase &amp; Beposo Tomato Corridor Pilot • Team Mythos</span>
       </div>
     </footer>
   </div>
@@ -343,7 +363,7 @@ export default {
   top: 0;
   z-index: 100;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.94);
+  background-color: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--color-neutral-100);
 }
@@ -356,6 +376,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: var(--space-4);
 }
 
 .app-logo {
@@ -364,10 +385,12 @@ export default {
   gap: var(--space-2);
   color: var(--color-primary);
   text-decoration: none;
+  flex-shrink: 0;
 }
 
 .logo-icon {
   color: var(--color-primary);
+  flex-shrink: 0;
 }
 
 .app-logo-text {
@@ -379,7 +402,8 @@ export default {
 .header-nav {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-3);
+  flex-shrink: 0;
 }
 
 .help-link {
@@ -388,6 +412,8 @@ export default {
   text-decoration: none;
   font-weight: var(--font-weight-medium);
   transition: color var(--transition-fast);
+  white-space: nowrap;
+  padding: 0 var(--space-2);
 }
 
 .help-link:hover {
@@ -399,9 +425,10 @@ export default {
   color: var(--color-neutral-700);
   text-decoration: none;
   font-weight: var(--font-weight-semibold);
-  padding: var(--space-2) var(--space-4);
+  padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-md);
   transition: all var(--transition-fast);
+  white-space: nowrap;
 }
 
 .nav-login-btn:hover {
@@ -415,9 +442,10 @@ export default {
   text-decoration: none;
   font-weight: var(--font-weight-bold);
   background-color: var(--color-primary);
-  padding: var(--space-2) var(--space-5);
+  padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-md);
   transition: background-color var(--transition-fast);
+  white-space: nowrap;
 }
 
 .nav-register-btn:hover {
@@ -456,24 +484,23 @@ export default {
   max-width: 620px;
 }
 
-/* Section 1 — Hero Split */
+/* Section 1 — Hero Section with Farmer Image Background */
 .hero-section {
-  min-height: calc(100vh - 68px);
-  background: linear-gradient(160deg, #1B4332 0%, #2D6A4F 55%, #2A9D8F 100%);
+  min-height: 85vh;
+  background: linear-gradient(180deg, rgba(27, 67, 50, 0.88) 0%, rgba(27, 67, 50, 0.95) 100%), url('/images/welcome_hero_banner.png') center/cover no-repeat;
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: var(--space-12) var(--space-6);
+  text-align: center;
   position: relative;
-  overflow: hidden;
 }
 
 .hero-inner {
-  max-width: 1200px;
-  width: 100%;
+  max-width: 860px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: var(--space-10);
+  display: flex;
+  flex-direction: column;
   align-items: center;
   color: var(--color-white);
 }
@@ -493,22 +520,16 @@ export default {
   animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.hero-text-col {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
 .hero-pill-badge {
   background: rgba(255, 255, 255, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.3);
   color: var(--color-white);
   border-radius: var(--radius-pill);
-  padding: 6px 16px;
+  padding: 6px 18px;
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   letter-spacing: 0.5px;
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-6);
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
@@ -516,17 +537,17 @@ export default {
 }
 
 .hero-headline {
-  font-size: 44px;
+  font-size: 48px;
   font-weight: 800;
   line-height: 1.15;
   color: var(--color-white);
-  margin: 0 0 var(--space-5) 0;
+  margin: 0 0 var(--space-6) 0;
   letter-spacing: -1px;
 }
 
 .hero-headline-sub {
   display: block;
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 600;
   color: var(--color-primary-lighter);
   margin-top: var(--space-2);
@@ -537,13 +558,15 @@ export default {
   line-height: var(--line-height-relaxed);
   color: rgba(255, 255, 255, 0.9);
   margin: 0 0 var(--space-8) 0;
+  max-width: 740px;
   font-weight: var(--font-weight-regular);
 }
 
 .hero-cta-group {
   display: flex;
   gap: var(--space-4);
-  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 .btn-hero-primary {
@@ -572,10 +595,10 @@ export default {
   background-color: transparent;
   color: var(--color-white);
   border: 1.5px solid rgba(255, 255, 255, 0.7);
-  padding: 0 var(--space-6);
+  padding: 0 var(--space-8);
   height: 52px;
   border-radius: var(--radius-md);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-bold);
   font-size: var(--font-size-base);
   text-decoration: none;
   display: inline-flex;
@@ -587,54 +610,6 @@ export default {
 .btn-hero-secondary:hover {
   background-color: rgba(255, 255, 255, 0.15);
   border-color: var(--color-white);
-}
-
-/* Hero Visual Side */
-.hero-visual-col {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.hero-image-frame {
-  position: relative;
-  width: 100%;
-  max-width: 480px;
-  border-radius: var(--radius-xl);
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-}
-
-.hero-img {
-  width: 100%;
-  height: 380px;
-  object-fit: cover;
-  display: block;
-}
-
-.hero-image-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(27, 67, 50, 0.6) 0%, transparent 60%);
-}
-
-.hero-floating-tag {
-  position: absolute;
-  bottom: var(--space-4);
-  left: var(--space-4);
-  right: var(--space-4);
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(8px);
-  color: var(--color-primary-hover);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  box-shadow: var(--shadow-md);
 }
 
 /* Section 2 — The Problem We Solve */
@@ -666,21 +641,13 @@ export default {
   box-shadow: var(--shadow-md);
 }
 
-.card-accent-green {
-  border-top: 4px solid var(--color-primary);
-}
-
-.card-accent-amber {
-  border-top: 4px solid var(--color-secondary);
-}
-
-.card-accent-teal {
-  border-top: 4px solid var(--color-tertiary);
-}
+.card-accent-green { border-top: 4px solid var(--color-primary); }
+.card-accent-amber { border-top: 4px solid var(--color-secondary); }
+.card-accent-teal { border-top: 4px solid var(--color-tertiary); }
 
 .problem-icon-wrapper {
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
@@ -688,20 +655,9 @@ export default {
   margin-bottom: var(--space-4);
 }
 
-.green-icon-bg {
-  background-color: var(--color-primary-subtle);
-  color: var(--color-primary);
-}
-
-.amber-icon-bg {
-  background-color: var(--color-warning-light);
-  color: var(--color-secondary-dark);
-}
-
-.teal-icon-bg {
-  background-color: var(--color-tertiary-subtle);
-  color: var(--color-tertiary);
-}
+.green-icon-bg { background-color: var(--color-primary-subtle); color: var(--color-primary); }
+.amber-icon-bg { background-color: var(--color-warning-light); color: var(--color-secondary-dark); }
+.teal-icon-bg { background-color: var(--color-tertiary-subtle); color: var(--color-tertiary); }
 
 .problem-card-title {
   font-size: var(--font-size-lg);
@@ -744,8 +700,8 @@ export default {
 }
 
 .chain-icon-box {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
@@ -830,9 +786,7 @@ export default {
   min-width: 60px;
 }
 
-.how-card-content {
-  flex: 1;
-}
+.how-card-content { flex: 1; }
 
 .how-card-title {
   font-size: var(--font-size-lg);
@@ -888,8 +842,8 @@ export default {
 }
 
 .glass-icon-circle {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: var(--radius-full);
   background: rgba(255, 255, 255, 0.2);
   display: flex;
@@ -957,68 +911,71 @@ export default {
   transform: translateY(-1px);
 }
 
-/* Footer */
+/* Footer (Clean & Non-redundant) */
 .welcome-footer {
   background-color: var(--color-neutral-900);
   border-top: 1px solid var(--color-neutral-700);
-  padding: var(--space-6) 0;
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
 }
 
 .footer-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 var(--space-6);
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
   color: var(--color-neutral-400);
   font-size: var(--font-size-xs);
+  flex-wrap: wrap;
 }
 
-.footer-left {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.footer-brand {
+.footer-brand-text {
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
 }
 
-.footer-links {
-  display: flex;
-  gap: var(--space-4);
-}
-
-.footer-link {
+.footer-copy-text {
   color: var(--color-neutral-400);
-  text-decoration: none;
-  transition: color var(--transition-fast);
 }
 
-.footer-link:hover {
-  color: var(--color-white);
-}
-
-/* Responsiveness */
-@media (max-width: 991px) {
-  .hero-inner {
-    grid-template-columns: 1fr;
-    gap: var(--space-8);
-    text-align: center;
+/* Mobile Responsiveness & Layout Fixes */
+@media (max-width: 768px) {
+  .header-inner {
+    padding: 0 var(--space-4);
+    height: 60px;
   }
 
-  .hero-text-col {
-    align-items: center;
+  .app-logo-text {
+    font-size: var(--font-size-base);
+  }
+
+  .header-nav {
+    gap: var(--space-2);
+  }
+
+  .help-link {
+    font-size: 12px;
+    padding: 0 4px;
+  }
+
+  .nav-login-btn {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  .nav-register-btn {
+    padding: 6px 12px;
+    font-size: 12px;
   }
 
   .hero-headline {
-    font-size: 36px;
+    font-size: 32px;
   }
 
   .hero-headline-sub {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   .problem-cards-grid,
@@ -1049,14 +1006,21 @@ export default {
   }
 }
 
-@media (max-width: 600px) {
-  .hero-headline { font-size: 28px; }
-  .hero-headline-sub { font-size: 20px; }
+@media (max-width: 480px) {
+  .header-inner {
+    padding: 0 var(--space-3);
+  }
+  
+  .app-logo-text {
+    font-size: 14px;
+  }
+
+  .hero-headline { font-size: 26px; }
+  .hero-headline-sub { font-size: 18px; }
   .hero-subheadline { font-size: var(--font-size-base); }
   .hero-cta-group { flex-direction: column; width: 100%; }
   .btn-hero-primary, .btn-hero-secondary { width: 100%; justify-content: center; }
   .how-card { flex-direction: column; align-items: flex-start; padding: var(--space-5); gap: var(--space-2); }
   .how-number { font-size: 28px; }
-  .footer-inner { flex-direction: column; gap: var(--space-3); text-align: center; }
 }
 </style>
