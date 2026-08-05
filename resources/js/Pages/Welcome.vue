@@ -114,10 +114,9 @@
             <!-- Card 1 -->
             <div class="problem-card card-accent-green">
               <div class="problem-icon-wrapper green-icon-bg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 22C6.5 22 2 17.5 2 12S6.5 2 12 2s10 4.5 10 10-4.5 10-10 10z"/>
-                  <path d="M12 6v6l4 2"/>
-                  <path d="M16 2v4"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
                 </svg>
               </div>
               <h3 class="problem-card-title">Produce Lost Every Tuesday</h3>
@@ -129,7 +128,7 @@
             <!-- Card 2 -->
             <div class="problem-card card-accent-amber">
               <div class="problem-icon-wrapper amber-icon-bg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="2" y="5" width="20" height="14" rx="2"/>
                   <line x1="2" y1="10" x2="22" y2="10"/>
                   <path d="M12 14h.01"/>
@@ -144,7 +143,7 @@
             <!-- Card 3 -->
             <div class="problem-card card-accent-teal">
               <div class="problem-icon-wrapper teal-icon-bg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="1" y="3" width="15" height="13" rx="2"/>
                   <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
                   <circle cx="5.5" cy="18.5" r="2.5"/>
@@ -787,18 +786,43 @@ export default {
   border-bottom: 1px solid var(--color-neutral-100);
 }
 
+.problem-section .section-container {
+  padding: 48px var(--space-6);
+}
+
+.problem-section .section-header-text {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.problem-section .section-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--color-neutral-900);
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+}
+
+.problem-section .section-subtitle {
+  font-size: 14px;
+  color: var(--color-neutral-500);
+  margin: 0 auto;
+  max-width: 480px;
+  line-height: 1.5;
+}
+
 .problem-cards-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-6);
+  gap: 24px;
 }
 
 .problem-card {
   background-color: var(--color-white);
-  border-radius: var(--radius-lg);
-  padding: var(--space-6);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-sm);
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid var(--color-neutral-100);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -807,7 +831,7 @@ export default {
 
 .problem-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .card-accent-green { border-top: 4px solid var(--color-primary); }
@@ -815,13 +839,13 @@ export default {
 .card-accent-teal { border-top: 4px solid var(--color-tertiary); }
 
 .problem-icon-wrapper {
-  width: 46px;
-  height: 46px;
-  border-radius: var(--radius-md);
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: var(--space-4);
+  margin-bottom: 16px;
 }
 
 .green-icon-bg { background-color: var(--color-primary-subtle); color: var(--color-primary); }
@@ -829,16 +853,17 @@ export default {
 .teal-icon-bg { background-color: var(--color-tertiary-subtle); color: var(--color-tertiary); }
 
 .problem-card-title {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
+  font-size: 20px;
+  font-weight: 700;
   color: var(--color-neutral-900);
-  margin: 0 0 var(--space-2) 0;
+  margin: 0 0 10px 0;
+  line-height: 1.25;
 }
 
 .problem-card-body {
-  font-size: var(--font-size-sm);
-  color: var(--color-neutral-500);
-  line-height: var(--line-height-relaxed);
+  font-size: 16px;
+  color: var(--color-neutral-700);
+  line-height: 1.55;
   margin: 0;
 }
 
@@ -1187,7 +1212,38 @@ export default {
     font-size: 11.5px;
   }
 
-  .problem-cards-grid,
+  .problem-section .section-container {
+    padding: 32px 16px;
+  }
+
+  .problem-section .section-title {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+
+  .problem-section .section-subtitle {
+    font-size: 14px;
+  }
+
+  .problem-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .problem-card {
+    padding: 20px;
+  }
+
+  .problem-card-title {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  .problem-card-body {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
   .stakeholders-grid {
     grid-template-columns: 1fr;
   }
