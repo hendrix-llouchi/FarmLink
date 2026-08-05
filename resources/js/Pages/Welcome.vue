@@ -251,50 +251,6 @@
         </div>
       </section>
 
-      <!-- Section 4 — How It Works -->
-      <section class="how-it-works-section">
-        <div class="section-container">
-          <div class="section-header-text">
-            <h2 class="section-title">How FarmLink Works</h2>
-            <p class="section-subtitle">Three simple steps to guaranteed sales and seamless logistics.</p>
-          </div>
-
-          <div class="how-it-works-list">
-            <!-- Step 1 -->
-            <div class="how-card">
-              <div class="how-number">01</div>
-              <div class="how-card-content">
-                <h3 class="how-card-title">Farmer lists fresh tomatoes</h3>
-                <p class="how-card-text">
-                  Add your harvest with date, quality grade, and minimum order quantity. Buyers see exactly what they're getting before they commit.
-                </p>
-              </div>
-            </div>
-
-            <!-- Step 2 -->
-            <div class="how-card">
-              <div class="how-number">02</div>
-              <div class="how-card-content">
-                <h3 class="how-card-title">Market trader commits with escrow</h3>
-                <p class="how-card-text">
-                  Buyers pay via Mobile Money — product cost and transport cost locked in escrow. No more price negotiation under pressure.
-                </p>
-              </div>
-            </div>
-
-            <!-- Step 3 -->
-            <div class="how-card">
-              <div class="how-number">03</div>
-              <div class="how-card-content">
-                <h3 class="how-card-title">FarmLink arranges delivery</h3>
-                <p class="how-card-text">
-                  An aboboyaa driver on the Daboase &amp; Beposo → Market Circle corridor is matched and notified. Farmer gets paid. Driver gets paid. No waste.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <!-- Section 5 — Who It's For & Integrated CTA -->
       <section class="who-its-for-section">
@@ -972,52 +928,6 @@ export default {
 .desktop-arrow { display: inline-block; }
 .mobile-arrow { display: none; }
 
-/* Section 4 — How It Works */
-.how-it-works-section {
-  background-color: var(--color-white);
-  border-bottom: 1px solid var(--color-neutral-100);
-}
-
-.how-it-works-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.how-card {
-  background-color: var(--color-neutral-50);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-6) var(--space-8);
-  display: flex;
-  align-items: center;
-  gap: var(--space-6);
-  box-shadow: var(--shadow-xs);
-  transition: transform var(--transition-base);
-}
-
-.how-card:hover {
-  transform: translateX(6px);
-  box-shadow: var(--shadow-sm);
-}
-
-.how-number {
-  font-size: 36px;
-  font-weight: 800;
-  color: var(--color-primary);
-  min-width: 60px;
-}
-
-.how-card-content { flex: 1; }
-
-.how-card-title {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-neutral-900);
-  margin: 0 0 var(--space-2) 0;
-}
 
 .how-card-text {
   font-size: var(--font-size-sm);
@@ -1326,7 +1236,5 @@ export default {
 
   .hero-headline { font-size: 23px; }
   .hero-subheadline { font-size: 12.5px; }
-  .how-card { flex-direction: column; align-items: flex-start; padding: var(--space-5); gap: var(--space-2); }
-  .how-number { font-size: 28px; }
 }
 </style>
