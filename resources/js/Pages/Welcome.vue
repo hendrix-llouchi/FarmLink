@@ -822,8 +822,8 @@ export default {
 
 /* Section 3 — The Supply Chain */
 .supply-chain-section {
-  background-color: var(--color-neutral-50);
-  border-bottom: 1px solid var(--color-neutral-100);
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #E9ECEF;
 }
 
 .supply-chain-section .section-container {
@@ -936,11 +936,10 @@ export default {
   margin: 0;
 }
 
-/* Section 5 — Who It's For & Integrated Seamless CTA */
 /* Section 5 — Who It's For & Integrated CTA */
 .who-its-for-section {
-  background-color: var(--color-white);
-  border-bottom: 1px solid var(--color-neutral-100);
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #E9ECEF;
 }
 
 .who-its-for-section .section-title {
