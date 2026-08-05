@@ -530,37 +530,40 @@ export default {
 .mobile-dropdown-nav {
   display: flex;
   flex-direction: column;
-  padding: var(--space-3) var(--space-4) var(--space-4);
+  padding: 16px 20px 20px;
   background-color: var(--color-white);
   border-bottom: 1px solid var(--color-neutral-100);
-  gap: var(--space-2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  gap: 4px;
 }
 
 .mobile-nav-link {
-  font-size: var(--font-size-sm);
+  font-size: 14.5px;
   color: var(--color-neutral-700);
   text-decoration: none;
-  font-weight: var(--font-weight-medium);
-  padding: var(--space-2.5) var(--space-3);
-  border-radius: var(--radius-md);
-  transition: background-color var(--transition-fast);
+  font-weight: 500;
+  padding: 10px 4px;
+  display: block;
+  transition: color var(--transition-fast);
 }
 
 .mobile-nav-link:hover {
-  background-color: var(--color-neutral-100);
   color: var(--color-primary);
 }
 
 .mobile-nav-btn {
-  font-size: var(--font-size-sm);
+  font-size: 15px;
   color: var(--color-white);
   text-decoration: none;
-  font-weight: var(--font-weight-bold);
+  font-weight: 600;
   background-color: var(--color-primary);
-  padding: var(--space-2.5) var(--space-4);
-  border-radius: var(--radius-md);
-  text-align: center;
-  margin-top: var(--space-1);
+  height: 44px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  box-shadow: 0 2px 8px rgba(45, 106, 79, 0.2);
   transition: background-color var(--transition-fast);
 }
 
@@ -572,7 +575,7 @@ export default {
 .mobile-menu-enter-active,
 .mobile-menu-leave-active {
   transition: all 0.25s ease-in-out;
-  max-height: 200px;
+  max-height: 240px;
   opacity: 1;
   overflow: hidden;
 }
