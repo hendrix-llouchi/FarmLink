@@ -780,10 +780,10 @@ export default {
 }
 
 
-/* Section 2 — The Problem We Solve (Light #F9FAF8 Aesthetic for Contrast) */
+/* Section 2 — The Problem We Solve (Dark Hero Visual Matching) */
 .problem-section {
-  background-color: #F9FAF8;
-  border-bottom: 1px solid #E5E7EB;
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-neutral-100);
 }
 
 .problem-section .section-container {
@@ -798,14 +798,14 @@ export default {
 .problem-section .section-title {
   font-size: 28px !important;
   font-weight: 800 !important;
-  color: #1B4332 !important;
+  color: var(--color-neutral-900) !important;
   margin: 0 0 10px 0 !important;
   letter-spacing: -0.5px;
 }
 
 .problem-section .section-subtitle {
   font-size: 14px !important;
-  color: #6B7280 !important;
+  color: var(--color-neutral-500) !important;
   margin: 0 auto !important;
   max-width: 520px;
   line-height: 1.6;
@@ -818,11 +818,11 @@ export default {
 }
 
 .problem-card {
-  background: #FFFFFF;
+  background: linear-gradient(165deg, #1B4332 0%, #22543D 100%);
   border-radius: 16px;
   padding: 32px 26px;
-  border: 1px solid #E5E7EB;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 20px rgba(27, 67, 50, 0.18);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -831,42 +831,43 @@ export default {
 
 .problem-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 28px rgba(27, 67, 50, 0.28);
 }
 
 .problem-icon-wrapper {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: #E8F5E9;
-  border: 1px solid #C8E6C9;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  color: #1B4332;
+  color: #FFFFFF;
 }
 
 .problem-card-title {
   font-size: 20px !important;
   font-weight: 700 !important;
-  color: #1B4332 !important;
+  color: #FFFFFF !important;
   margin: 0 0 10px 0 !important;
   line-height: 1.3;
 }
 
 .problem-card-body {
   font-size: 14px !important;
-  color: #6B7280 !important;
+  color: rgba(255, 255, 255, 0.78) !important;
   line-height: 1.6 !important;
   margin: 0;
 }
 
-/* Section 3 — The Supply Chain (Dark Green Aesthetic #1B4332) */
+/* Section 3 — The Supply Chain */
 .supply-chain-section {
-  background: linear-gradient(165deg, #1B4332 0%, #143527 100%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--color-white);
+  background-color: var(--color-neutral-50);
+  border-bottom: 1px solid var(--color-neutral-100);
 }
 
 .supply-chain-section .section-container {
@@ -876,14 +877,14 @@ export default {
 .supply-chain-section .section-title {
   font-size: 28px !important;
   font-weight: 800 !important;
-  color: #FFFFFF !important;
+  color: var(--color-neutral-900) !important;
   margin: 0 0 10px 0 !important;
   letter-spacing: -0.5px;
 }
 
 .supply-chain-section .section-subtitle {
   font-size: 14px !important;
-  color: rgba(255, 255, 255, 0.6) !important;
+  color: var(--color-neutral-500) !important;
   margin: 0 auto !important;
   max-width: 540px;
   line-height: 1.6;
@@ -899,30 +900,31 @@ export default {
 
 .chain-step-card {
   flex: 1;
-  background: rgba(255, 255, 255, 0.08);
+  background: linear-gradient(165deg, #1B4332 0%, #22543D 100%);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 14px;
   padding: 24px 20px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 6px 18px rgba(27, 67, 50, 0.15);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   min-height: 200px;
-  transition: transform var(--transition-base), background var(--transition-base);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
 }
 
 .chain-step-card:hover {
   transform: translateY(-2px);
-  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 24px rgba(27, 67, 50, 0.24);
 }
 
 .chain-icon-circle {
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -933,7 +935,7 @@ export default {
 .chain-step-number {
   font-size: 11px !important;
   font-weight: 700 !important;
-  color: rgba(255, 255, 255, 0.45) !important;
+  color: rgba(255, 255, 255, 0.5) !important;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 4px;
@@ -949,7 +951,7 @@ export default {
 
 .chain-step-desc {
   font-size: 13.5px !important;
-  color: rgba(255, 255, 255, 0.72) !important;
+  color: rgba(255, 255, 255, 0.78) !important;
   line-height: 1.5 !important;
   margin: 0;
 }
@@ -963,8 +965,8 @@ export default {
 
 .arrow-symbol {
   font-size: 20px;
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.45);
+  font-weight: 400;
+  color: var(--color-primary);
 }
 
 .desktop-arrow { display: inline-block; }
@@ -1271,7 +1273,7 @@ export default {
   .problem-card-body {
     font-size: 14px !important;
     line-height: 1.55 !important;
-    color: #6B7280 !important;
+    color: rgba(255, 255, 255, 0.78) !important;
   }
 
   .stakeholders-grid {
