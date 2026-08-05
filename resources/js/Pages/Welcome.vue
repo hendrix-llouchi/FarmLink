@@ -245,7 +245,7 @@
         </div>
       </section>
 
-      <!-- Section 5 — Who It's For -->
+      <!-- Section 5 — Who It's For & Integrated CTA -->
       <section class="who-its-for-section">
         <div class="section-container">
           <div class="section-header-text light-header">
@@ -304,24 +304,23 @@
               </p>
             </div>
           </div>
-        </div>
-      </section>
 
-      <!-- Final CTA Strip -->
-      <section class="final-cta-strip">
-        <div class="cta-strip-inner">
-          <h3 class="cta-strip-headline">Ready to end the distress sale?</h3>
-          <Link href="/register" class="btn-cta-strip">
-            Get Started — It's Free
-          </Link>
+          <!-- Seamless Integrated CTA Box inside Green Section -->
+          <div class="integrated-cta-box">
+            <h3 class="integrated-cta-title">Ready to end the distress sale?</h3>
+            <Link href="/register" class="btn-integrated-cta">
+              Get Started — It's Free
+            </Link>
+          </div>
         </div>
       </section>
     </main>
 
-    <!-- Footer -->
+    <!-- Clean Single Footer -->
     <footer class="welcome-footer">
       <div class="footer-inner">
         <span class="footer-brand-text">FarmLink</span>
+        <span class="footer-dot">•</span>
         <span class="footer-copy-text">Daboase &amp; Beposo Tomato Corridor Pilot • Team Mythos</span>
       </div>
     </footer>
@@ -802,7 +801,7 @@ export default {
   margin: 0;
 }
 
-/* Section 5 — Who It's For */
+/* Section 5 — Who It's For & Integrated Seamless CTA */
 .who-its-for-section {
   background: linear-gradient(160deg, #1B4332 0%, #2D6A4F 55%, #2A9D8F 100%);
   color: var(--color-white);
@@ -866,34 +865,32 @@ export default {
   margin: 0;
 }
 
-/* Final CTA Strip */
-.final-cta-strip {
-  background-color: var(--color-neutral-900);
-  padding: var(--space-8) var(--space-6);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.cta-strip-inner {
-  max-width: 900px;
-  margin: 0 auto;
+/* Integrated CTA Box inside Green Section */
+.integrated-cta-box {
+  margin-top: var(--space-12);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8) var(--space-8);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-6);
 }
 
-.cta-strip-headline {
+.integrated-cta-title {
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
   margin: 0;
 }
 
-.btn-cta-strip {
-  background-color: var(--color-secondary);
-  color: var(--color-secondary-dark);
+.btn-integrated-cta {
+  background-color: var(--color-white);
+  color: var(--color-primary-hover);
   padding: 0 var(--space-8);
-  height: 48px;
+  height: 50px;
   border-radius: var(--radius-md);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-base);
@@ -903,18 +900,19 @@ export default {
   justify-content: center;
   white-space: nowrap;
   transition: all var(--transition-fast);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12);
 }
 
-.btn-cta-strip:hover {
-  background-color: var(--color-secondary-hover);
-  color: var(--color-white);
-  transform: translateY(-1px);
+.btn-integrated-cta:hover {
+  background-color: var(--color-neutral-50);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.18);
 }
 
-/* Footer (Clean & Non-redundant) */
+/* Single Clean Footer */
 .welcome-footer {
-  background-color: var(--color-neutral-900);
-  border-top: 1px solid var(--color-neutral-700);
+  background-color: #163628;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: var(--space-6) var(--space-4);
   text-align: center;
 }
@@ -926,7 +924,7 @@ export default {
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  color: var(--color-neutral-400);
+  color: rgba(255, 255, 255, 0.7);
   font-size: var(--font-size-xs);
   flex-wrap: wrap;
 }
@@ -936,8 +934,12 @@ export default {
   color: var(--color-white);
 }
 
+.footer-dot {
+  color: rgba(255, 255, 255, 0.4);
+}
+
 .footer-copy-text {
-  color: var(--color-neutral-400);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* Mobile Responsiveness & Layout Fixes */
@@ -1000,9 +1002,14 @@ export default {
     min-height: auto;
   }
 
-  .cta-strip-inner {
+  .integrated-cta-box {
     flex-direction: column;
     text-align: center;
+    padding: var(--space-6);
+  }
+
+  .integrated-cta-title {
+    font-size: var(--font-size-xl);
   }
 }
 
