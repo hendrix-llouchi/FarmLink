@@ -780,10 +780,10 @@ export default {
 }
 
 
-/* Section 2 — The Problem We Solve (Dark Hero Visual Matching) */
+/* Section 2 — The Problem We Solve (Light #F9FAF8 Aesthetic for Contrast) */
 .problem-section {
-  background-color: var(--color-white);
-  border-bottom: 1px solid var(--color-neutral-100);
+  background-color: #F9FAF8;
+  border-bottom: 1px solid #E5E7EB;
 }
 
 .problem-section .section-container {
@@ -798,14 +798,14 @@ export default {
 .problem-section .section-title {
   font-size: 28px !important;
   font-weight: 800 !important;
-  color: var(--color-neutral-900) !important;
+  color: #1B4332 !important;
   margin: 0 0 10px 0 !important;
   letter-spacing: -0.5px;
 }
 
 .problem-section .section-subtitle {
   font-size: 14px !important;
-  color: var(--color-neutral-500) !important;
+  color: #6B7280 !important;
   margin: 0 auto !important;
   max-width: 520px;
   line-height: 1.6;
@@ -818,11 +818,11 @@ export default {
 }
 
 .problem-card {
-  background: linear-gradient(165deg, #1B4332 0%, #22543D 100%);
+  background: #FFFFFF;
   border-radius: 16px;
   padding: 32px 26px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 6px 20px rgba(27, 67, 50, 0.18);
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -831,35 +831,33 @@ export default {
 
 .problem-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(27, 67, 50, 0.28);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .problem-icon-wrapper {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: #E8F5E9;
+  border: 1px solid #C8E6C9;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  color: #FFFFFF;
+  color: #1B4332;
 }
 
 .problem-card-title {
   font-size: 20px !important;
   font-weight: 700 !important;
-  color: #FFFFFF !important;
+  color: #1B4332 !important;
   margin: 0 0 10px 0 !important;
   line-height: 1.3;
 }
 
 .problem-card-body {
   font-size: 14px !important;
-  color: rgba(255, 255, 255, 0.78) !important;
+  color: #6B7280 !important;
   line-height: 1.6 !important;
   margin: 0;
 }
@@ -1273,7 +1271,7 @@ export default {
   .problem-card-body {
     font-size: 14px !important;
     line-height: 1.55 !important;
-    color: rgba(255, 255, 255, 0.78) !important;
+    color: #6B7280 !important;
   }
 
   .stakeholders-grid {
