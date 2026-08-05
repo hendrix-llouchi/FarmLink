@@ -10,12 +10,42 @@
           </svg>
           <span class="app-logo-text">FarmLink</span>
         </Link>
-        <nav class="header-nav">
+
+        <!-- Desktop Navigation -->
+        <nav class="header-nav desktop-nav">
           <a href="#" class="help-link" @click.prevent="triggerAlert('Help Center: Western Region Corridor Guide, Buyer FAQ, and Driver Delivery Info.')">Help</a>
           <Link href="/login" class="nav-login-btn">Log In</Link>
           <Link href="/register" class="nav-register-btn">Register</Link>
         </nav>
+
+        <!-- Mobile Hamburger Button -->
+        <button 
+          type="button" 
+          class="mobile-menu-btn" 
+          @click="mobileMenuOpen = !mobileMenuOpen"
+          :aria-expanded="mobileMenuOpen"
+          aria-label="Toggle navigation menu"
+        >
+          <svg v-if="!mobileMenuOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="6" x2="20" y2="6"/>
+            <line x1="4" y1="12" x2="20" y2="12"/>
+            <line x1="4" y1="18" x2="20" y2="18"/>
+          </svg>
+          <svg v-else xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
       </div>
+
+      <!-- Mobile Dropdown Navigation -->
+      <transition name="mobile-menu">
+        <div v-if="mobileMenuOpen" class="mobile-dropdown-nav">
+          <a href="#" class="mobile-nav-link" @click.prevent="triggerAlert('Help Center: Western Region Corridor Guide, Buyer FAQ, and Driver Delivery Info.'); mobileMenuOpen = false;">Help</a>
+          <Link href="/login" class="mobile-nav-link" @click="mobileMenuOpen = false">Log In</Link>
+          <Link href="/register" class="mobile-nav-btn" @click="mobileMenuOpen = false">Get Started</Link>
+        </div>
+      </transition>
     </header>
 
     <!-- Main Content Area -->
@@ -32,11 +62,11 @@
 
           <h1 class="hero-headline">
             From Daboase &amp; Beposo Farms to Takoradi Market
-            <span class="hero-headline-sub">— Fresh. Committed. Secured.</span>
+            <span class="hero-headline-sub">Fresh. Committed. Secured.</span>
           </h1>
 
           <p class="hero-subheadline">
-            FarmLink connects smallholder tomato farmers in Daboase and Beposo directly to market women at Takoradi Market Circle — eliminating distress sales through pre-committed, escrow-secured orders.
+            Sell produce directly to verified buyers with pre-committed orders and secure transport.
           </p>
 
           <div class="hero-cta-group">
@@ -44,9 +74,31 @@
               <span>Get Started</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </Link>
-            <Link href="/login" class="btn-hero-secondary">
-              Log In
+            <Link href="/login" class="btn-hero-secondary-link">
+              Already have an account? Log in
             </Link>
+          </div>
+
+          <!-- Trust Badges -->
+          <div class="hero-trust-badges">
+            <div class="trust-badge">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>Verified Buyers</span>
+            </div>
+            <div class="trust-badge">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>Secure Payments</span>
+            </div>
+            <div class="trust-badge">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              <span>Local Transport Network</span>
+            </div>
           </div>
         </div>
       </section>
@@ -337,6 +389,11 @@ export default {
     Link,
     Head
   },
+  data() {
+    return {
+      mobileMenuOpen: false
+    };
+  },
   methods: {
     triggerAlert(msg) {
       alert(msg);
@@ -453,6 +510,81 @@ export default {
   background-color: var(--color-primary-hover);
 }
 
+/* Mobile Hamburger Menu Navigation */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--color-neutral-700);
+  cursor: pointer;
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.mobile-menu-btn:hover {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-900);
+}
+
+.mobile-dropdown-nav {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-neutral-100);
+  gap: var(--space-2);
+}
+
+.mobile-nav-link {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  padding: var(--space-2.5) var(--space-3);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+.mobile-nav-link:hover {
+  background-color: var(--color-neutral-100);
+  color: var(--color-primary);
+}
+
+.mobile-nav-btn {
+  font-size: var(--font-size-sm);
+  color: var(--color-white);
+  text-decoration: none;
+  font-weight: var(--font-weight-bold);
+  background-color: var(--color-primary);
+  padding: var(--space-2.5) var(--space-4);
+  border-radius: var(--radius-md);
+  text-align: center;
+  margin-top: var(--space-1);
+  transition: background-color var(--transition-fast);
+}
+
+.mobile-nav-btn:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* Mobile menu animation */
+.mobile-menu-enter-active,
+.mobile-menu-leave-active {
+  transition: all 0.25s ease-in-out;
+  max-height: 200px;
+  opacity: 1;
+  overflow: hidden;
+}
+
+.mobile-menu-enter-from,
+.mobile-menu-leave-to {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 /* Main */
 .main-content {
   flex: 1;
@@ -485,14 +617,14 @@ export default {
   max-width: 620px;
 }
 
-/* Section 1 — Hero Section with Farmer Image Background */
+/* Section 1 — Hero Section (Farmer Background Image with Lighter Green Overlay) */
 .hero-section {
-  min-height: 85vh;
-  background: linear-gradient(180deg, rgba(27, 67, 50, 0.88) 0%, rgba(27, 67, 50, 0.95) 100%), url('/images/welcome_hero_banner.png') center/cover no-repeat;
+  min-height: auto;
+  background: linear-gradient(180deg, rgba(27, 67, 50, 0.48) 0%, rgba(45, 106, 79, 0.62) 100%), url('/images/welcome_hero_banner.png') center/cover no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-12) var(--space-6);
+  padding: 56px var(--space-6) 48px;
   text-align: center;
   position: relative;
 }
@@ -522,50 +654,55 @@ export default {
 }
 
 .hero-pill-badge {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   color: var(--color-white);
   border-radius: var(--radius-pill);
   padding: 6px 18px;
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   letter-spacing: 0.5px;
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-5);
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
 }
 
 .hero-headline {
-  font-size: 48px;
+  font-size: 44px;
   font-weight: 800;
   line-height: 1.15;
   color: var(--color-white);
-  margin: 0 0 var(--space-6) 0;
+  margin: 0 0 var(--space-4) 0;
   letter-spacing: -1px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
 }
 
 .hero-headline-sub {
   display: block;
-  font-size: 30px;
+  font-size: 26px;
   font-weight: 600;
   color: var(--color-primary-lighter);
   margin-top: var(--space-2);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
 }
 
 .hero-subheadline {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-base);
   line-height: var(--line-height-relaxed);
-  color: rgba(255, 255, 255, 0.9);
-  margin: 0 0 var(--space-8) 0;
-  max-width: 740px;
-  font-weight: var(--font-weight-regular);
+  color: rgba(255, 255, 255, 0.95);
+  margin: 0 0 var(--space-6) 0;
+  max-width: 620px;
+  font-weight: var(--font-weight-medium);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 }
 
 .hero-cta-group {
   display: flex;
-  gap: var(--space-4);
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
   justify-content: center;
   width: 100%;
 }
@@ -574,7 +711,7 @@ export default {
   background-color: var(--color-white);
   color: var(--color-primary-hover);
   padding: 0 var(--space-8);
-  height: 52px;
+  height: 48px;
   border-radius: var(--radius-md);
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-base);
@@ -583,35 +720,69 @@ export default {
   align-items: center;
   gap: var(--space-2);
   transition: all var(--transition-fast);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .btn-hero-primary:hover {
   background-color: var(--color-neutral-50);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.25);
 }
 
-.btn-hero-secondary {
-  background-color: transparent;
+.btn-hero-secondary-link {
   color: var(--color-white);
-  border: 1.5px solid rgba(255, 255, 255, 0.7);
-  padding: 0 var(--space-8);
-  height: 52px;
-  border-radius: var(--radius-md);
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-base);
-  text-decoration: none;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  opacity: 0.92;
+  transition: opacity var(--transition-fast), color var(--transition-fast);
+  padding: var(--space-2) var(--space-3);
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  transition: all var(--transition-fast);
 }
 
-.btn-hero-secondary:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-  border-color: var(--color-white);
+.btn-hero-secondary-link:hover {
+  opacity: 1;
+  color: var(--color-primary-lighter);
 }
+
+/* Trust Badges */
+.hero-trust-badges {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-white);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transition: transform var(--transition-fast), background var(--transition-fast);
+}
+
+.trust-badge:hover {
+  background: rgba(255, 255, 255, 0.26);
+  transform: translateY(-1px);
+}
+
+.trust-badge svg {
+  color: var(--color-primary-lighter);
+  flex-shrink: 0;
+}
+
 
 /* Section 2 — The Problem We Solve */
 .problem-section {
@@ -946,40 +1117,82 @@ export default {
 
 /* Mobile Responsiveness & Layout Fixes */
 @media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .header-inner {
     padding: 0 var(--space-4);
     height: 60px;
   }
 
   .app-logo-text {
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-lg);
   }
 
-  .header-nav {
-    gap: var(--space-2);
+  .hero-section {
+    padding: var(--space-8) var(--space-4) var(--space-6);
+    min-height: auto;
   }
 
-  .help-link {
-    font-size: 12px;
-    padding: 0 4px;
-  }
-
-  .nav-login-btn {
-    padding: 4px 8px;
-    font-size: 12px;
-  }
-
-  .nav-register-btn {
-    padding: 6px 12px;
-    font-size: 12px;
+  .hero-pill-badge {
+    margin-bottom: var(--space-3);
+    padding: 4px 14px;
+    font-size: 11px;
   }
 
   .hero-headline {
-    font-size: 32px;
+    font-size: 26px;
+    margin-bottom: var(--space-3);
+    letter-spacing: -0.5px;
   }
 
   .hero-headline-sub {
-    font-size: 22px;
+    font-size: 17px;
+    margin-top: var(--space-1);
+  }
+
+  .hero-subheadline {
+    font-size: 13.5px;
+    line-height: 1.45;
+    margin-bottom: var(--space-4);
+    max-width: 340px;
+  }
+
+  .hero-cta-group {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2.5);
+    width: 100%;
+  }
+
+  .btn-hero-primary {
+    width: 100%;
+    max-width: 300px;
+    height: 46px;
+    font-size: 15px;
+    justify-content: center;
+  }
+
+  .btn-hero-secondary-link {
+    font-size: 13px;
+    padding: 4px;
+  }
+
+  .hero-trust-badges {
+    margin-top: var(--space-5);
+    gap: var(--space-2);
+  }
+
+  .trust-badge {
+    padding: 5px 12px;
+    font-size: 11.5px;
   }
 
   .problem-cards-grid,
@@ -1021,14 +1234,12 @@ export default {
   }
   
   .app-logo-text {
-    font-size: 14px;
+    font-size: 15px;
   }
 
-  .hero-headline { font-size: 26px; }
-  .hero-headline-sub { font-size: 18px; }
-  .hero-subheadline { font-size: var(--font-size-base); }
-  .hero-cta-group { flex-direction: column; width: 100%; }
-  .btn-hero-primary, .btn-hero-secondary { width: 100%; justify-content: center; }
+  .hero-headline { font-size: 24px; }
+  .hero-headline-sub { font-size: 16px; }
+  .hero-subheadline { font-size: 13px; }
   .how-card { flex-direction: column; align-items: flex-start; padding: var(--space-5); gap: var(--space-2); }
   .how-number { font-size: 28px; }
 }
