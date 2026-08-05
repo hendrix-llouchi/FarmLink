@@ -255,9 +255,9 @@
       <!-- Section 5 — Who It's For & Integrated CTA -->
       <section class="who-its-for-section">
         <div class="section-container">
-          <div class="section-header-text light-header">
-            <h2 class="section-title text-white">Built for the Western Region</h2>
-            <p class="section-subtitle text-white-sub">Tailored solutions for every key player along the agricultural corridor.</p>
+          <div class="section-header-text">
+            <h2 class="section-title">Built for the Western Region</h2>
+            <p class="section-subtitle">Tailored solutions for every key player along the agricultural corridor.</p>
           </div>
 
           <div class="stakeholders-grid">
@@ -273,7 +273,7 @@
                 <h3>Farmers</h3>
               </div>
               <p>
-                Smallholder tomato farmers in Daboase and Beposo who harvest and need guaranteed buyers before produce spoils.
+                Smallholder tomato farmers who need guaranteed buyers before harvest.
               </p>
             </div>
 
@@ -289,7 +289,7 @@
                 <h3>Market Traders</h3>
               </div>
               <p>
-                Market women and traders at Takoradi Market Circle who want reliable, pre-arranged supply without traveling to Beposo every Tuesday.
+                Market women who want reliable pre-arranged supply without travel.
               </p>
             </div>
 
@@ -307,7 +307,7 @@
                 <h3>Aboboyaa Drivers</h3>
               </div>
               <p>
-                Transport operators on the Daboase &amp; Beposo → Market Circle corridor who want confirmed, pre-paid delivery jobs — not just waiting at the roadside.
+                Transport operators who want confirmed, pre-paid delivery jobs.
               </p>
             </div>
           </div>
@@ -937,13 +937,27 @@ export default {
 }
 
 /* Section 5 — Who It's For & Integrated Seamless CTA */
+/* Section 5 — Who It's For & Integrated CTA */
 .who-its-for-section {
-  background: linear-gradient(160deg, #1B4332 0%, #2D6A4F 55%, #2A9D8F 100%);
-  color: var(--color-white);
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-neutral-100);
 }
 
-.light-header .text-white { color: var(--color-white); }
-.light-header .text-white-sub { color: rgba(255, 255, 255, 0.85); }
+.who-its-for-section .section-title {
+  font-size: 28px !important;
+  font-weight: 800 !important;
+  color: var(--color-neutral-900) !important;
+  margin: 0 0 10px 0 !important;
+  letter-spacing: -0.5px;
+}
+
+.who-its-for-section .section-subtitle {
+  font-size: 14px !important;
+  color: var(--color-neutral-500) !important;
+  margin: 0 auto !important;
+  max-width: 540px;
+  line-height: 1.6;
+}
 
 .stakeholders-grid {
   display: grid;
@@ -952,21 +966,21 @@ export default {
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: var(--radius-lg);
-  padding: var(--space-6);
+  background: linear-gradient(165deg, #1B4332 0%, #22543D 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 26px 22px;
   color: var(--color-white);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  transition: transform var(--transition-base);
+  box-shadow: 0 6px 18px rgba(27, 67, 50, 0.15);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
 }
 
 .glass-card:hover {
   transform: translateY(-4px);
-  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 24px rgba(27, 67, 50, 0.24);
 }
 
 .glass-card-header {
@@ -976,10 +990,11 @@ export default {
 }
 
 .glass-icon-circle {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.2);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -987,31 +1002,31 @@ export default {
 }
 
 .glass-card-header h3 {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
+  font-size: 18px !important;
+  font-weight: 700 !important;
   margin: 0;
-  color: var(--color-white);
+  color: #FFFFFF !important;
 }
 
 .glass-card p {
-  font-size: var(--font-size-sm);
-  color: rgba(255, 255, 255, 0.9);
-  line-height: var(--line-height-relaxed);
+  font-size: 14px !important;
+  color: rgba(255, 255, 255, 0.78) !important;
+  line-height: 1.5 !important;
   margin: 0;
 }
 
-/* Integrated CTA Box inside Green Section */
+/* Integrated CTA Box */
 .integrated-cta-box {
   margin-top: var(--space-12);
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: linear-gradient(165deg, #1B4332 0%, #22543D 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-xl);
   padding: var(--space-8) var(--space-8);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-6);
+  box-shadow: 0 8px 24px rgba(27, 67, 50, 0.18);
 }
 
 .integrated-cta-title {
