@@ -164,144 +164,100 @@
         <div class="section-container">
           <div class="section-header-text">
             <h2 class="section-title">How Produce Moves</h2>
-            <p class="section-subtitle">A transparent digital corridor connecting farm gate in Daboase &amp; Beposo to Takoradi Market Circle.</p>
+            <p class="section-subtitle">From harvest to market in 4 steps — pricing locked before the truck leaves.</p>
           </div>
 
           <div class="chain-diagram-flex">
             <!-- Step 1 -->
             <div class="chain-step-card">
-              <div class="chain-icon-box green-box">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <div class="chain-icon-circle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 2 2 4v4a4 4 0 0 1-4 4h-2a3 3 0 0 0-3 3v3z"/>
                   <path d="M9 22v-4H7a2 2 0 0 1-2-2V8"/>
                 </svg>
               </div>
-              <span class="chain-step-number">Step 1</span>
-              <h4 class="chain-step-title">Farm — Daboase / Beposo</h4>
+              <span class="chain-step-number">STEP 1</span>
+              <h4 class="chain-step-title">Farm Gate</h4>
               <p class="chain-step-desc">
-                Farmer harvests tomatoes and lists them on FarmLink with harvest date, unit, and quality grade.
+                Farmer lists harvest date, quantity, and grade.
               </p>
             </div>
 
             <!-- Arrow 1 -->
             <div class="chain-arrow">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-desktop"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-mobile"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
+              <span class="arrow-symbol desktop-arrow">→</span>
+              <span class="arrow-symbol mobile-arrow">↓</span>
             </div>
 
             <!-- Step 2 -->
             <div class="chain-step-card">
-              <div class="chain-icon-box amber-box">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <div class="chain-icon-circle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                   <path d="m9 12 2 2 4-4"/>
                 </svg>
               </div>
-              <span class="chain-step-number">Step 2</span>
-              <h4 class="chain-step-title">FarmLink Match</h4>
+              <span class="chain-step-number">STEP 2</span>
+              <h4 class="chain-step-title">Escrow Commit</h4>
               <p class="chain-step-desc">
-                Market trader browses, commits to a purchase — product price + estimated transport cost locked in escrow.
+                Trader commits to purchase with Mobile Money escrow.
               </p>
             </div>
 
             <!-- Arrow 2 -->
             <div class="chain-arrow">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-desktop"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-mobile"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
+              <span class="arrow-symbol desktop-arrow">→</span>
+              <span class="arrow-symbol mobile-arrow">↓</span>
             </div>
 
             <!-- Step 3 -->
             <div class="chain-step-card">
-              <div class="chain-icon-box teal-box">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <div class="chain-icon-circle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="1" y="3" width="15" height="13" rx="2"/>
                   <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
                   <circle cx="5.5" cy="18.5" r="2.5"/>
                   <circle cx="18.5" cy="18.5" r="2.5"/>
                 </svg>
               </div>
-              <span class="chain-step-number">Step 3</span>
+              <span class="chain-step-number">STEP 3</span>
               <h4 class="chain-step-title">Aboboyaa Transit</h4>
               <p class="chain-step-desc">
-                FarmLink assigns an aboboyaa driver. Pickup confirmed digitally with full transport accountability.
+                Aboboyaa driver assigned with pre-paid delivery.
               </p>
             </div>
 
             <!-- Arrow 3 -->
             <div class="chain-arrow">
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-desktop"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="arrow-mobile"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg>
+              <span class="arrow-symbol desktop-arrow">→</span>
+              <span class="arrow-symbol mobile-arrow">↓</span>
             </div>
 
             <!-- Step 4 -->
             <div class="chain-step-card">
-              <div class="chain-icon-box blue-box">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <div class="chain-icon-circle">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
                   <polyline points="9 22 9 12 15 12 15 22"/>
                 </svg>
               </div>
-              <span class="chain-step-number">Step 4</span>
+              <span class="chain-step-number">STEP 4</span>
               <h4 class="chain-step-title">Market Circle</h4>
               <p class="chain-step-desc">
-                Market trader receives fresh tomatoes. Farmer paid. Driver paid. Zero distress sales.
+                Produce delivered, funds released instantly.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Section 4 — How It Works -->
-      <section class="how-it-works-section">
-        <div class="section-container">
-          <div class="section-header-text">
-            <h2 class="section-title">How FarmLink Works</h2>
-            <p class="section-subtitle">Three simple steps to guaranteed sales and seamless logistics.</p>
-          </div>
-
-          <div class="how-it-works-list">
-            <!-- Step 1 -->
-            <div class="how-card">
-              <div class="how-number">01</div>
-              <div class="how-card-content">
-                <h3 class="how-card-title">Farmer lists fresh tomatoes</h3>
-                <p class="how-card-text">
-                  Add your harvest with date, quality grade, and minimum order quantity. Buyers see exactly what they're getting before they commit.
-                </p>
-              </div>
-            </div>
-
-            <!-- Step 2 -->
-            <div class="how-card">
-              <div class="how-number">02</div>
-              <div class="how-card-content">
-                <h3 class="how-card-title">Market trader commits with escrow</h3>
-                <p class="how-card-text">
-                  Buyers pay via Mobile Money — product cost and transport cost locked in escrow. No more price negotiation under pressure.
-                </p>
-              </div>
-            </div>
-
-            <!-- Step 3 -->
-            <div class="how-card">
-              <div class="how-number">03</div>
-              <div class="how-card-content">
-                <h3 class="how-card-title">FarmLink arranges delivery</h3>
-                <p class="how-card-text">
-                  An aboboyaa driver on the Daboase &amp; Beposo → Market Circle corridor is matched and notified. Farmer gets paid. Driver gets paid. No waste.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <!-- Section 5 — Who It's For & Integrated CTA -->
       <section class="who-its-for-section">
         <div class="section-container">
-          <div class="section-header-text light-header">
-            <h2 class="section-title text-white">Built for the Western Region</h2>
-            <p class="section-subtitle text-white-sub">Tailored solutions for every key player along the agricultural corridor.</p>
+          <div class="section-header-text">
+            <h2 class="section-title">Built for the Western Region</h2>
+            <p class="section-subtitle">Tailored solutions for every key player along the agricultural corridor.</p>
           </div>
 
           <div class="stakeholders-grid">
@@ -317,7 +273,7 @@
                 <h3>Farmers</h3>
               </div>
               <p>
-                Smallholder tomato farmers in Daboase and Beposo who harvest and need guaranteed buyers before produce spoils.
+                Smallholder tomato farmers who need guaranteed buyers before harvest.
               </p>
             </div>
 
@@ -333,7 +289,7 @@
                 <h3>Market Traders</h3>
               </div>
               <p>
-                Market women and traders at Takoradi Market Circle who want reliable, pre-arranged supply without traveling to Beposo every Tuesday.
+                Market women who want reliable pre-arranged supply without travel.
               </p>
             </div>
 
@@ -351,7 +307,7 @@
                 <h3>Aboboyaa Drivers</h3>
               </div>
               <p>
-                Transport operators on the Daboase &amp; Beposo → Market Circle corridor who want confirmed, pre-paid delivery jobs — not just waiting at the roadside.
+                Transport operators who want confirmed, pre-paid delivery jobs.
               </p>
             </div>
           </div>
@@ -866,125 +822,112 @@ export default {
 
 /* Section 3 — The Supply Chain */
 .supply-chain-section {
-  background-color: var(--color-neutral-50);
-  border-bottom: 1px solid var(--color-neutral-100);
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #E9ECEF;
+}
+
+.supply-chain-section .section-container {
+  padding: 56px var(--space-6);
+}
+
+.supply-chain-section .section-title {
+  font-size: 28px !important;
+  font-weight: 800 !important;
+  color: var(--color-neutral-900) !important;
+  margin: 0 0 10px 0 !important;
+  letter-spacing: -0.5px;
+}
+
+.supply-chain-section .section-subtitle {
+  font-size: 14px !important;
+  color: var(--color-neutral-500) !important;
+  margin: 0 auto !important;
+  max-width: 540px;
+  line-height: 1.6;
 }
 
 .chain-diagram-flex {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-3);
+  gap: 12px;
+  margin-top: 40px;
 }
 
 .chain-step-card {
   flex: 1;
-  background-color: var(--color-white);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5);
-  box-shadow: var(--shadow-xs);
+  background: linear-gradient(165deg, #1B4332 0%, #22543D 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 24px 20px;
+  box-shadow: 0 6px 18px rgba(27, 67, 50, 0.15);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  min-height: 210px;
+  min-height: 200px;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
 }
 
-.chain-icon-box {
+.chain-step-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(27, 67, 50, 0.24);
+}
+
+.chain-icon-circle {
   width: 42px;
   height: 42px;
-  border-radius: var(--radius-md);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: var(--space-3);
+  margin-bottom: 16px;
+  color: #FFFFFF;
 }
 
-.green-box { background-color: var(--color-primary-subtle); color: var(--color-primary); }
-.amber-box { background-color: var(--color-warning-light); color: var(--color-secondary-dark); }
-.teal-box { background-color: var(--color-tertiary-subtle); color: var(--color-tertiary); }
-.blue-box { background-color: #E0F2FE; color: #0284C7; }
-
 .chain-step-number {
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: rgba(255, 255, 255, 0.5) !important;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: var(--space-1);
+  letter-spacing: 1px;
+  margin-bottom: 4px;
 }
 
 .chain-step-title {
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-neutral-900);
-  margin: 0 0 var(--space-2) 0;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: #FFFFFF !important;
+  margin: 0 0 8px 0 !important;
+  line-height: 1.3;
 }
 
 .chain-step-desc {
-  font-size: var(--font-size-xs);
-  color: var(--color-neutral-500);
-  line-height: var(--line-height-base);
+  font-size: 13.5px !important;
+  color: rgba(255, 255, 255, 0.78) !important;
+  line-height: 1.5 !important;
   margin: 0;
 }
 
 .chain-arrow {
-  color: var(--color-primary-light);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-.arrow-desktop { display: block; }
-.arrow-mobile { display: none; }
-
-/* Section 4 — How It Works */
-.how-it-works-section {
-  background-color: var(--color-white);
-  border-bottom: 1px solid var(--color-neutral-100);
-}
-
-.how-it-works-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.how-card {
-  background-color: var(--color-neutral-50);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-6) var(--space-8);
-  display: flex;
-  align-items: center;
-  gap: var(--space-6);
-  box-shadow: var(--shadow-xs);
-  transition: transform var(--transition-base);
-}
-
-.how-card:hover {
-  transform: translateX(6px);
-  box-shadow: var(--shadow-sm);
-}
-
-.how-number {
-  font-size: 36px;
-  font-weight: 800;
+.arrow-symbol {
+  font-size: 20px;
+  font-weight: 400;
   color: var(--color-primary);
-  min-width: 60px;
 }
 
-.how-card-content { flex: 1; }
+.desktop-arrow { display: inline-block; }
+.mobile-arrow { display: none; }
 
-.how-card-title {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-neutral-900);
-  margin: 0 0 var(--space-2) 0;
-}
 
 .how-card-text {
   font-size: var(--font-size-sm);
@@ -993,14 +936,27 @@ export default {
   margin: 0;
 }
 
-/* Section 5 — Who It's For & Integrated Seamless CTA */
+/* Section 5 — Who It's For & Integrated CTA */
 .who-its-for-section {
-  background: linear-gradient(160deg, #1B4332 0%, #2D6A4F 55%, #2A9D8F 100%);
-  color: var(--color-white);
+  background-color: #F9FAF8;
+  border-bottom: 1px solid #E9ECEF;
 }
 
-.light-header .text-white { color: var(--color-white); }
-.light-header .text-white-sub { color: rgba(255, 255, 255, 0.85); }
+.who-its-for-section .section-title {
+  font-size: 28px !important;
+  font-weight: 800 !important;
+  color: var(--color-neutral-900) !important;
+  margin: 0 0 10px 0 !important;
+  letter-spacing: -0.5px;
+}
+
+.who-its-for-section .section-subtitle {
+  font-size: 14px !important;
+  color: var(--color-neutral-500) !important;
+  margin: 0 auto !important;
+  max-width: 540px;
+  line-height: 1.6;
+}
 
 .stakeholders-grid {
   display: grid;
@@ -1009,21 +965,21 @@ export default {
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: var(--radius-lg);
-  padding: var(--space-6);
+  background: linear-gradient(165deg, #1B4332 0%, #22543D 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  padding: 26px 22px;
   color: var(--color-white);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  transition: transform var(--transition-base);
+  box-shadow: 0 6px 18px rgba(27, 67, 50, 0.15);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
 }
 
 .glass-card:hover {
   transform: translateY(-4px);
-  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 24px rgba(27, 67, 50, 0.24);
 }
 
 .glass-card-header {
@@ -1033,10 +989,11 @@ export default {
 }
 
 .glass-icon-circle {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.2);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1044,31 +1001,31 @@ export default {
 }
 
 .glass-card-header h3 {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
+  font-size: 18px !important;
+  font-weight: 700 !important;
   margin: 0;
-  color: var(--color-white);
+  color: #FFFFFF !important;
 }
 
 .glass-card p {
-  font-size: var(--font-size-sm);
-  color: rgba(255, 255, 255, 0.9);
-  line-height: var(--line-height-relaxed);
+  font-size: 14px !important;
+  color: rgba(255, 255, 255, 0.78) !important;
+  line-height: 1.5 !important;
   margin: 0;
 }
 
-/* Integrated CTA Box inside Green Section */
+/* Integrated CTA Box */
 .integrated-cta-box {
   margin-top: var(--space-12);
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: linear-gradient(165deg, #1B4332 0%, #22543D 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-xl);
   padding: var(--space-8) var(--space-8);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-6);
+  box-shadow: 0 8px 24px rgba(27, 67, 50, 0.18);
 }
 
 .integrated-cta-title {
@@ -1247,22 +1204,29 @@ export default {
     grid-template-columns: 1fr;
   }
 
+  .supply-chain-section .section-container {
+    padding: 36px 16px;
+  }
+
+  .supply-chain-section .section-title {
+    font-size: 26px !important;
+    margin-bottom: 8px !important;
+  }
+
   .chain-diagram-flex {
     flex-direction: column;
-    gap: var(--space-4);
+    gap: 16px;
+    margin-top: 28px;
   }
-
-  .chain-arrow {
-    margin: var(--space-2) 0;
-  }
-
-  .arrow-desktop { display: none; }
-  .arrow-mobile { display: block; }
 
   .chain-step-card {
     width: 100%;
     min-height: auto;
+    padding: 20px 18px;
   }
+
+  .desktop-arrow { display: none; }
+  .mobile-arrow { display: inline-block; }
 
   .integrated-cta-box {
     flex-direction: column;
@@ -1286,7 +1250,5 @@ export default {
 
   .hero-headline { font-size: 23px; }
   .hero-subheadline { font-size: 12.5px; }
-  .how-card { flex-direction: column; align-items: flex-start; padding: var(--space-5); gap: var(--space-2); }
-  .how-number { font-size: 28px; }
 }
 </style>
