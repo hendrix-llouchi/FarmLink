@@ -112,9 +112,9 @@
 
           <div class="problem-cards-grid">
             <!-- Card 1 -->
-            <div class="problem-card card-accent-green">
-              <div class="problem-icon-wrapper green-icon-bg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <div class="problem-card">
+              <div class="problem-icon-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="12" cy="12" r="10"/>
                   <polyline points="12 6 12 12 16 14"/>
                 </svg>
@@ -126,9 +126,9 @@
             </div>
 
             <!-- Card 2 -->
-            <div class="problem-card card-accent-green">
-              <div class="problem-icon-wrapper green-icon-bg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <div class="problem-card">
+              <div class="problem-icon-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="2" y="5" width="20" height="14" rx="2"/>
                   <line x1="2" y1="10" x2="22" y2="10"/>
                   <path d="M12 14h.01"/>
@@ -141,9 +141,9 @@
             </div>
 
             <!-- Card 3 -->
-            <div class="problem-card card-accent-green">
-              <div class="problem-icon-wrapper green-icon-bg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <div class="problem-card">
+              <div class="problem-icon-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="1" y="3" width="15" height="13" rx="2"/>
                   <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
                   <circle cx="5.5" cy="18.5" r="2.5"/>
@@ -780,7 +780,7 @@ export default {
 }
 
 
-/* Section 2 — The Problem We Solve */
+/* Section 2 — The Problem We Solve (Dark Hero Visual Matching) */
 .problem-section {
   background-color: var(--color-white);
   border-bottom: 1px solid var(--color-neutral-100);
@@ -797,7 +797,7 @@ export default {
 
 .problem-section .section-title {
   font-size: 28px !important;
-  font-weight: 700 !important;
+  font-weight: 800 !important;
   color: var(--color-neutral-900) !important;
   margin: 0 0 10px 0 !important;
   letter-spacing: -0.5px;
@@ -818,11 +818,11 @@ export default {
 }
 
 .problem-card {
-  background-color: var(--color-white);
-  border-radius: 12px;
-  padding: 32px 24px;
-  border: 1px solid var(--color-neutral-100);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  background: linear-gradient(165deg, #1B4332 0%, #22543D 100%);
+  border-radius: 16px;
+  padding: 32px 26px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 20px rgba(27, 67, 50, 0.18);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -831,39 +831,35 @@ export default {
 
 .problem-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-}
-
-.card-accent-green {
-  border-top: 4px solid var(--color-primary);
+  box-shadow: 0 10px 28px rgba(27, 67, 50, 0.28);
 }
 
 .problem-icon-wrapper {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-}
-
-.green-icon-bg {
-  background-color: var(--color-primary-subtle);
-  color: var(--color-primary);
+  color: #FFFFFF;
 }
 
 .problem-card-title {
   font-size: 20px !important;
   font-weight: 700 !important;
-  color: var(--color-neutral-900) !important;
+  color: #FFFFFF !important;
   margin: 0 0 10px 0 !important;
   line-height: 1.3;
 }
 
 .problem-card-body {
   font-size: 14px !important;
-  color: var(--color-neutral-500) !important;
+  color: rgba(255, 255, 255, 0.78) !important;
   line-height: 1.6 !important;
   margin: 0;
 }
@@ -1244,7 +1240,7 @@ export default {
   .problem-card-body {
     font-size: 14px !important;
     line-height: 1.55 !important;
-    color: var(--color-neutral-500) !important;
+    color: rgba(255, 255, 255, 0.78) !important;
   }
 
   .stakeholders-grid {
