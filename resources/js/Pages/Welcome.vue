@@ -122,7 +122,7 @@
               </div>
               <h3 class="problem-card-title">Produce Lost Every Tuesday</h3>
               <p class="problem-card-body">
-                Tomatoes harvested in Daboase and Beposo must sell on market day or be discarded. With no cold storage, every unsold crate is a financial loss.
+                Unsold tomatoes spoil within days.
               </p>
               <div class="problem-card-tag tag-red">
                 <span>Zero Cold Storage</span>
@@ -140,7 +140,7 @@
               </div>
               <h3 class="problem-card-title">The Distress Sale Trap</h3>
               <p class="problem-card-body">
-                Without pre-committed buyers, farmers slash prices at day's end. Market women wait specifically for this — exploiting the time pressure farmers face.
+                Farmers are forced to slash prices at day's end.
               </p>
               <div class="problem-card-tag tag-amber">
                 <span>Unpredictable Pricing</span>
@@ -159,7 +159,7 @@
               </div>
               <h3 class="problem-card-title">Transport Cost Disputes</h3>
               <p class="problem-card-body">
-                Aboboyaa transport costs are settled informally on the spot, with no advance agreement — absorbing unpredictable portions of the farmer's revenue.
+                Unpredictable delivery costs absorb farmer profits.
               </p>
               <div class="problem-card-tag tag-teal">
                 <span>Informal Logistics</span>
@@ -1277,8 +1277,10 @@ export default {
   }
 
   .problem-card-body {
-    font-size: 16px;
-    line-height: 1.5;
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+    color: #334155 !important;
+    font-weight: 500 !important;
   }
 
   .stakeholders-grid {
