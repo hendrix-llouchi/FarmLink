@@ -61,12 +61,11 @@
           </div>
 
           <h1 class="hero-headline">
-            From Daboase &amp; Beposo Farms to Takoradi Market
-            <span class="hero-headline-sub">Fresh. Committed. Secured.</span>
+            Sell Your Tomatoes Before Harvest.
           </h1>
 
           <p class="hero-subheadline">
-            Sell produce directly to verified buyers with pre-committed orders and secure transport.
+            Connect with verified buyers through secure pre-orders.
           </p>
 
           <div class="hero-cta-group">
@@ -97,7 +96,7 @@
               <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
-              <span>Local Transport Network</span>
+              <span>Local Transport</span>
             </div>
           </div>
         </div>
@@ -421,9 +420,10 @@ export default {
   top: 0;
   z-index: 100;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--color-neutral-100);
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(233, 236, 239, 0.8);
 }
 
 .header-inner {
@@ -530,37 +530,40 @@ export default {
 .mobile-dropdown-nav {
   display: flex;
   flex-direction: column;
-  padding: var(--space-3) var(--space-4) var(--space-4);
+  padding: 16px 20px 20px;
   background-color: var(--color-white);
   border-bottom: 1px solid var(--color-neutral-100);
-  gap: var(--space-2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  gap: 4px;
 }
 
 .mobile-nav-link {
-  font-size: var(--font-size-sm);
+  font-size: 14.5px;
   color: var(--color-neutral-700);
   text-decoration: none;
-  font-weight: var(--font-weight-medium);
-  padding: var(--space-2.5) var(--space-3);
-  border-radius: var(--radius-md);
-  transition: background-color var(--transition-fast);
+  font-weight: 500;
+  padding: 10px 4px;
+  display: block;
+  transition: color var(--transition-fast);
 }
 
 .mobile-nav-link:hover {
-  background-color: var(--color-neutral-100);
   color: var(--color-primary);
 }
 
 .mobile-nav-btn {
-  font-size: var(--font-size-sm);
+  font-size: 15px;
   color: var(--color-white);
   text-decoration: none;
-  font-weight: var(--font-weight-bold);
+  font-weight: 600;
   background-color: var(--color-primary);
-  padding: var(--space-2.5) var(--space-4);
-  border-radius: var(--radius-md);
-  text-align: center;
-  margin-top: var(--space-1);
+  height: 44px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  box-shadow: 0 2px 8px rgba(45, 106, 79, 0.2);
   transition: background-color var(--transition-fast);
 }
 
@@ -572,7 +575,7 @@ export default {
 .mobile-menu-enter-active,
 .mobile-menu-leave-active {
   transition: all 0.25s ease-in-out;
-  max-height: 200px;
+  max-height: 240px;
   opacity: 1;
   overflow: hidden;
 }
@@ -620,17 +623,17 @@ export default {
 /* Section 1 — Hero Section (Farmer Background Image with Lighter Green Overlay) */
 .hero-section {
   min-height: auto;
-  background: linear-gradient(180deg, rgba(27, 67, 50, 0.48) 0%, rgba(45, 106, 79, 0.62) 100%), url('/images/welcome_hero_banner.png') center/cover no-repeat;
+  background: linear-gradient(180deg, rgba(27, 67, 50, 0.48) 0%, rgba(45, 106, 79, 0.65) 100%), url('/images/welcome_hero_banner.png') center/cover no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 56px var(--space-6) 48px;
+  padding: 44px var(--space-6) 36px;
   text-align: center;
   position: relative;
 }
 
 .hero-inner {
-  max-width: 860px;
+  max-width: 780px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -657,54 +660,47 @@ export default {
   background: rgba(255, 255, 255, 0.18);
   border: 1px solid rgba(255, 255, 255, 0.35);
   color: var(--color-white);
-  border-radius: var(--radius-pill);
-  padding: 6px 18px;
+  border-radius: 9999px;
+  padding: 5px 16px;
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
   letter-spacing: 0.5px;
-  margin-bottom: var(--space-5);
+  margin-bottom: 14px;
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .hero-headline {
-  font-size: 44px;
+  font-size: 46px;
   font-weight: 800;
-  line-height: 1.15;
+  line-height: 1.12;
   color: var(--color-white);
-  margin: 0 0 var(--space-4) 0;
+  margin: 0 0 10px 0;
   letter-spacing: -1px;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
-}
-
-.hero-headline-sub {
-  display: block;
-  font-size: 26px;
-  font-weight: 600;
-  color: var(--color-primary-lighter);
-  margin-top: var(--space-2);
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 }
 
 .hero-subheadline {
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-relaxed);
+  font-size: 18px;
+  line-height: 1.4;
   color: rgba(255, 255, 255, 0.95);
-  margin: 0 0 var(--space-6) 0;
-  max-width: 620px;
+  margin: 0 0 16px 0;
+  max-width: 580px;
   font-weight: var(--font-weight-medium);
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
 }
 
 .hero-cta-group {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-3);
+  gap: 10px;
   justify-content: center;
   width: 100%;
+  margin-bottom: 22px;
 }
 
 .btn-hero-primary {
@@ -737,7 +733,7 @@ export default {
   text-underline-offset: 4px;
   opacity: 0.92;
   transition: opacity var(--transition-fast), color var(--transition-fast);
-  padding: var(--space-2) var(--space-3);
+  padding: 4px 8px;
   display: inline-flex;
   align-items: center;
 }
@@ -747,27 +743,28 @@ export default {
   color: var(--color-primary-lighter);
 }
 
-/* Trust Badges */
+/* Trust Badges — Actual Pills with Blur & Opacity */
 .hero-trust-badges {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-3);
-  margin-top: var(--space-6);
+  gap: 12px;
+  margin-top: 0;
   flex-wrap: wrap;
 }
 
 .trust-badge {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: 6px 14px;
+  gap: 8px;
+  padding: 8px 20px;
   background: rgba(255, 255, 255, 0.18);
   border: 1px solid rgba(255, 255, 255, 0.35);
-  backdrop-filter: blur(8px);
-  border-radius: var(--radius-pill);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 9999px;
+  font-size: 13.5px;
+  font-weight: 600;
   color: var(--color-white);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
   transition: transform var(--transition-fast), background var(--transition-fast);
@@ -779,7 +776,7 @@ export default {
 }
 
 .trust-badge svg {
-  color: var(--color-primary-lighter);
+  color: #52B788;
   flex-shrink: 0;
 }
 
@@ -1137,61 +1134,56 @@ export default {
   }
 
   .hero-section {
-    padding: var(--space-8) var(--space-4) var(--space-6);
+    padding: 28px var(--space-4) 24px;
     min-height: auto;
   }
 
   .hero-pill-badge {
-    margin-bottom: var(--space-3);
-    padding: 4px 14px;
+    margin-bottom: 10px;
+    padding: 4px 12px;
     font-size: 11px;
   }
 
   .hero-headline {
     font-size: 26px;
-    margin-bottom: var(--space-3);
+    margin-bottom: 8px;
     letter-spacing: -0.5px;
-  }
-
-  .hero-headline-sub {
-    font-size: 17px;
-    margin-top: var(--space-1);
   }
 
   .hero-subheadline {
     font-size: 13.5px;
-    line-height: 1.45;
-    margin-bottom: var(--space-4);
-    max-width: 340px;
+    line-height: 1.4;
+    margin-bottom: 14px;
+    max-width: 320px;
   }
 
   .hero-cta-group {
     flex-direction: column;
     align-items: center;
-    gap: var(--space-2.5);
+    gap: 8px;
     width: 100%;
+    margin-bottom: 16px;
   }
 
   .btn-hero-primary {
     width: 100%;
-    max-width: 300px;
-    height: 46px;
+    max-width: 290px;
+    height: 44px;
     font-size: 15px;
     justify-content: center;
   }
 
   .btn-hero-secondary-link {
-    font-size: 13px;
+    font-size: 12.5px;
     padding: 4px;
   }
 
   .hero-trust-badges {
-    margin-top: var(--space-5);
-    gap: var(--space-2);
+    gap: 8px;
   }
 
   .trust-badge {
-    padding: 5px 12px;
+    padding: 6px 14px;
     font-size: 11.5px;
   }
 
@@ -1237,9 +1229,8 @@ export default {
     font-size: 15px;
   }
 
-  .hero-headline { font-size: 24px; }
-  .hero-headline-sub { font-size: 16px; }
-  .hero-subheadline { font-size: 13px; }
+  .hero-headline { font-size: 23px; }
+  .hero-subheadline { font-size: 12.5px; }
   .how-card { flex-direction: column; align-items: flex-start; padding: var(--space-5); gap: var(--space-2); }
   .how-number { font-size: 28px; }
 }
