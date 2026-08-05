@@ -938,7 +938,7 @@ export default {
 
 /* Section 5 — Who It's For & Integrated CTA */
 .who-its-for-section {
-  background-color: #FFFFFF;
+  background-color: #F9FAF8;
   border-bottom: 1px solid #E9ECEF;
 }
 
