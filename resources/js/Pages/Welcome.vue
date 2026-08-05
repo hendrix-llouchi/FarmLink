@@ -106,6 +106,7 @@
       <section class="problem-section">
         <div class="section-container">
           <div class="section-header-text">
+            <span class="section-tag">CHALLENGES</span>
             <h2 class="section-title">The Problem We Solve</h2>
             <p class="section-subtitle">Addressing post-harvest losses and distress sales in the Daboase &amp; Beposo → Market Circle tomato corridor.</p>
           </div>
@@ -123,6 +124,9 @@
               <p class="problem-card-body">
                 Tomatoes harvested in Daboase and Beposo must sell on market day or be discarded. With no cold storage, every unsold crate is a financial loss.
               </p>
+              <div class="problem-card-tag tag-red">
+                <span>Zero Cold Storage</span>
+              </div>
             </div>
 
             <!-- Card 2 -->
@@ -138,6 +142,9 @@
               <p class="problem-card-body">
                 Without pre-committed buyers, farmers slash prices at day's end. Market women wait specifically for this — exploiting the time pressure farmers face.
               </p>
+              <div class="problem-card-tag tag-amber">
+                <span>Unpredictable Pricing</span>
+              </div>
             </div>
 
             <!-- Card 3 -->
@@ -154,6 +161,9 @@
               <p class="problem-card-body">
                 Aboboyaa transport costs are settled informally on the spot, with no advance agreement — absorbing unpredictable portions of the farmer's revenue.
               </p>
+              <div class="problem-card-tag tag-teal">
+                <span>Informal Logistics</span>
+              </div>
             </div>
           </div>
         </div>
@@ -782,33 +792,46 @@ export default {
 
 /* Section 2 — The Problem We Solve */
 .problem-section {
-  background-color: var(--color-white);
-  border-bottom: 1px solid var(--color-neutral-100);
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #E9ECEF;
 }
 
 .problem-section .section-container {
-  padding: 48px var(--space-6);
+  padding: 56px var(--space-6);
 }
 
 .problem-section .section-header-text {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 36px;
+}
+
+.section-tag {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #2D6A4F !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background-color: #D8F3DC;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  display: inline-block;
+  margin-bottom: 10px;
 }
 
 .problem-section .section-title {
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--color-neutral-900);
-  margin: 0 0 8px 0;
+  font-size: 28px !important;
+  font-weight: 800 !important;
+  color: #111827 !important;
+  margin: 0 0 10px 0 !important;
   letter-spacing: -0.5px;
 }
 
 .problem-section .section-subtitle {
-  font-size: 14px;
-  color: var(--color-neutral-500);
-  margin: 0 auto;
-  max-width: 480px;
-  line-height: 1.5;
+  font-size: 14px !important;
+  color: #64748B !important;
+  margin: 0 auto !important;
+  max-width: 520px;
+  line-height: 1.6;
 }
 
 .problem-cards-grid {
@@ -818,20 +841,20 @@ export default {
 }
 
 .problem-card {
-  background-color: var(--color-white);
-  border-radius: 12px;
-  padding: 24px;
-  border: 1px solid var(--color-neutral-100);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  background-color: #FFFFFF;
+  border-radius: 16px;
+  padding: 26px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  transition: all var(--transition-base);
+  transition: all 0.25s ease;
 }
 
 .problem-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.1), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
 }
 
 .card-accent-green { border-top: 4px solid var(--color-primary); }
@@ -839,13 +862,13 @@ export default {
 .card-accent-teal { border-top: 4px solid var(--color-tertiary); }
 
 .problem-icon-wrapper {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .green-icon-bg { background-color: var(--color-primary-subtle); color: var(--color-primary); }
@@ -853,19 +876,33 @@ export default {
 .teal-icon-bg { background-color: var(--color-tertiary-subtle); color: var(--color-tertiary); }
 
 .problem-card-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--color-neutral-900);
-  margin: 0 0 10px 0;
-  line-height: 1.25;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #0F172A !important;
+  margin: 0 0 10px 0 !important;
+  line-height: 1.3;
 }
 
 .problem-card-body {
-  font-size: 16px;
-  color: var(--color-neutral-700);
-  line-height: 1.55;
+  font-size: 16px !important;
+  color: #475569 !important;
+  line-height: 1.6;
   margin: 0;
 }
+
+.problem-card-tag {
+  margin-top: 16px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+.tag-red { background-color: #FEE2E2; color: #991B1B; }
+.tag-amber { background-color: #FEF3C7; color: #92400E; }
+.tag-teal { background-color: #CCFBF1; color: #115E59; }
 
 /* Section 3 — The Supply Chain */
 .supply-chain-section {
