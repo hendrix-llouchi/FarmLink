@@ -181,17 +181,17 @@
               </div>
 
               <div v-if="localProducts.length === 0" class="empty-listings-card">
-                <div class="empty-icon-box">🥦</div>
-                <h3>No produce listed yet</h3>
-                <p>List your vegetables now to connect with nearby buyers.</p>
-                <AppButton variant="primary" size="md" @click="scrollToForm">List Your First Produce</AppButton>
+                <div class="empty-icon-box">🍅</div>
+                <h3>No tomatoes listed yet</h3>
+                <p>List your tomatoes now to connect with buyers at Takoradi Market Circle.</p>
+                <AppButton variant="primary" size="md" @click="scrollToForm">List Your First Tomatoes</AppButton>
               </div>
 
               <div v-else class="listings-grid">
                 <AppCard v-for="product in localProducts" :key="product.id" class="product-card" paddingSize="sm">
                   <div class="product-img-box">
-                    <img v-if="product.image_path" :src="product.image_path.startsWith('data:') || product.image_path.startsWith('http') ? product.image_path : '/storage/' + product.image_path" :alt="product.name" class="product-image" />
-                    <div v-else class="product-placeholder">🥦</div>
+                    <img v-if="product.image_path" :src="product.image_path.startsWith('data:') || product.image_path.startsWith('http') || product.image_path.startsWith('/') ? product.image_path : '/storage/' + product.image_path" :alt="product.name" class="product-image" />
+                    <div v-else class="product-placeholder">🍅</div>
                     <div class="badge-overlay">
                       <AppBadge :variant="product.quantity > 0 ? 'success' : 'danger'" size="sm">
                         {{ product.quantity > 0 ? 'Available' : 'Sold Out' }}
@@ -321,30 +321,32 @@
                   <span v-if="form.errors.image" class="error-validation-text">{{ form.errors.image }}</span>
                 </div>
 
-                <!-- Vegetable Name -->
+                <!-- Tomato Listing Name -->
                 <AppInput
                   id="name"
                   v-model="form.name"
-                  label="Vegetable Name"
-                  placeholder="e.g. Fresh Red Tomatoes"
+                  label="Tomato Variety Name"
+                  placeholder="e.g. Fresh Roma Tomatoes"
                   required
                   :error="form.errors.name"
                 />
 
-                <!-- Category -->
+                <!-- Category (Tomato-only) -->
                 <AppInput
                   id="category"
                   v-model="form.category"
                   type="select"
-                  label="Category"
+                  label="Tomato Category"
                   required
                   :error="form.errors.category"
                 >
-                  <option value="" disabled>Select category</option>
-                  <option value="Vegetable">Vegetable (General)</option>
-                  <option value="Leafy Green">Leafy Green</option>
-                  <option value="Root/Tuber">Root / Tuber</option>
-                  <option value="Other">Other</option>
+                  <option value="" disabled>Select tomato type</option>
+                  <option value="Tomato">Tomato (General)</option>
+                  <option value="Tomato">Roma Tomatoes</option>
+                  <option value="Tomato">Beefsteak Tomatoes</option>
+                  <option value="Tomato">Cherry Tomatoes</option>
+                  <option value="Tomato">Plum Tomatoes</option>
+                  <option value="Tomato">Local Red Tomatoes</option>
                 </AppInput>
 
                 <!-- Quantity -->
@@ -608,7 +610,7 @@ export default {
       form.quality_grade = product.quality_grade || 'A';
       form.unit = product.unit || 'Crate';
       form.minimum_order_qty = product.minimum_order_qty || 1;
-      imagePreview.value = product.image_path ? (product.image_path.startsWith('data:') || product.image_path.startsWith('http') ? product.image_path : '/storage/' + product.image_path) : null;
+      imagePreview.value = product.image_path ? (product.image_path.startsWith('data:') || product.image_path.startsWith('http') || product.image_path.startsWith('/') ? product.image_path : '/storage/' + product.image_path) : null;
       scrollToForm();
     };
 

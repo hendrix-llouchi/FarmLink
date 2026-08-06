@@ -94,7 +94,7 @@
             v-model="search" 
             @input="debounceSearch"
             type="text" 
-            placeholder="Search produce..." 
+            placeholder="Search tomatoes (Roma, Beefsteak, Cherry...)" 
             class="search-input"
           />
         </div>
@@ -125,35 +125,28 @@
         :class="{ active: category === '' }" 
         @click="category = ''; applyFilters();"
       >
-        All Produce
+        🍅 All Tomatoes
       </button>
       <button 
         class="category-pill" 
-        :class="{ active: category === 'Vegetable' }" 
-        @click="category = 'Vegetable'; applyFilters();"
+        :class="{ active: qualityGrade === 'A' }" 
+        @click="qualityGrade = 'A'; category = 'Tomato'; applyFilters();"
       >
-        Vegetables
+        ⭐ Grade A — Premium
       </button>
       <button 
         class="category-pill" 
-        :class="{ active: category === 'Leafy Green' }" 
-        @click="category = 'Leafy Green'; applyFilters();"
+        :class="{ active: qualityGrade === 'B' }" 
+        @click="qualityGrade = 'B'; category = 'Tomato'; applyFilters();"
       >
-        Leafy Greens
+        ✅ Grade B — Standard
       </button>
       <button 
         class="category-pill" 
-        :class="{ active: category === 'Root/Tuber' }" 
-        @click="category = 'Root/Tuber'; applyFilters();"
+        :class="{ active: qualityGrade === 'C' }" 
+        @click="qualityGrade = 'C'; category = 'Tomato'; applyFilters();"
       >
-        Roots &amp; Tubers
-      </button>
-      <button 
-        class="category-pill" 
-        :class="{ active: category === 'Other' }" 
-        @click="category = 'Other'; applyFilters();"
-      >
-        Others
+        💰 Grade C — Budget
       </button>
     </div>
 
@@ -194,9 +187,10 @@
         </p>
       </div>
       <div class="corridor-stat-pills">
-        <span class="stat-pill">🍅 Tomatoes — Primary Crop</span>
+        <span class="stat-pill">🍅 Tomatoes — Only Crop</span>
         <span class="stat-pill">📅 Market Days — Tuesdays</span>
         <span class="stat-pill">🛺 Aboboyaa — Est. Transport Included</span>
+        <span class="stat-pill">🏆 Grade A, B &amp; C Available</span>
       </div>
     </div>
 
@@ -209,9 +203,9 @@
 
       <!-- Empty State -->
       <div v-if="products.length === 0" class="empty-state">
-        <div class="empty-icon">🥬</div>
-        <h3>No produce matches found</h3>
-        <p>Try resetting filters or adjusting search queries.</p>
+        <div class="empty-icon">🍅</div>
+        <h3>No tomatoes match your search</h3>
+        <p>Try resetting filters or adjusting your search terms.</p>
         <button @click="clearFilters" class="reset-filters-btn">Reset Filters</button>
       </div>
 
@@ -222,11 +216,11 @@
           <div class="product-img-wrapper">
             <img 
               v-if="product.image_path" 
-              :src="product.image_path.startsWith('http') ? product.image_path : '/storage/' + product.image_path" 
+              :src="product.image_path.startsWith('http') || product.image_path.startsWith('/') ? product.image_path : '/storage/' + product.image_path" 
               :alt="product.name" 
               class="product-image"
             />
-            <div v-else class="product-placeholder">🥦</div>
+            <div v-else class="product-placeholder">🍅</div>
             <div class="price-badge-overlay">GH₵ {{ Number(product.price).toFixed(2) }}</div>
           </div>
 
