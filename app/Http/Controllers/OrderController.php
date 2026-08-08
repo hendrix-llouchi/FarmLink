@@ -39,6 +39,7 @@ class OrderController extends Controller
             'quantity_ordered' => ['required', 'integer', 'min:1'],
             'payment_network' => ['required', 'string', 'in:MTN'],
             'payment_number' => ['required', 'string', 'regex:/^[0-9]{10}$/'],
+            'delivery_address' => ['nullable', 'string', 'max:255'],
         ]);
 
         $referenceId = (string) \Illuminate\Support\Str::uuid();
@@ -81,6 +82,7 @@ class OrderController extends Controller
                     'payment_status'            => 'unpaid',
                     'momo_reference'            => $referenceId,
                     'estimated_transport_cost'  => $estimatedTransportCost,
+                    'delivery_address'          => $request->delivery_address ?: (auth()->user()->location ?? 'Takoradi'),
                 ]);
             });
 
@@ -139,6 +141,7 @@ class OrderController extends Controller
     {
         $orders = Order::whereNull('driver_id')
             ->where('status', 'pending')
+            ->where('payment_status', '!=', 'unpaid')
             ->with(['buyer', 'product.user'])
             ->latest()
             ->get();
@@ -149,9 +152,16 @@ class OrderController extends Controller
             ->latest()
             ->get();
 
+        $completedTrips = Order::where('driver_id', auth()->id())
+            ->where('status', 'delivered')
+            ->with(['buyer', 'product.user', 'ratings'])
+            ->latest()
+            ->get();
+
         return Inertia::render('DriverDashboard', [
-            'orders' => $orders,
-            'activeTrips' => $activeTrips
+            'orders'         => $orders,
+            'activeTrips'    => $activeTrips,
+            'completedTrips' => $completedTrips,
         ]);
     }
 
@@ -164,6 +174,12 @@ class OrderController extends Controller
             DB::transaction(function () use ($id) {
                 // Lock the order for update to prevent concurrent assignment
                 $order = Order::lockForUpdate()->findOrFail($id);
+
+                if ($order->payment_status === 'unpaid') {
+                    throw ValidationException::withMessages([
+                        'order' => ['This order has not been paid for by the buyer yet. Transport can only be accepted once payment is locked in escrow.']
+                    ]);
+                }
 
                 if ($order->driver_id !== null) {
                     throw ValidationException::withMessages([

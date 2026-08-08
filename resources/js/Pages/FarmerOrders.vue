@@ -149,6 +149,27 @@
               <div class="buyer-meta">
                 <span class="buyer-label">Buyer:</span>
                 <span class="buyer-name">{{ order.buyer?.name || 'Local Buyer' }}</span>
+
+                <!-- Buyer type badge -->
+                <span
+                  v-if="order.buyer?.buyer_type === 'market_trader'"
+                  class="buyer-type-pill trader-pill"
+                >
+                  Market Trader 🏪
+                </span>
+                <span
+                  v-else-if="order.buyer?.buyer_type === 'restaurant'"
+                  class="buyer-type-pill restaurant-pill"
+                >
+                  Restaurant 🍽️
+                </span>
+                <span
+                  v-else-if="order.buyer?.buyer_type === 'individual'"
+                  class="buyer-type-pill individual-pill"
+                >
+                  Individual 🧍
+                </span>
+
                 <span class="buyer-location">📍 {{ order.buyer?.location || 'Takoradi' }}</span>
               </div>
               <div class="total-paid-meta">
@@ -157,38 +178,26 @@
               </div>
             </div>
 
-            <!-- Logistics Info & Action Row -->
+            <!-- Transport Line (arranged by FarmLink) -->
+            <div class="transport-arranged-line">
+              <span>🛺 Est. Transport: ₵{{ order.estimated_transport_cost ? Number(order.estimated_transport_cost).toFixed(2) : '—' }} — arranged by FarmLink</span>
+            </div>
+
+            <!-- Logistics Info & Automated Status Row -->
             <div class="order-logistics-row">
               <div v-if="order.driver" class="driver-info-box">
                 <div class="driver-avatar-mini">🚚</div>
                 <div class="driver-meta-text">
                   <span class="driver-name-lbl">Driver: <strong>{{ order.driver.name }}</strong></span>
-                  <span class="driver-loc-lbl">Location: {{ order.driver.location }}</span>
+                  <span class="driver-loc-lbl">Location: {{ order.driver.location || 'Takoradi' }}</span>
                 </div>
                 <span class="driver-cost-badge">Cost: GH₵{{ Number(order.estimated_transport_cost || 0).toFixed(2) }}</span>
               </div>
-              <div v-else-if="order.transport_requested" class="searching-driver-box">
-                <span class="pulse-indicator"></span>
-                <span class="searching-txt">Searching for transporter...</span>
+              <div v-else-if="order.payment_status === 'unpaid'" class="awaiting-payment-badge-farmer" style="display: flex; align-items: center; justify-content: center; gap: 6px; background-color: var(--color-neutral-100); color: var(--color-neutral-500); font-size: var(--font-size-xs); font-weight: bold; height: 36px; border-radius: var(--radius-md); border: 1px dashed var(--color-border); width: 100%;">
+                <span>🔒 Awaiting Buyer Payment</span>
               </div>
-              <div v-else class="request-transport-action-row">
-                <div v-if="order.payment_status === 'unpaid'" class="awaiting-payment-badge-farmer" style="display: flex; align-items: center; justify-content: center; gap: 6px; background-color: var(--color-neutral-100); color: var(--color-neutral-500); font-size: var(--font-size-xs); font-weight: bold; height: 36px; border-radius: var(--radius-md); border: 1px dashed var(--color-border); width: 100%;">
-                  <span>🔒 Awaiting Buyer Payment</span>
-                </div>
-                <button 
-                  v-else
-                  @click="requestTransport(order.id)" 
-                  class="request-transport-btn"
-                  :disabled="requestingId === order.id"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="1" y="3" width="15" height="13" />
-                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
-                    <circle cx="5.5" cy="18.5" r="2.5" />
-                    <circle cx="18.5" cy="18.5" r="2.5" />
-                  </svg>
-                  <span>{{ requestingId === order.id ? 'Requesting...' : 'Request Transport' }}</span>
-                </button>
+              <div v-else class="searching-driver-box" style="display: flex; align-items: center; justify-content: center; gap: 8px; background-color: var(--color-primary-subtle); color: var(--color-primary); font-size: var(--font-size-xs); font-weight: bold; height: 36px; border-radius: var(--radius-md); border: 1px solid var(--color-primary-light); width: 100%;">
+                <span>🛺 Transport Arranged by FarmLink (Awaiting Aboboyaa Driver)</span>
               </div>
             </div>
 
@@ -238,7 +247,7 @@
 
 <script>
 import { Link, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 export default {
   name: 'FarmerOrders',
@@ -254,6 +263,18 @@ export default {
   setup() {
     const requestingId = ref(null);
     const imgErrors = ref({});
+    let pollInterval = null;
+
+    onMounted(() => {
+      pollInterval = setInterval(() => {
+        router.reload({ preserveScroll: true, only: ['orders'] });
+      }, 5000);
+    });
+
+    onUnmounted(() => {
+      if (pollInterval) clearInterval(pollInterval);
+    });
+
 
     const formatDate = (dateString) => {
       if (!dateString) return '';
@@ -538,6 +559,39 @@ export default {
   border-radius: var(--radius-pill);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
+}
+
+.buyer-type-pill {
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.trader-pill {
+  background-color: var(--color-primary-lighter);
+  color: var(--color-primary);
+}
+
+.restaurant-pill {
+  background-color: #FEF3C7;
+  color: #92400E;
+}
+
+.individual-pill {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+}
+
+.transport-arranged-line {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-neutral-50);
+  border-top: 1px dashed var(--color-border);
 }
 
 /* Flash alerts */

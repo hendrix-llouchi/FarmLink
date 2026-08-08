@@ -266,6 +266,12 @@
                   <div class="order-middle-row" style="margin: var(--space-2) 0;">
                     <h4 class="buyer-name-title" style="font-size: var(--font-size-sm); font-weight: bold; margin: 0 0 var(--space-1) 0;">{{ order.buyer?.name || 'Local Buyer' }}</h4>
                     <p class="order-desc-detail" style="font-size: var(--font-size-xs); color: var(--color-neutral-700); margin: 0;">{{ order.quantity_ordered }}x {{ order.product?.name || 'Produce' }} • {{ order.buyer?.location || 'Takoradi' }}</p>
+                    <div v-if="order.buyer?.phone_number" class="buyer-phone-row" style="margin-top: 4px;">
+                      <a :href="'tel:' + order.buyer.phone_number" style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: var(--color-primary); background-color: var(--color-primary-lighter); padding: 2px 8px; border-radius: var(--radius-pill); text-decoration: none;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        <span>Call Buyer: {{ order.buyer.phone_number }}</span>
+                      </a>
+                    </div>
                   </div>
                   <div v-if="order.payment_status === 'unpaid'" class="awaiting-payment-badge-farmer" style="display: flex; align-items: center; justify-content: center; gap: 6px; background-color: var(--color-neutral-100); color: var(--color-neutral-500); font-size: 10px; font-weight: bold; height: 32px; border-radius: var(--radius-sm); border: 1px dashed var(--color-border); width: 100%;">
                     <span>🔒 Awaiting Buyer Payment</span>
@@ -525,7 +531,7 @@
 <script>
 import { useForm, Link, router } from '@inertiajs/vue3';
 import FreshnessBar from '@/Components/UI/FreshnessBar.vue';
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted, onUnmounted } from 'vue';
 import AppButton from '../Components/UI/AppButton.vue';
 import AppInput from '../Components/UI/AppInput.vue';
 import AppCard from '../Components/UI/AppCard.vue';
@@ -560,6 +566,18 @@ export default {
     const imagePreview = ref(null);
     const imgErrors = ref({});
     const addFormSection = ref(null);
+
+    let pollInterval = null;
+
+    onMounted(() => {
+      pollInterval = setInterval(() => {
+        router.reload({ preserveScroll: true, only: ['products', 'pendingOrders', 'metrics'] });
+      }, 5000);
+    });
+
+    onUnmounted(() => {
+      if (pollInterval) clearInterval(pollInterval);
+    });
 
     // Frontend Reactive copy of products to support mock edit/delete in prototype
     const localProducts = ref([...props.products]);

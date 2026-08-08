@@ -318,6 +318,12 @@
                   <span>•</span>
                   <span>📍 {{ selectedProduct.user?.location || 'Takoradi' }}</span>
                 </div>
+                <div v-if="selectedProduct.user?.phone_number" class="farmer-phone-contact" style="margin-top: var(--space-2); display: flex; align-items: center; gap: var(--space-2);">
+                  <a :href="'tel:' + selectedProduct.user.phone_number" class="btn-call-farmer" style="display: inline-flex; align-items: center; gap: 6px; font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); color: var(--color-primary); background-color: var(--color-primary-lighter); padding: 4px 12px; border-radius: var(--radius-pill); text-decoration: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <span>Call Farmer: {{ selectedProduct.user.phone_number }}</span>
+                  </a>
+                </div>
               </div>
             </div>
 
@@ -366,11 +372,25 @@
                     <span>Order:</span>
                     <span>{{ orderQuantity }}x {{ selectedProduct.name }}</span>
                   </div>
-                  <div class="summary-line total">
-                    <span>Total Amount:</span>
-                    <span>GH₵ {{ Number(selectedProduct.price * orderQuantity).toFixed(2) }}</span>
+                  <div class="summary-line">
+                    <span>Product Cost:</span>
+                    <span>₵ {{ Number(selectedProduct.price * orderQuantity).toFixed(2) }}</span>
+                  </div>
+                  <div class="summary-line transport-line">
+                    <span>Estimated Transport <span class="est-tag">Est.</span>:</span>
+                    <span>₵ {{ (40.00 + (orderQuantity * 2.00)).toFixed(2) }}</span>
+                  </div>
+                  <div class="route-hint-sub">(Daboase → Market Circle)</div>
+                  <div class="summary-line total border-top">
+                    <span>Total in Escrow:</span>
+                    <span class="total-escrow-amount">₵ {{ ((selectedProduct.price * orderQuantity) + 40.00 + (orderQuantity * 2.00)).toFixed(2) }}</span>
                   </div>
                 </div>
+
+                <!-- Caption Note -->
+                <p class="escrow-caption-note">
+                  Your product payment goes to the farmer. Transport is released to the driver on confirmed delivery. Transport cost is an estimate for this route.
+                </p>
 
                 <div class="input-form-group">
                   <label class="form-input-label">Mobile Money Network</label>
@@ -399,6 +419,19 @@
                   />
                 </div>
 
+                <div class="input-form-group">
+                  <label for="delivery-addr" class="form-input-label">Delivery / Drop-off Address</label>
+                  <input 
+                    id="delivery-addr" 
+                    v-model="deliveryAddress" 
+                    type="text" 
+                    placeholder="e.g. Takoradi Market Circle, Stall B4 or Anaji Estate" 
+                    class="form-text-input"
+                    :disabled="processing"
+                  />
+                  <span class="delivery-address-hint" style="font-size: 11px; color: var(--color-neutral-500); margin-top: 2px;">This address will be provided to your Aboboyaa driver for drop-off.</span>
+                </div>
+
                 <!-- Error Display -->
                 <div v-if="errorMessage" class="error-alert-text">
                   {{ errorMessage }}
@@ -410,7 +443,7 @@
                     class="btn-checkout-primary"
                     :disabled="processing"
                   >
-                    Pay GH₵ {{ Number(selectedProduct.price * orderQuantity).toFixed(2) }}
+                    Pay ₵ {{ ((selectedProduct.price * orderQuantity) + 40.00 + (orderQuantity * 2.00)).toFixed(2) }}
                   </button>
                   <button 
                     @click="checkoutStep = 1" 
@@ -478,7 +511,7 @@
 </template>
 
 <script>
-import { router, Link } from '@inertiajs/vue3';
+import { router, Link, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import FreshnessBar from '@/Components/UI/FreshnessBar.vue';
 
@@ -499,6 +532,7 @@ export default {
     }
   },
   setup(props) {
+    const page = usePage();
     const search = ref(props.filters.search || '');
     const category = ref(props.filters.category || '');
     const location = ref(props.filters.location || '');
@@ -518,6 +552,7 @@ export default {
     const paymentPin = ref('');
     const paymentProcessing = ref(false);
     const paymentSuccess = ref(false);
+    const deliveryAddress = ref(page.props.auth?.user?.location || 'Takoradi Market Circle');
 
     let searchTimeout = null;
 
@@ -612,7 +647,8 @@ export default {
         product_id: selectedProduct.value.id,
         quantity_ordered: orderQuantity.value,
         payment_network: paymentNetwork.value,
-        payment_number: paymentNumber.value
+        payment_number: paymentNumber.value,
+        delivery_address: deliveryAddress.value
       }, {
         onSuccess: () => {
           document.body.style.overflow = '';
@@ -1466,6 +1502,36 @@ export default {
   border-top: 1px dashed var(--color-primary-light);
   padding-top: var(--space-2);
   margin-top: 2px;
+}
+
+.route-hint-sub {
+  font-size: 10px;
+  color: var(--color-neutral-500);
+  margin-top: -2px;
+  margin-bottom: 2px;
+}
+
+.est-tag {
+  font-size: 9px;
+  background-color: var(--color-neutral-200);
+  color: var(--color-neutral-700);
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.total-escrow-amount {
+  color: var(--color-primary);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+}
+
+.escrow-caption-note {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-3);
+  line-height: 1.35;
 }
 
 /* Radio buttons momo networks */

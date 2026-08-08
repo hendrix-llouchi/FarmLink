@@ -11,41 +11,78 @@
 
       <!-- User Profile Summary in Sidebar -->
       <div class="sidebar-user">
-        <div class="user-avatar driver" style="background-color: var(--color-accent);">
-          {{ $page.props.auth?.user?.name?.charAt(0).toUpperCase() || 'D' }}
+        <div class="user-avatar driver">
+          {{ driverDetails.name.charAt(0).toUpperCase() }}
         </div>
         <div class="user-info">
-          <span class="user-name">{{ $page.props.auth?.user?.name || 'Driver' }}</span>
-          <span class="user-role">Driver Portal</span>
+          <span class="user-name">{{ driverDetails.name }}</span>
+          <span class="user-role">{{ driverDetails.model }}</span>
         </div>
       </div>
 
+      <!-- Sidebar Menu Tabs -->
       <nav class="sidebar-menu">
-        <Link href="/driver/dashboard" class="menu-item active">
+        <button 
+          @click="activeTab = 'jobs'" 
+          class="menu-item" 
+          :class="{ active: activeTab === 'jobs' }"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="1" y="3" width="15" height="13"/>
             <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
             <circle cx="5.5" cy="18.5" r="2.5"/>
             <circle cx="18.5" cy="18.5" r="2.5"/>
           </svg>
-          <span class="menu-label">Deliveries</span>
-        </Link>
+          <span class="menu-label">Available Jobs</span>
+        </button>
+
+        <button 
+          @click="activeTab = 'history'" 
+          class="menu-item" 
+          :class="{ active: activeTab === 'history' }"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span class="menu-label">Trip History</span>
+        </button>
+
+        <button 
+          @click="activeTab = 'earnings'" 
+          class="menu-item" 
+          :class="{ active: activeTab === 'earnings' }"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="6" width="20" height="12" rx="2"/>
+            <circle cx="12" cy="12" r="2"/>
+            <path d="M6 12h.01M18 12h.01"/>
+          </svg>
+          <span class="menu-label">Earnings Overview</span>
+        </button>
+
+        <button 
+          @click="activeTab = 'profile'" 
+          class="menu-item" 
+          :class="{ active: activeTab === 'profile' }"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          <span class="menu-label">Driver Profile</span>
+        </button>
+
         <Link href="/notifications" class="menu-item">
-          <div class="menu-item-badge-wrap" style="display: flex; align-items: center; width: 100%; gap: var(--space-3);">
+          <div class="menu-item-badge-wrap">
             <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>
             </svg>
-            <span class="menu-label" style="display: inline;">Alerts</span>
-            <span v-if="$page.props.auth?.unread_notifications_count > 0" class="badge-count-sidebar" style="margin-left: auto; background-color: var(--color-danger); color: var(--color-white); font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); padding: 2px var(--space-2); border-radius: var(--radius-pill); min-width: 18px; text-align: center;">
+            <span class="menu-label">Alerts</span>
+            <span v-if="$page.props.auth?.unread_notifications_count > 0" class="badge-count-sidebar">
               {{ $page.props.auth.unread_notifications_count }}
             </span>
           </div>
-        </Link>
-        <Link href="/settings" class="menu-item">
-          <svg xmlns="http://www.w3.org/2000/svg" class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-          </svg>
-          <span class="menu-label">Settings</span>
         </Link>
       </nav>
 
@@ -61,271 +98,626 @@
 
     <!-- Mobile Top Header -->
     <header class="mobile-header">
-      <div class="header-brand" style="display: flex; align-items: center; gap: var(--space-2);">
+      <div class="header-brand">
         <span class="logo-text">FarmLink</span>
-        <span class="mobile-user-name" style="font-size: var(--font-size-xs); color: var(--color-neutral-500); border-left: 1.5px solid var(--color-border); padding-left: var(--space-2); margin-left: var(--space-1); font-weight: var(--font-weight-medium);">
-          {{ $page.props.auth?.user?.name }}
+        <span class="mobile-user-name">
+          {{ driverDetails.name }}
         </span>
       </div>
       <div class="header-actions">
-        <Link href="/logout" method="post" as="button" class="icon-action-btn logout-header-btn" title="Log Out">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
-          </svg>
-        </Link>
+        <button class="status-pill-toggle" @click="isOnline = !isOnline" :class="{ online: isOnline }">
+          <span class="toggle-dot"></span>
+          <span class="toggle-label">{{ isOnline ? 'ONLINE' : 'OFFLINE' }}</span>
+        </button>
       </div>
     </header>
 
-    <!-- Main Content Layout wrapper -->
+    <!-- Main Content Body -->
     <div class="main-layout">
       <main class="content-body">
-        
-        <!-- Main Scrollable Body -->
         <div class="main-content">
 
-      <!-- ═══ ACTIVE TRIP SECTION ═══ -->
-      <section class="section-block">
-        <div class="section-header">
-          <h2 class="section-title">Active Trip</h2>
-        </div>
-
-        <!-- Empty Active Trip State -->
-        <div v-if="activeTrips.length === 0" class="empty-active-card">
-          <svg xmlns="http://www.w3.org/2000/svg" class="empty-state-svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-            <circle cx="12" cy="10" r="3"/>
-          </svg>
-          <h3 class="empty-title">No Active Trips</h3>
-          <p class="empty-sub">Accept an available job below to begin a delivery transit.</p>
-        </div>
-
-        <!-- Active Trip Cards -->
-        <div v-else class="active-trips-list">
-          <div v-for="order in activeTrips" :key="order.id" class="active-trip-card">
-            <!-- Status & Payout Row -->
-            <div class="trip-status-row">
-              <span class="in-progress-badge">IN PROGRESS</span>
-              <div class="payout-col">
-                <span class="payout-label-sm">Estimated Payout</span>
-                <span class="payout-amount">
-                  GHS {{ order.estimated_transport_cost
-                    ? Number(order.estimated_transport_cost).toFixed(2)
-                    : Number(order.total_price).toFixed(2) }}
-                </span>
+          <!-- ══════════════════════════════════════════════════════════════ -->
+          <!-- SCREEN 1: JOBS TAB (Real Available Jobs & Active Deliveries)   -->
+          <!-- ══════════════════════════════════════════════════════════════ -->
+          <div v-if="activeTab === 'jobs'" class="tab-content-view">
+            <!-- Top Controls Row: Status Toggle + Rating Badge -->
+            <div class="top-status-bar">
+              <div class="status-control-box">
+                <span class="control-sublabel">DRIVER STATUS</span>
+                <button class="online-switch" :class="{ is_active: isOnline }" @click="isOnline = !isOnline">
+                  <span class="switch-knob"></span>
+                  <span class="switch-text">{{ isOnline ? 'ONLINE' : 'OFFLINE' }}</span>
+                </button>
               </div>
-            </div>
 
-            <!-- Progress Steps: Farm → Transit → Market -->
-            <div class="progress-steps-row">
-              <div class="progress-step" :class="{
-                completed: order.status === 'in_transit' || order.status === 'delivered',
-                active: order.status === 'processing'
-              }">
-                <div class="step-icon-circle">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                    <polyline points="9 22 9 12 15 12 15 22"/>
+              <div class="rating-control-box">
+                <span class="control-sublabel">RATING</span>
+                <div class="rating-badge-pill">
+                  <span class="rating-num">{{ driverRatingFormatted }}</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#F4A261" stroke="none">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                   </svg>
-                </div>
-                <span class="step-name">Farm</span>
-              </div>
-              <div class="step-connector" :class="{ completed: order.status === 'in_transit' || order.status === 'delivered' }"></div>
-              <div class="progress-step" :class="{
-                completed: order.status === 'delivered',
-                active: order.status === 'in_transit',
-                pending: order.status === 'processing'
-              }">
-                <div class="step-icon-circle">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <rect x="1" y="3" width="15" height="13"/>
-                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
-                    <circle cx="5.5" cy="18.5" r="2.5"/>
-                    <circle cx="18.5" cy="18.5" r="2.5"/>
-                  </svg>
-                </div>
-                <span class="step-name">Transit</span>
-              </div>
-              <div class="step-connector" :class="{ completed: order.status === 'delivered' }"></div>
-              <div class="progress-step" :class="{
-                completed: order.status === 'delivered',
-                pending: order.status !== 'delivered'
-              }">
-                <div class="step-icon-circle">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/>
-                  </svg>
-                </div>
-                <span class="step-name">Market</span>
-              </div>
-            </div>
-
-            <!-- Pickup & Drop-off -->
-            <div class="route-info-block">
-              <div class="route-row">
-                <span class="route-type-tag pickup-tag">PICKUP</span>
-                <div class="route-detail">
-                  <span class="route-location">{{ order.product?.user?.location || 'Takoradi Market' }}</span>
-                  <span class="route-party">{{ order.product?.user?.name || 'Local Farmer' }}</span>
-                </div>
-              </div>
-              <div class="route-connector-line"></div>
-              <div class="route-row">
-                <span class="route-type-tag dropoff-tag">DROP-OFF</span>
-                <div class="route-detail">
-                  <span class="route-location">{{ order.buyer?.location || 'Tarkwa Center' }}</span>
-                  <span class="route-party">{{ order.buyer?.name || 'Local Buyer' }}</span>
                 </div>
               </div>
             </div>
 
-            <!-- Cargo Info -->
-            <div class="cargo-chip">
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            <!-- Revenue Today Banner -->
+            <div class="revenue-banner-card">
+              <div class="banner-info">
+                <span class="banner-subtitle">Earnings Today</span>
+                <h1 class="banner-amount">GHS {{ todayEarningsCalculated }}</h1>
+              </div>
+              <div class="banner-icon-watermark">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <rect x="2" y="6" width="20" height="12" rx="2"/>
+                  <circle cx="12" cy="12" r="2"/>
+                  <path d="M6 12h.01M18 12h.01"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Active Trip Section -->
+            <section v-if="activeTrips && activeTrips.length > 0" class="section-block active-section">
+              <div class="section-header">
+                <h2 class="section-title">Active Delivery</h2>
+                <span class="active-pulse-badge">IN TRANSIT</span>
+              </div>
+
+              <div v-for="order in activeTrips" :key="order.id" class="active-trip-card">
+                <div class="trip-status-row">
+                  <div class="payout-col">
+                    <span class="payout-label-sm">Transport Fee</span>
+                    <span class="payout-amount">
+                      GHS {{ order.estimated_transport_cost ? Number(order.estimated_transport_cost).toFixed(2) : Number(order.total_price).toFixed(2) }}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Delivery Steps -->
+                <div class="progress-steps-row">
+                  <div class="progress-step" :class="{ completed: order.status === 'in_transit' || order.status === 'delivered', active: order.status === 'processing' }">
+                    <div class="step-icon-circle">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                    </div>
+                    <span class="step-name">Farm Gate</span>
+                  </div>
+                  <div class="step-connector" :class="{ completed: order.status === 'in_transit' || order.status === 'delivered' }"></div>
+                  <div class="progress-step" :class="{ completed: order.status === 'delivered', active: order.status === 'in_transit' }">
+                    <div class="step-icon-circle">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                    </div>
+                    <span class="step-name">Transit</span>
+                  </div>
+                  <div class="step-connector" :class="{ completed: order.status === 'delivered' }"></div>
+                  <div class="progress-step" :class="{ completed: order.status === 'delivered', pending: order.status !== 'delivered' }">
+                    <div class="step-icon-circle">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
+                    </div>
+                    <span class="step-name">Market</span>
+                  </div>
+                </div>
+
+                <!-- Route info -->
+                <div class="route-info-block">
+                  <div class="route-row">
+                    <span class="route-type-tag pickup-tag">PICKUP</span>
+                    <div class="route-detail">
+                      <span class="route-location">{{ order.product?.user?.location || 'Farm Location' }}</span>
+                      <span class="route-party">Farmer: {{ order.product?.user?.name || 'Local Farmer' }}</span>
+                      <div v-if="order.product?.user?.phone_number" class="farmer-contact-row" style="margin-top: 6px; display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: var(--font-size-xs); font-weight: bold; color: var(--color-primary);">📞 {{ order.product.user.phone_number }}</span>
+                        <a :href="'tel:' + order.product.user.phone_number" class="btn-call-farmer" style="background-color: var(--color-primary); color: white; border-radius: var(--radius-sm); font-size: 11px; font-weight: bold; padding: 3px 10px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">Call Farmer</a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="route-connector-line"></div>
+                  <div class="route-row">
+                    <span class="route-type-tag dropoff-tag">DROP-OFF</span>
+                    <div class="route-detail">
+                      <span class="route-location">{{ order.delivery_address || order.buyer?.location || 'Takoradi' }}</span>
+                      <span class="route-party">Buyer: <strong>{{ order.buyer?.name || 'Local Buyer' }}</strong></span>
+                      <div v-if="order.buyer?.phone_number" class="buyer-contact-row" style="margin-top: 6px; display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: var(--font-size-xs); font-weight: bold; color: var(--color-primary);">📞 {{ order.buyer.phone_number }}</span>
+                        <a :href="'tel:' + order.buyer.phone_number" class="btn-call-buyer" style="background-color: var(--color-primary); color: white; border-radius: var(--radius-sm); font-size: 11px; font-weight: bold; padding: 3px 10px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">Call Buyer</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Cargo info chip -->
+                <div class="cargo-chip">
+                  📦 {{ order.quantity_ordered }}x {{ order.product?.name || 'Produce' }}
+                </div>
+
+                <div class="trip-action-buttons">
+                  <button 
+                    class="btn-picked-up" 
+                    :class="{ 'picked-up': order.status === 'in_transit' || order.status === 'delivered' }"
+                    :disabled="processingId === order.id || order.status === 'in_transit' || order.status === 'delivered'" 
+                    @click.prevent="pickupJob(order.id)"
+                  >
+                    <span v-if="processingId === order.id && order.status !== 'in_transit'">Updating...</span>
+                    <span v-else-if="order.status === 'in_transit' || order.status === 'delivered'">Picked Up ✓</span>
+                    <span v-else>Picked Up</span>
+                  </button>
+                  <button
+                    class="btn-delivered"
+                    @click="completeJob(order.id)"
+                    :disabled="processingId === order.id || order.status !== 'in_transit'"
+                  >
+                    <span v-if="processingId === order.id && order.status === 'in_transit'">Updating...</span>
+                    <span v-else>Delivered</span>
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <!-- Available Delivery Jobs Section -->
+            <section class="section-block">
+              <div class="section-header-flex">
+                <h2 class="section-title">Available Delivery Jobs</h2>
+                <span v-if="orders && orders.length > 0" class="nearby-badge">{{ orders.length }} AVAILABLE</span>
+              </div>
+
+              <!-- Empty Jobs State -->
+              <div v-if="!orders || orders.length === 0" class="empty-state-card">
+                <svg xmlns="http://www.w3.org/2000/svg" class="empty-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <rect x="1" y="3" width="15" height="13"/>
+                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                  <circle cx="5.5" cy="18.5" r="2.5"/>
+                  <circle cx="18.5" cy="18.5" r="2.5"/>
+                </svg>
+                <h3 class="empty-title">No Available Jobs</h3>
+                <p class="empty-desc">There are currently no pending produce orders awaiting an Aboboyaa driver. New delivery requests from farmers will appear here automatically.</p>
+              </div>
+
+              <!-- Real Jobs Feed List -->
+              <div v-else class="jobs-feed-list">
+                <div v-for="order in orders" :key="order.id" class="job-card-styled">
+                  <div class="job-header-row">
+                    <div class="produce-badge">
+                      <span class="produce-name">{{ order.product?.name?.toUpperCase() || 'PRODUCE' }}</span>
+                      <span class="produce-qty">{{ order.quantity_ordered }} {{ order.product?.unit || 'units' }}</span>
+                    </div>
+                    <div class="job-payout-box">
+                      <span class="payout-sub">Est. Transport Fee</span>
+                      <span class="payout-val">GHS {{ order.estimated_transport_cost ? Number(order.estimated_transport_cost).toFixed(2) : '40.00' }}</span>
+                    </div>
+                  </div>
+
+                  <div class="route-preview">
+                    <div class="route-pin-item">
+                      <span class="pin-dot green"></span>
+                      <span class="pin-text">Pickup: {{ order.product?.user?.location || 'Farm Gate' }} (Farmer: {{ order.product?.user?.name }})</span>
+                    </div>
+                    <div class="route-dot-connector"></div>
+                    <div class="route-pin-item">
+                      <span class="pin-dot orange"></span>
+                      <span class="pin-text">Drop-off: {{ order.delivery_address || order.buyer?.location || 'Takoradi' }} (Buyer: {{ order.buyer?.name }})</span>
+                    </div>
+                  </div>
+
+                  <div class="driver-payout-line">
+                    <span>🛺 Your payout for this trip: <strong>Est. ₵{{ order.estimated_transport_cost ? Number(order.estimated_transport_cost).toFixed(2) : '40.00' }}</strong></span>
+                  </div>
+
+                  <button 
+                    @click="acceptJob(order.id)" 
+                    :disabled="processingId === order.id" 
+                    class="btn-accept-primary"
+                  >
+                    <span v-if="processingId === order.id">Accepting...</span>
+                    <span v-else>Accept Job</span>
+                  </button>
+                </div>
+              </div>
+            </section>
+          </div>
+
+
+          <!-- ══════════════════════════════════════════════════════════════ -->
+          <!-- SCREEN 2: TRIP HISTORY TAB                                     -->
+          <!-- ══════════════════════════════════════════════════════════════ -->
+          <div v-else-if="activeTab === 'history'" class="tab-content-view">
+            <div class="section-header-flex">
+              <h2 class="page-main-title">Trip History</h2>
+            </div>
+
+            <!-- Search Bar -->
+            <div v-if="completedTrips && completedTrips.length > 0" class="search-input-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
               </svg>
-              {{ order.quantity_ordered }}x {{ order.product?.name || 'Fresh Produce' }}
+              <input 
+                type="text" 
+                v-model="historyQuery" 
+                placeholder="Search by produce or location..." 
+                class="search-text-input"
+              />
             </div>
 
-            <!-- Action Buttons: Picked Up + Delivered -->
-            <div class="trip-action-buttons">
-              <button 
-                class="btn-picked-up" 
-                :class="{ 'picked-up': order.status === 'in_transit' || order.status === 'delivered' }"
-                :disabled="processingId === order.id || order.status === 'in_transit' || order.status === 'delivered'" 
-                @click.prevent="pickupJob(order.id)"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                <span v-if="processingId === order.id && order.status !== 'in_transit'">Updating...</span>
-                <span v-else-if="order.status === 'in_transit' || order.status === 'delivered'">Picked Up ✓</span>
-                <span v-else>Picked Up</span>
-              </button>
-              <button
-                class="btn-delivered"
-                @click="completeJob(order.id)"
-                :disabled="processingId === order.id || order.status !== 'in_transit'"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-                <span v-if="processingId === order.id && order.status === 'in_transit'">Updating...</span>
-                <span v-else>Delivered</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div class="section-divider"></div>
-
-      <!-- ═══ AVAILABLE DELIVERY JOBS SECTION ═══ -->
-      <section class="section-block">
-        <div class="section-header">
-          <div>
-            <h2 class="section-title">Available Delivery Jobs</h2>
-            <p class="section-subtitle">Accept jobs to coordinate local vegetable transport</p>
-          </div>
-          <span class="nearby-badge">{{ orders.length }} NEARBY</span>
-        </div>
-
-        <!-- Empty Jobs State -->
-        <div v-if="orders.length === 0" class="empty-jobs-card">
-          <svg xmlns="http://www.w3.org/2000/svg" class="empty-state-svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="1" y="3" width="15" height="13"/>
-            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
-            <circle cx="5.5" cy="18.5" r="2.5"/>
-            <circle cx="18.5" cy="18.5" r="2.5"/>
-          </svg>
-          <h3 class="empty-title">No Deliveries Available</h3>
-          <p class="empty-sub">There are currently no pending orders awaiting a driver. Check back later.</p>
-        </div>
-
-        <!-- Available Jobs List -->
-        <div v-else class="jobs-list">
-          <div v-for="order in orders" :key="order.id" class="job-card">
-            <!-- Top Row: Payout + Distance -->
-            <div class="job-top-row">
-              <div class="job-payout-block">
-                <span class="est-payout-label">EST. PAYOUT</span>
-                <span class="est-payout-amount">
-                  GHS {{ order.estimated_transport_cost
-                    ? Number(order.estimated_transport_cost).toFixed(2)
-                    : Number(order.total_price).toFixed(2) }}
-                </span>
-              </div>
-              <span class="distance-badge">↕ ~{{ Math.floor(Math.random() * 20 + 3) }}.{{ Math.floor(Math.random() * 9) }} km</span>
+            <!-- Empty History State -->
+            <div v-if="!completedTrips || completedTrips.length === 0" class="empty-state-card">
+              <svg xmlns="http://www.w3.org/2000/svg" class="empty-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+              <h3 class="empty-title">No Trip History Yet</h3>
+              <p class="empty-desc">Completed deliveries will be archived here with full route breakdown and transport earnings.</p>
             </div>
 
-            <!-- Route Block -->
-            <div class="job-route-block">
-              <div class="job-route-row">
-                <span class="pickup-dot-icon"></span>
-                <div class="job-route-text">
-                  <span class="job-route-label">From:</span>
-                  <span class="job-route-value">{{ order.product?.user?.location || 'Takoradi Market' }}</span>
-                  <span class="job-cargo-sub">{{ order.quantity_ordered }}x {{ order.product?.name || 'Produce' }}</span>
+            <!-- Real Completed Trips List -->
+            <div v-else class="history-trips-list">
+              <div v-for="trip in filteredHistory" :key="trip.id" class="history-item-card">
+                <div class="history-card-top">
+                  <span class="history-date">{{ formatDate(trip.updated_at || trip.created_at) }}</span>
+                  <span class="delivered-status-chip">DELIVERED</span>
+                </div>
+                <h3 class="history-cargo-title">{{ trip.quantity_ordered }}x {{ trip.product?.name || 'Produce' }}</h3>
+
+                <div class="route-preview history-route">
+                  <div class="route-pin-item">
+                    <span class="pin-dot green"></span>
+                    <span class="pin-text">{{ trip.product?.user?.location || 'Farm Gate' }}</span>
+                  </div>
+                  <div class="route-dot-connector"></div>
+                  <div class="route-pin-item">
+                    <span class="pin-dot orange"></span>
+                    <span class="pin-text">{{ trip.buyer?.location || 'Buyer Destination' }}</span>
+                  </div>
+                </div>
+
+                <div class="history-card-footer">
+                  <span class="history-payout">GHS {{ Number(trip.estimated_transport_cost || 40.00).toFixed(2) }}</span>
+                  <div v-if="trip.ratings && trip.ratings.length > 0" class="history-rating-pill">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#F4A261" stroke="none">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                    <span>{{ trip.ratings[0].score }} (Rating)</span>
+                  </div>
                 </div>
               </div>
-              <div class="job-route-line"></div>
-              <div class="job-route-row">
-                <span class="dropoff-dot-icon"></span>
-                <div class="job-route-text">
-                  <span class="job-route-label">To:</span>
-                  <span class="job-route-value">{{ order.buyer?.location || 'Tarkwa Center' }}</span>
+            </div>
+          </div>
+
+
+          <!-- ══════════════════════════════════════════════════════════════ -->
+          <!-- SCREEN 3: EARNINGS OVERVIEW TAB (Using Real Order Data)        -->
+          <!-- ══════════════════════════════════════════════════════════════ -->
+          <div v-else-if="activeTab === 'earnings'" class="tab-content-view">
+            <div class="earnings-header-block">
+              <h2 class="page-main-title">Earnings Overview</h2>
+              <p class="page-subtitle">Track your farm-to-market delivery revenue.</p>
+            </div>
+
+            <!-- Total Payout Banner Card -->
+            <div class="total-payout-hero">
+              <span class="payout-hero-label">TOTAL PAYOUT EARNED</span>
+              <h1 class="payout-hero-amount">GHS {{ totalEarningsCalculated }}</h1>
+            </div>
+
+            <!-- Two Metric Stat Cards Grid -->
+            <div class="metrics-two-col">
+              <div class="metric-card-box">
+                <span class="metric-sub">TODAY'S EARNINGS</span>
+                <div class="metric-val-row">
+                  <span class="metric-value">GHS {{ todayEarningsCalculated }}</span>
+                </div>
+              </div>
+
+              <div class="metric-card-box">
+                <span class="metric-sub">COMPLETED DELIVERIES</span>
+                <div class="metric-val-row">
+                  <span class="metric-value">{{ completedTrips ? completedTrips.length : 0 }} Trips</span>
                 </div>
               </div>
             </div>
 
-            <!-- Accept Job Button -->
-            <button
-              @click="acceptJob(order.id)"
-              :disabled="processingId === order.id"
-              class="btn-accept-job"
-            >
-              <span v-if="processingId === order.id">Accepting...</span>
-              <span v-else>Accept Job</span>
-            </button>
+            <!-- Recent Payouts Section (Derived Dynamically from Real Completed Orders) -->
+            <section class="section-block margin-top-lg">
+              <div class="section-header-flex">
+                <h3 class="section-subheading">Recent Payouts</h3>
+                <button v-if="recentPayoutsList.length > 0" class="view-all-link" @click="triggerViewAllPayouts">View All</button>
+              </div>
+
+              <!-- Empty Recent Payouts State -->
+              <div v-if="recentPayoutsList.length === 0" class="empty-state-card">
+                <svg xmlns="http://www.w3.org/2000/svg" class="empty-icon" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <rect x="2" y="6" width="20" height="12" rx="2"/>
+                  <circle cx="12" cy="12" r="2"/>
+                  <path d="M6 12h.01M18 12h.01"/>
+                </svg>
+                <h3 class="empty-title">No Payout Records Yet</h3>
+                <p class="empty-desc">Payout transactions for completed farm deliveries will be recorded here automatically.</p>
+              </div>
+
+              <!-- Real Payout Feed List -->
+              <div v-else class="recent-payouts-feed">
+                <div v-for="(payout, idx) in recentPayoutsList" :key="idx" class="payout-card-item">
+                  <div class="payout-left-box">
+                    <div class="payout-icon-avatar" :class="{ processing: payout.status === 'PROCESSING' }">
+                      <svg v-if="payout.status === 'SETTLED'" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="6" width="20" height="12" rx="2"/>
+                        <circle cx="12" cy="12" r="2"/>
+                        <path d="M6 12h.01M18 12h.01"/>
+                      </svg>
+                      <svg v-else xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="1"/>
+                        <circle cx="17" cy="12" r="1"/>
+                        <circle cx="7" cy="12" r="1"/>
+                      </svg>
+                    </div>
+
+                    <div class="payout-details-col">
+                      <h4 class="payout-trip-id">Trip ID: {{ payout.id }}</h4>
+                      <span class="payout-meta-sub">{{ payout.date }} • {{ payout.method }}</span>
+                    </div>
+                  </div>
+
+                  <div class="payout-right-box">
+                    <div class="payout-amount-text">
+                      <span class="currency-tag">GHS</span>
+                      <span class="amount-number">{{ payout.amount }}</span>
+                    </div>
+                    <span class="status-pill" :class="payout.status.toLowerCase()">{{ payout.status }}</span>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
+
+
+          <!-- ══════════════════════════════════════════════════════════════ -->
+          <!-- SCREEN 4: DRIVER PROFILE TAB                                   -->
+          <!-- ══════════════════════════════════════════════════════════════ -->
+          <div v-else-if="activeTab === 'profile'" class="tab-content-view">
+            <!-- Driver Header Card -->
+            <div class="driver-profile-hero">
+              <div class="profile-avatar-wrapper">
+                <div class="profile-avatar-circle">
+                  {{ driverDetails.name.charAt(0).toUpperCase() }}
+                </div>
+              </div>
+              <div class="profile-hero-info">
+                <h2 class="driver-full-name">{{ driverDetails.name }}</h2>
+                <span class="driver-vehicle-subtitle">{{ driverDetails.model }}</span>
+                <div class="profile-rating-pill">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#F4A261" stroke="none">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                  <span>{{ driverRatingFormatted }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Stats Overview 2-Col Grid -->
+            <div class="metrics-two-col margin-top-md">
+              <div class="profile-metric-box">
+                <span class="profile-metric-label">Total Earnings</span>
+                <span class="profile-metric-val green-text">GHS {{ totalEarningsCalculated }}</span>
+              </div>
+              <div class="profile-metric-box">
+                <span class="profile-metric-label">Deliveries Completed</span>
+                <span class="profile-metric-val teal-text">{{ completedTrips ? completedTrips.length : (driverDetails.jobsDone || 0) }}</span>
+              </div>
+            </div>
+
+            <!-- Document Status Card -->
+            <div class="profile-section-card">
+              <div class="card-section-header">
+                <h3 class="card-section-title">Document Status</h3>
+                <button class="edit-link-btn" @click="openEditModal">Edit</button>
+              </div>
+
+              <div class="doc-status-list">
+                <div class="doc-item-row">
+                  <div class="doc-info">
+                    <div class="doc-icon-box">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="16" rx="2"/>
+                        <line x1="7" y1="8" x2="17" y2="8"/>
+                        <line x1="7" y1="12" x2="13" y2="12"/>
+                      </svg>
+                    </div>
+                    <div class="doc-text-block">
+                      <span class="doc-name">Driver's License</span>
+                      <span class="doc-expiry">Exp: {{ driverDetails.licenseExpiry }}</span>
+                    </div>
+                  </div>
+                  <span class="status-verified-badge">VERIFIED</span>
+                </div>
+
+                <div class="doc-item-row">
+                  <div class="doc-info">
+                    <div class="doc-icon-box">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                      </svg>
+                    </div>
+                    <div class="doc-text-block">
+                      <span class="doc-name">Vehicle Insurance</span>
+                      <span class="doc-expiry">Exp: {{ driverDetails.insuranceExpiry }}</span>
+                    </div>
+                  </div>
+                  <span class="status-verified-badge">VERIFIED</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Vehicle Details Grid -->
+            <div class="profile-section-card">
+              <div class="card-section-header">
+                <h3 class="card-section-title">Vehicle Details</h3>
+                <button class="edit-link-btn" @click="openEditModal">Edit</button>
+              </div>
+
+              <div class="vehicle-specs-grid">
+                <div class="spec-cell">
+                  <span class="spec-label">MODEL</span>
+                  <span class="spec-value">{{ driverDetails.model }}</span>
+                </div>
+                <div class="spec-cell">
+                  <span class="spec-label">PLATE</span>
+                  <span class="spec-value">{{ driverDetails.plate }}</span>
+                </div>
+                <div class="spec-cell">
+                  <span class="spec-label">CAPACITY</span>
+                  <span class="spec-value">{{ driverDetails.capacity }}</span>
+                </div>
+                <div class="spec-cell">
+                  <span class="spec-label">FUEL TYPE</span>
+                  <span class="spec-value">{{ driverDetails.fuelType }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Logout Button Action -->
+            <div class="logout-wrapper">
+              <Link href="/logout" method="post" as="button" class="btn-logout-account">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+                </svg>
+                <span>Logout Account</span>
+              </Link>
+            </div>
+
+            <div class="version-footer-text">
+              FarmLink Driver Portal • Western Region
+            </div>
+          </div>
+
         </div>
-      </section>
-    </div>
       </main>
     </div>
 
-    <!-- Mobile Bottom Navigation Bar (Stitch style — teal accent) -->
+    <!-- Edit Driver & Vehicle Details Modal -->
+    <div v-if="showEditModal" class="modal-overlay" @click.self="showEditModal = false">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 class="modal-title">Edit Driver & Vehicle Details</h3>
+          <button class="btn-close-modal" @click="showEditModal = false">&times;</button>
+        </div>
+
+        <form @submit.prevent="saveDriverDetails" class="modal-form">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" v-model="editForm.name" class="form-input" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Vehicle Model / Type</label>
+            <input type="text" v-model="editForm.model" class="form-input" placeholder="e.g. Aboboyaa Motor Tricycle" required />
+          </div>
+
+          <div class="form-row-2col">
+            <div class="form-group">
+              <label class="form-label">License Plate</label>
+              <input type="text" v-model="editForm.plate" class="form-input" placeholder="e.g. GW-492-23" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Capacity (KG)</label>
+              <input type="text" v-model="editForm.capacity" class="form-input" placeholder="e.g. 1,200 KG" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Fuel Type</label>
+            <select v-model="editForm.fuelType" class="form-input">
+              <option value="Petrol">Petrol</option>
+              <option value="Diesel">Diesel</option>
+              <option value="Electric">Electric</option>
+            </select>
+          </div>
+
+          <div class="form-row-2col">
+            <div class="form-group">
+              <label class="form-label">License Expiry</label>
+              <input type="text" v-model="editForm.licenseExpiry" class="form-input" placeholder="e.g. 12 Dec 2026" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Insurance Expiry</label>
+              <input type="text" v-model="editForm.insuranceExpiry" class="form-input" placeholder="e.g. 18 Oct 2026" />
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-cancel" @click="showEditModal = false">Cancel</button>
+            <button type="submit" class="btn-save-primary">Save Details</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Mobile Bottom Navigation Bar (4-Tab Capsule) -->
     <nav class="mobile-bottom-nav">
-      <Link href="/driver/dashboard" class="mobile-nav-item active">
-        <div class="nav-active-pill">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <button 
+        @click="activeTab = 'jobs'" 
+        class="mobile-nav-item" 
+        :class="{ active: activeTab === 'jobs' }"
+      >
+        <div class="nav-icon-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
             <rect x="1" y="3" width="15" height="13"/>
             <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
             <circle cx="5.5" cy="18.5" r="2.5"/>
             <circle cx="18.5" cy="18.5" r="2.5"/>
           </svg>
-          <span class="nav-label">Deliveries</span>
         </div>
-      </Link>
-      <Link href="/notifications" class="mobile-nav-item">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
-        </svg>
-        <span class="nav-label">Alerts</span>
-      </Link>
-      <Link href="/settings" class="mobile-nav-item">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-        </svg>
-        <span class="nav-label">Settings</span>
-      </Link>
+        <span class="nav-label">Jobs</span>
+      </button>
+
+      <button 
+        @click="activeTab = 'earnings'" 
+        class="mobile-nav-item" 
+        :class="{ active: activeTab === 'earnings' }"
+      >
+        <div class="nav-icon-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <rect x="2" y="6" width="20" height="12" rx="2"/>
+            <circle cx="12" cy="12" r="2"/>
+            <path d="M6 12h.01M18 12h.01"/>
+          </svg>
+        </div>
+        <span class="nav-label">Earnings</span>
+      </button>
+
+      <button 
+        @click="activeTab = 'history'" 
+        class="mobile-nav-item" 
+        :class="{ active: activeTab === 'history' }"
+      >
+        <div class="nav-icon-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+        </div>
+        <span class="nav-label">History</span>
+      </button>
+
+      <button 
+        @click="activeTab = 'profile'" 
+        class="mobile-nav-item" 
+        :class="{ active: activeTab === 'profile' }"
+      >
+        <div class="nav-icon-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <span class="nav-label">Profile</span>
+      </button>
     </nav>
 
   </div>
 </template>
 
 <script>
-import { Link, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { Link, router, usePage } from '@inertiajs/vue3';
+import { ref, computed, reactive, onMounted, onUnmounted } from 'vue';
 
 export default {
   name: 'DriverDashboard',
@@ -335,15 +727,124 @@ export default {
   props: {
     orders: {
       type: Array,
-      required: true
+      default: () => []
     },
     activeTrips: {
       type: Array,
-      required: true
+      default: () => []
+    },
+    completedTrips: {
+      type: Array,
+      default: () => []
     }
   },
-  setup() {
+  setup(props) {
+    const page = usePage();
+    const activeTab = ref('jobs');
+    const isOnline = ref(true);
     const processingId = ref(null);
+    const historyQuery = ref('');
+    const showEditModal = ref(false);
+
+    let pollInterval = null;
+
+    onMounted(() => {
+      pollInterval = setInterval(() => {
+        router.reload({ preserveScroll: true, only: ['orders', 'activeTrips', 'completedTrips'] });
+      }, 5000);
+    });
+
+    onUnmounted(() => {
+      if (pollInterval) clearInterval(pollInterval);
+    });
+
+    // Reactive Driver & Vehicle Details
+    const driverDetails = reactive({
+      name: page.props.auth?.user?.name || 'Emmanuel Mensah',
+      model: 'Aboboyaa Motor Tricycle',
+      plate: 'GW-492-23',
+      capacity: '1,200 KG',
+      fuelType: 'Petrol',
+      licenseExpiry: '12 Dec 2026',
+      insuranceExpiry: '18 Oct 2026',
+      jobsDone: 0
+    });
+
+    const editForm = reactive({ ...driverDetails });
+
+    const openEditModal = () => {
+      Object.assign(editForm, driverDetails);
+      showEditModal.value = true;
+    };
+
+    const saveDriverDetails = () => {
+      Object.assign(driverDetails, editForm);
+      showEditModal.value = false;
+    };
+
+    const driverRatingFormatted = computed(() => '5.0');
+
+    const formatDate = (dateStr) => {
+      if (!dateStr) return 'Recently';
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    };
+
+    // REAL DATA: Recent Payouts derived dynamically from driver's actual completed orders
+    const recentPayoutsList = computed(() => {
+      if (!props.completedTrips || props.completedTrips.length === 0) {
+        return [];
+      }
+      return props.completedTrips.map(order => ({
+        id: `#ADG-${order.id}`,
+        date: formatDate(order.updated_at || order.created_at),
+        method: 'Mobile Money',
+        amount: Number(order.estimated_transport_cost || 40.00).toFixed(2),
+        status: order.payment_status === 'released' || order.status === 'delivered' ? 'SETTLED' : 'PROCESSING'
+      }));
+    });
+
+    const triggerViewAllPayouts = () => {
+      alert('Viewing complete Mobile Money & Bank payout history statement...');
+    };
+
+    // Total earnings calculated dynamically from real completed orders
+    const totalEarningsCalculated = computed(() => {
+      if (!props.completedTrips || props.completedTrips.length === 0) {
+        return '0.00';
+      }
+      const sum = props.completedTrips.reduce((acc, item) => {
+        return acc + Number(item.estimated_transport_cost || 40.00);
+      }, 0);
+      return sum.toFixed(2);
+    });
+
+    const todayEarningsCalculated = computed(() => {
+      if (!props.completedTrips || props.completedTrips.length === 0) {
+        return '0.00';
+      }
+      const todayStr = new Date().toISOString().split('T')[0];
+      const sum = props.completedTrips.reduce((acc, item) => {
+        const itemDate = (item.updated_at || item.created_at || '').split('T')[0];
+        if (itemDate === todayStr) {
+          return acc + Number(item.estimated_transport_cost || 40.00);
+        }
+        return acc;
+      }, 0);
+      return sum.toFixed(2);
+    });
+
+    const filteredHistory = computed(() => {
+      if (!props.completedTrips) return [];
+      if (!historyQuery.value.trim()) return props.completedTrips;
+      const q = historyQuery.value.toLowerCase();
+      return props.completedTrips.filter(trip => {
+        const produce = (trip.product?.name || '').toLowerCase();
+        const pickup = (trip.product?.user?.location || '').toLowerCase();
+        const dropoff = (trip.buyer?.location || '').toLowerCase();
+        return produce.includes(q) || pickup.includes(q) || dropoff.includes(q);
+      });
+    });
 
     const acceptJob = (orderId) => {
       processingId.value = orderId;
@@ -372,16 +873,26 @@ export default {
       });
     };
 
-    const triggerAlert = (msg) => {
-      alert(msg);
-    };
-
     return {
+      activeTab,
+      isOnline,
       processingId,
+      historyQuery,
+      driverDetails,
+      editForm,
+      showEditModal,
+      openEditModal,
+      saveDriverDetails,
+      driverRatingFormatted,
+      recentPayoutsList,
+      triggerViewAllPayouts,
+      totalEarningsCalculated,
+      todayEarningsCalculated,
+      filteredHistory,
+      formatDate,
       acceptJob,
       pickupJob,
-      completeJob,
-      triggerAlert
+      completeJob
     };
   }
 }
@@ -390,7 +901,6 @@ export default {
 <style scoped>
 @import "../../css/design-tokens.css";
 
-/* Outer wrapper */
 .dashboard-container {
   display: flex;
   flex-direction: column;
@@ -398,226 +908,396 @@ export default {
   background-color: var(--color-bg-page);
   color: var(--color-neutral-900);
   font-family: var(--font-family);
-  overflow-x: hidden;
+  padding-bottom: 72px;
+}
+
+.sidebar-nav {
+  display: none;
+}
+
+.mobile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.logo-text {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.mobile-user-name {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  border-left: 1.5px solid var(--color-border);
+  padding-left: var(--space-2);
+  margin-left: var(--space-1);
+}
+
+.status-pill-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background-color: var(--color-neutral-100);
+  padding: 4px var(--space-3);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+}
+
+.status-pill-toggle.online {
+  background-color: var(--color-primary-subtle);
+  border-color: var(--color-primary-light);
+}
+
+.toggle-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-neutral-500);
+}
+
+.status-pill-toggle.online .toggle-dot {
+  background-color: var(--color-primary);
+}
+
+.toggle-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-700);
+}
+
+.main-layout {
+  flex: 1;
+  display: flex;
+  justify-content: center;
   width: 100%;
 }
 
-/* ── Header ── */
-.app-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 var(--space-4);
-  background-color: var(--color-white);
-  border-bottom: 1px solid var(--color-border);
-  height: var(--topbar-height);
-  position: sticky;
-  top: 0;
-  z-index: 50;
+.content-body {
+  width: 100%;
+  max-width: 600px;
+  padding: var(--space-4);
 }
 
-.app-logo {
+.top-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-white);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-xs);
+  margin-bottom: var(--space-4);
+}
+
+.control-sublabel {
+  display: block;
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-500);
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.online-switch {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  color: var(--color-tertiary);
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
-.logo-icon { color: var(--color-tertiary); }
+.switch-knob {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--color-neutral-400);
+}
 
-.app-logo-text {
-  font-size: var(--font-size-lg);
+.online-switch.is_active .switch-knob {
+  background-color: var(--color-primary);
+}
+
+.switch-text {
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
-  letter-spacing: -0.5px;
   color: var(--color-neutral-900);
 }
 
-.header-actions {
+.rating-badge-pill {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 4px;
+  background-color: var(--color-warning-light);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
 }
 
-.icon-action-btn {
+.rating-num {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-secondary-dark);
+}
+
+.revenue-banner-card {
+  position: relative;
+  background: linear-gradient(135deg, #1B4332 0%, #2D6A4F 100%);
+  color: var(--color-white);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--space-5);
+  overflow: hidden;
+}
+
+.banner-subtitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-primary-lighter);
+  font-weight: var(--font-weight-medium);
+}
+
+.banner-amount {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: #FFFFFF !important;
+  margin-top: 4px;
+}
+
+.banner-icon-watermark {
+  position: absolute;
+  right: var(--space-4);
+  bottom: var(--space-3);
+  opacity: 0.18;
+}
+
+.section-block {
+  margin-bottom: var(--space-5);
+}
+
+.margin-top-lg {
+  margin-top: var(--space-5);
+}
+
+.section-header-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.section-title, .section-subheading {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+}
+
+.view-all-link {
   background: none;
   border: none;
-  color: var(--color-neutral-700);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-500);
   cursor: pointer;
+}
+
+.view-all-link:hover {
+  color: var(--color-primary);
+}
+
+.nearby-badge {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary-hover);
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.recent-payouts-feed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.payout-card-item {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-xs);
+}
+
+.payout-left-box {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.payout-icon-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  background-color: #E6F4F1;
+  color: #1E7268;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-full);
-  transition: background-color var(--transition-fast);
 }
 
-.icon-action-btn:hover { background-color: var(--color-neutral-100); }
-
-/* ── Flash ── */
-.flash-alert {
-  margin: var(--space-3) var(--space-4);
-  padding: var(--space-3) var(--space-4);
-  background-color: var(--color-tertiary-subtle);
-  border: 1px solid var(--color-tertiary-light);
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
-  color: var(--color-tertiary);
-  font-weight: var(--font-weight-semibold);
+.payout-icon-avatar.processing {
+  background-color: #FDF4E7;
+  color: #D97706;
 }
 
-/* ── Main ── */
-.main-content {
-  flex: 1;
+.payout-details-col {
   display: flex;
   flex-direction: column;
 }
 
-.section-block {
-  padding: var(--space-4);
+.payout-trip-id {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
 }
 
-.section-divider {
-  height: 6px;
-  background-color: var(--color-neutral-100);
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
+.payout-meta-sub {
+  font-size: 11px;
+  color: var(--color-neutral-500);
+  margin-top: 2px;
 }
 
-.section-header {
+.payout-right-box {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: var(--space-4);
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
 }
 
-.section-title {
+.payout-amount-text {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.payout-amount-text .currency-tag {
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+}
+
+.payout-amount-text .amount-number {
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   color: var(--color-neutral-900);
-  margin: 0 0 2px 0;
 }
 
-.section-subtitle {
-  font-size: var(--font-size-xs);
-  color: var(--color-neutral-500);
-  margin: 0;
-}
-
-/* ── Nearby Badge ── */
-.nearby-badge {
-  background-color: var(--color-tertiary);
-  color: var(--color-white);
-  font-size: 10px;
+.status-pill {
+  font-size: 9px;
   font-weight: var(--font-weight-bold);
-  padding: 3px var(--space-2);
-  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
   letter-spacing: 0.5px;
-  white-space: nowrap;
-  flex-shrink: 0;
 }
 
-/* ── Empty States ── */
-.empty-active-card {
+.status-pill.settled {
+  background-color: #D1FAE5;
+  color: #065F46;
+}
+
+.status-pill.processing {
+  background-color: #FEF3C7;
+  color: #92400E;
+}
+
+.empty-state-card {
   background-color: var(--color-white);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: var(--space-8) var(--space-4);
+  padding: var(--space-6) var(--space-4);
   text-align: center;
-  box-shadow: var(--shadow-xs);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.empty-jobs-card {
-  background-color: var(--color-white);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-10) var(--space-4);
-  text-align: center;
-  box-shadow: var(--shadow-xs);
-}
-
-.empty-state-svg {
-  color: var(--color-neutral-300);
+.empty-icon {
+  color: var(--color-neutral-400);
   margin-bottom: var(--space-3);
 }
 
 .empty-title {
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-neutral-900);
-  margin: 0 0 var(--space-2) 0;
-}
-
-.empty-sub {
-  font-size: var(--font-size-sm);
-  color: var(--color-neutral-500);
-  margin: 0;
-  max-width: 260px;
-  margin: 0 auto;
-}
-
-/* ── Active Trip Card ── */
-.active-trips-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-.active-trip-card {
-  background-color: var(--color-white);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4);
-  box-shadow: var(--shadow-sm);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-  border-left: 4px solid var(--color-tertiary);
-}
-
-/* Status & Payout Row */
-.trip-status-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.in-progress-badge {
-  background-color: var(--color-tertiary);
-  color: var(--color-white);
-  font-size: 10px;
-  font-weight: var(--font-weight-bold);
-  padding: 4px var(--space-2);
-  border-radius: var(--radius-sm);
-  letter-spacing: 0.8px;
-}
-
-.payout-col {
-  text-align: right;
-  display: flex;
-  flex-direction: column;
-}
-
-.payout-label-sm {
-  font-size: 9px;
-  text-transform: uppercase;
-  color: var(--color-neutral-500);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0.5px;
-}
-
-.payout-amount {
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   color: var(--color-neutral-900);
 }
 
-/* Progress Steps */
+.empty-desc {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  max-width: 380px;
+  margin-top: 4px;
+  line-height: var(--line-height-base);
+}
+
+.active-section {
+  background-color: var(--color-white);
+  border: 1.5px solid var(--color-primary-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+
+.active-pulse-badge {
+  background-color: var(--color-tertiary-subtle);
+  color: var(--color-tertiary-hover);
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+}
+
+.active-trip-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.payout-label-sm {
+  font-size: 10px;
+  color: var(--color-neutral-500);
+  text-transform: uppercase;
+}
+
+.payout-amount {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
 .progress-steps-row {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0;
+  justify-content: space-between;
+  margin: var(--space-2) 0;
 }
 
 .progress-step {
@@ -625,112 +1305,78 @@ export default {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  flex-shrink: 0;
 }
 
 .step-icon-circle {
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-full);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-500);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid var(--color-border);
-  background-color: var(--color-neutral-50);
-  color: var(--color-neutral-500);
 }
 
 .progress-step.completed .step-icon-circle {
-  background-color: var(--color-tertiary-subtle);
-  border-color: var(--color-tertiary);
-  color: var(--color-tertiary);
+  background-color: var(--color-primary);
+  color: var(--color-white);
 }
 
 .progress-step.active .step-icon-circle {
-  background-color: var(--color-tertiary);
-  border-color: var(--color-tertiary);
+  background-color: var(--color-secondary);
   color: var(--color-white);
-  box-shadow: 0 0 0 3px rgba(42,157,143,0.2);
 }
 
 .step-name {
-  font-size: 9px;
-  font-weight: var(--font-weight-bold);
-  color: var(--color-neutral-500);
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
 }
-
-.progress-step.active .step-name { color: var(--color-tertiary); }
-.progress-step.completed .step-name { color: var(--color-tertiary); }
 
 .step-connector {
   flex: 1;
   height: 2px;
-  background: linear-gradient(to right, var(--color-tertiary), var(--color-border));
-  margin-bottom: 18px;
-  min-width: 24px;
+  background-color: var(--color-neutral-200);
+  margin: 0 4px 16px;
 }
 
 .step-connector.completed {
-  background: var(--color-tertiary);
+  background-color: var(--color-primary);
 }
 
-/* Route Info */
 .route-info-block {
   background-color: var(--color-neutral-50);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
   padding: var(--space-3);
+  border-radius: var(--radius-md);
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: var(--space-2);
 }
 
 .route-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: var(--space-3);
 }
 
 .route-type-tag {
   font-size: 9px;
   font-weight: var(--font-weight-bold);
-  padding: 2px var(--space-2);
-  border-radius: var(--radius-sm);
-  letter-spacing: 0.5px;
-  white-space: nowrap;
-  flex-shrink: 0;
-  margin-top: 2px;
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
-.pickup-tag {
-  background-color: var(--color-tertiary-subtle);
-  color: var(--color-tertiary);
-}
-
-.dropoff-tag {
-  background-color: var(--color-primary-subtle);
-  color: var(--color-primary-hover);
-}
-
-.route-connector-line {
-  width: 2px;
-  height: 12px;
-  background-color: var(--color-border);
-  margin: 4px 0 4px 22px;
-}
+.pickup-tag { background-color: var(--color-primary-subtle); color: var(--color-primary-hover); }
+.dropoff-tag { background-color: var(--color-warning-light); color: var(--color-secondary-dark); }
 
 .route-detail {
   display: flex;
   flex-direction: column;
-  gap: 1px;
 }
 
 .route-location {
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-neutral-900);
+  font-weight: var(--font-weight-semibold);
 }
 
 .route-party {
@@ -738,228 +1384,666 @@ export default {
   color: var(--color-neutral-500);
 }
 
-/* Cargo chip */
-.cargo-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  background-color: var(--color-primary-subtle);
-  color: var(--color-primary-hover);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-bold);
-  padding: 4px var(--space-3);
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--color-primary-lighter);
+.route-connector-line {
+  width: 1px;
+  height: 12px;
+  background-color: var(--color-neutral-300);
+  margin-left: 24px;
 }
 
-/* Trip Action Buttons */
+.cargo-chip {
+  background-color: var(--color-neutral-100);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
 .trip-action-buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.btn-picked-up, .btn-delivered {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  border: none;
 }
 
 .btn-picked-up {
-  height: 40px;
-  background-color: var(--color-secondary);
-  color: var(--color-white);
-  border: none;
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  transition: opacity var(--transition-fast);
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary-light);
 }
 
-.btn-picked-up:hover { opacity: 0.9; }
-.btn-picked-up:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn-picked-up.picked-up {
-  background-color: var(--color-neutral-200);
-  color: var(--color-neutral-600);
-  border: 1px solid var(--color-border);
-  cursor: not-allowed;
-  opacity: 1 !important;
+  background-color: var(--color-primary);
+  color: var(--color-white);
 }
 
 .btn-delivered {
-  height: 40px;
   background-color: var(--color-tertiary);
   color: var(--color-white);
-  border: none;
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  transition: opacity var(--transition-fast);
 }
 
-.btn-delivered:hover { opacity: 0.9; }
-.btn-delivered:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-delivered:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
-/* ── Available Job Cards ── */
-.jobs-list {
+.jobs-feed-list {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
 }
 
-.job-card {
+.job-card-styled {
   background-color: var(--color-white);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-4);
-  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
 }
 
-.job-top-row {
+.job-header-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 }
 
-.job-payout-block {
+.produce-badge {
   display: flex;
   flex-direction: column;
-  gap: 1px;
 }
 
-.est-payout-label {
-  font-size: 9px;
-  text-transform: uppercase;
+.produce-name {
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
+}
+
+.produce-qty {
+  font-size: var(--font-size-xs);
   color: var(--color-neutral-500);
-  letter-spacing: 0.5px;
 }
 
-.est-payout-amount {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-secondary);
-}
-
-.distance-badge {
-  background-color: var(--color-neutral-100);
-  color: var(--color-neutral-700);
-  font-size: 10px;
-  font-weight: var(--font-weight-bold);
-  padding: 3px var(--space-2);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border);
-  flex-shrink: 0;
-}
-
-/* Job route block */
-.job-route-block {
-  background-color: var(--color-neutral-50);
-  border: 1px solid var(--color-border);
+.job-payout-box {
+  background-color: var(--color-warning-light);
+  padding: 4px var(--space-3);
   border-radius: var(--radius-md);
-  padding: var(--space-3);
+  text-align: right;
+}
+
+.payout-sub {
+  display: block;
+  font-size: 9px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-secondary-dark);
+}
+
+.payout-val {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-secondary-dark);
+}
+
+.route-preview {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 4px;
+  background-color: var(--color-neutral-50);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
 }
 
-.job-route-row {
+.route-pin-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.pin-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.pin-dot.green { background-color: var(--color-primary); }
+.pin-dot.orange { background-color: var(--color-secondary); }
+
+.pin-text {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.route-dot-connector {
+  width: 1px;
+  height: 10px;
+  background-color: var(--color-neutral-300);
+  margin-left: 3px;
+}
+
+.driver-payout-line {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-primary);
+  background-color: var(--color-primary-subtle);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-2);
+}
+
+.btn-accept-primary {
+  width: 100%;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-4);
+}
+
+.search-icon {
+  position: absolute;
+  left: var(--space-3);
+  color: var(--color-neutral-400);
+}
+
+.search-text-input {
+  width: 100%;
+  padding: var(--space-3) var(--space-3) var(--space-3) 40px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-neutral-300);
+  background-color: var(--color-white);
+  font-size: var(--font-size-sm);
+  outline: none;
+}
+
+.history-trips-list {
+  display: flex;
+  flex-direction: column;
   gap: var(--space-3);
 }
 
-.pickup-dot-icon, .dropoff-dot-icon {
-  width: 10px;
-  height: 10px;
-  border-radius: var(--radius-full);
-  flex-shrink: 0;
-  margin-top: 4px;
+.history-item-card {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
 }
 
-.pickup-dot-icon {
-  background-color: var(--color-tertiary);
-  box-shadow: 0 0 0 3px rgba(42,157,143,0.2);
-}
-
-.dropoff-dot-icon {
-  background-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(45,106,79,0.2);
-}
-
-.job-route-line {
-  width: 2px;
-  height: 14px;
-  background-color: var(--color-border);
-  margin: 4px 0 4px 4px;
-}
-
-.job-route-text {
+.history-card-top {
   display: flex;
-  flex-direction: column;
-  gap: 1px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
 }
 
-.job-route-label {
-  font-size: 9px;
-  text-transform: uppercase;
+.history-date {
+  font-size: var(--font-size-xs);
   color: var(--color-neutral-500);
+}
+
+.delivered-status-chip {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary-hover);
+  font-size: 9px;
+  font-weight: var(--font-weight-bold);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.history-cargo-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+}
+
+.history-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-3);
+  padding-top: var(--space-2);
+  border-top: 1px dashed var(--color-border);
+}
+
+.history-payout {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.history-rating-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.page-main-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.page-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-500);
+  margin-top: 2px;
+  margin-bottom: var(--space-4);
+}
+
+.total-payout-hero {
+  background: linear-gradient(135deg, #2D6A4F 0%, #1B4332 100%);
+  color: var(--color-white);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  margin-bottom: var(--space-4);
+}
+
+.payout-hero-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-primary-lighter);
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.5px;
 }
 
-.job-route-value {
+.payout-hero-amount {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: #FFFFFF !important;
+  margin-top: var(--space-2);
+}
+
+.metrics-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.metric-card-box, .profile-metric-box {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 84px;
+  box-shadow: var(--shadow-xs);
+}
+
+.metric-sub, .profile-metric-label {
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-500);
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.metric-value, .profile-metric-val {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.profile-metric-val.green-text {
+  color: var(--color-primary);
+}
+
+.profile-metric-val.teal-text {
+  color: var(--color-tertiary);
+}
+
+.driver-profile-hero {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  box-shadow: var(--shadow-xs);
+}
+
+.profile-avatar-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-hero-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.driver-full-name {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+}
+
+.driver-vehicle-subtitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  margin-top: 2px;
+}
+
+.profile-rating-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: var(--color-warning-light);
+  color: var(--color-secondary-dark);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  width: fit-content;
+  margin-top: 6px;
+}
+
+.profile-section-card {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-top: var(--space-4);
+  box-shadow: var(--shadow-xs);
+}
+
+.card-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.card-section-title {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   color: var(--color-neutral-900);
 }
 
-.job-cargo-sub {
+.edit-link-btn {
+  background: none;
+  border: none;
+  color: var(--color-primary);
   font-size: var(--font-size-xs);
-  color: var(--color-neutral-500);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
 }
 
-/* Accept Job Button */
-.btn-accept-job {
-  width: 100%;
-  height: 42px;
-  background-color: var(--color-primary-hover);
+.edit-link-btn:hover {
+  text-decoration: underline;
+}
+
+.doc-status-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.doc-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-bg-page);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.doc-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.doc-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-neutral-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-neutral-700);
+}
+
+.doc-text-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.doc-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+}
+
+.doc-expiry {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  margin-top: 1px;
+}
+
+.status-verified-badge {
+  background-color: #1B4332;
   color: var(--color-white);
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.vehicle-specs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.spec-cell {
+  background-color: var(--color-bg-page);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.spec-label {
+  font-size: 10px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-500);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.spec-value {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin-top: 3px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: var(--space-4);
+}
+
+.modal-card {
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 480px;
+  padding: var(--space-5);
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-3);
+}
+
+.modal-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+}
+
+.btn-close-modal {
+  background: none;
   border: none;
+  font-size: 24px;
+  color: var(--color-neutral-500);
+  cursor: pointer;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.form-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-700);
+}
+
+.form-input {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--color-primary);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.btn-cancel {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-700);
+  border: none;
+  padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   cursor: pointer;
-  transition: opacity var(--transition-fast);
-  letter-spacing: 0.3px;
 }
 
-.btn-accept-job:hover { opacity: 0.9; }
-.btn-accept-job:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-save-primary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
 
-/* ── Mobile Bottom Navigation Bar ── */
+.logout-wrapper {
+  margin-top: var(--space-6);
+}
+
+.btn-logout-account {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  background-color: #FFF0F0;
+  color: var(--color-danger);
+  border: 1px solid var(--color-danger-light);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+}
+
+.version-footer-text {
+  text-align: center;
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-400);
+  margin-top: var(--space-4);
+}
+
 .mobile-bottom-nav {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  max-width: 480px;
-  margin: 0 auto;
-  height: var(--bottom-nav-height);
+  height: 64px;
   background-color: var(--color-white);
   border-top: 1px solid var(--color-border);
   display: flex;
-  justify-content: space-around;
   align-items: center;
-  z-index: 100;
-  padding: 0 var(--space-2);
+  justify-content: space-around;
+  z-index: 50;
 }
 
 .mobile-nav-item {
@@ -967,339 +2051,146 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: var(--color-neutral-500);
-  text-decoration: none;
-  width: 33.33%;
-  height: 100%;
-  font-weight: var(--font-weight-semibold);
-  transition: all var(--transition-fast);
+  gap: 2px;
   background: none;
   border: none;
+  color: var(--color-neutral-500);
   cursor: pointer;
-}
-
-.mobile-nav-item .nav-label {
-  font-size: 9px;
-  margin-top: 2px;
+  padding: 6px var(--space-3);
+  border-radius: var(--radius-md);
+  flex: 1;
 }
 
 .mobile-nav-item.active {
-  color: var(--color-tertiary);
+  color: var(--color-primary);
 }
 
-.mobile-nav-item.active .nav-active-pill {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-1);
-  background-color: var(--color-tertiary-subtle);
-  color: var(--color-tertiary);
-  padding: 6px var(--space-3);
+.mobile-nav-item.active .nav-icon-wrap {
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary);
+  padding: 4px 16px;
   border-radius: var(--radius-pill);
 }
 
-.mobile-nav-item.active .nav-label {
+.nav-label {
   font-size: 10px;
-  margin-top: 0;
-}
-
-/* Sidebar navigation */
-.sidebar-nav {
-  display: none;
-  flex-direction: column;
-  background-color: var(--color-bg-sidebar);
-  border-right: 1px solid var(--color-border);
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  flex-shrink: 0;
-  transition: width var(--transition-base);
-  z-index: 100;
-  overflow-y: auto;
-}
-
-.sidebar-brand {
-  height: var(--topbar-height);
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: 0 var(--space-4);
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-tertiary);
   font-weight: var(--font-weight-bold);
-  overflow: hidden;
-}
-
-.logo-icon {
-  flex-shrink: 0;
-  color: var(--color-tertiary);
-}
-
-.logo-text {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: -0.5px;
-}
-
-.sidebar-user {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-4);
-  margin: var(--space-3);
-  background-color: var(--color-neutral-50);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-}
-
-.user-avatar {
-  width: 36px;
-  height: 36px;
-  background-color: var(--color-tertiary);
-  color: var(--color-white);
-  border-radius: var(--radius-full);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-base);
-  flex-shrink: 0;
-}
-
-.user-info {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.user-name {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-neutral-900);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.user-role {
-  font-size: var(--font-size-xs);
-  color: var(--color-neutral-500);
-}
-
-.sidebar-menu {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  padding: var(--space-3);
-  flex: 1;
-}
-
-.menu-item {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3);
-  color: var(--color-neutral-700);
-  border-radius: var(--radius-md);
-  text-decoration: none;
-  font-weight: var(--font-weight-medium);
-  font-size: var(--font-size-sm);
-  transition: all var(--transition-fast);
-  cursor: pointer;
-}
-
-.menu-item:hover:not(.disabled) {
-  background-color: var(--color-neutral-100);
-  color: var(--color-neutral-900);
-}
-
-.menu-item.active {
-  background-color: var(--color-tertiary-subtle);
-  color: var(--color-tertiary);
-}
-
-.sidebar-footer {
-  padding: var(--space-3);
-  border-top: 1px solid var(--color-border);
-}
-
-.logout-btn-sidebar {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  width: 100%;
-  padding: var(--space-3);
-  background: none;
-  border: none;
-  color: var(--color-danger);
-  font-weight: var(--font-weight-medium);
-  font-size: var(--font-size-sm);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: background-color var(--transition-fast);
-}
-
-.logout-btn-sidebar:hover {
-  background-color: var(--color-danger-light);
-}
-
-/* Mobile top header */
-.mobile-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: var(--topbar-height);
-  padding: 0 var(--space-4);
-  background-color: var(--color-white);
-  border-bottom: 1px solid var(--color-border);
-  position: sticky;
-  top: 0;
-  z-index: 50;
-}
-
-.mobile-header .logo-text {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-tertiary);
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.icon-action-btn {
-  background: none;
-  border: none;
-  color: var(--color-neutral-700);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-full);
-  transition: background-color var(--transition-fast);
-}
-
-.icon-action-btn:hover {
-  background-color: var(--color-neutral-100);
-}
-
-.icon-action-btn.logout-header-btn {
-  color: var(--color-danger);
-}
-
-.icon-action-btn.logout-header-btn:hover {
-  background-color: var(--color-danger-light);
-}
-
-/* Main Content layout wrapper */
-.main-layout {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  width: 100%;
-}
-
-.content-body {
-  flex: 1;
-  padding: var(--space-4);
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-  padding-bottom: calc(var(--bottom-nav-height) + 30px);
-}
-
-/* Responsive Media Queries */
-@media (max-width: 767px) {
-  .dashboard-container {
-    padding-bottom: var(--bottom-nav-height);
-    overflow-x: hidden;
-  }
-  .mobile-bottom-nav {
-    left: 0;
-    right: 0;
-    max-width: 100%;
-  }
 }
 
 @media (min-width: 768px) {
   .dashboard-container {
     flex-direction: row;
+    padding-bottom: 0;
   }
-  .mobile-header {
-    display: none;
-  }
-  .mobile-bottom-nav {
-    display: none;
-  }
-  .sidebar-nav {
-    display: flex;
-    width: var(--sidebar-width-collapsed);
-  }
-  .main-layout {
-    margin-left: var(--sidebar-width-collapsed);
-  }
-  .sidebar-user {
-    padding: var(--space-2);
-    margin: var(--space-2);
-  }
-  .user-info {
-    display: none;
-  }
-  .logo-text, .menu-label, .logout-label {
-    display: none;
-  }
-  .sidebar-brand {
-    justify-content: center;
-  }
-  .menu-item {
-    justify-content: center;
-  }
-  .logout-btn-sidebar {
-    justify-content: center;
-  }
-  
-  .main-content {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-6);
-    align-items: start;
-  }
-  .section-divider {
-    display: none;
-  }
-}
 
-@media (min-width: 1025px) {
+  .mobile-header, .mobile-bottom-nav {
+    display: none;
+  }
+
   .sidebar-nav {
+    display: flex;
+    flex-direction: column;
     width: var(--sidebar-width);
-  }
-  .main-layout {
-    margin-left: var(--sidebar-width);
-  }
-  .sidebar-brand {
-    justify-content: flex-start;
-  }
-  .sidebar-user {
+    background-color: var(--color-white);
+    border-right: 1px solid var(--color-border);
     padding: var(--space-4);
-    margin: var(--space-3);
+    height: 100vh;
+    position: sticky;
+    top: 0;
   }
+
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
+  }
+
+  .sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    background-color: var(--color-neutral-50);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-5);
+  }
+
+  .user-avatar.driver {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    font-weight: var(--font-weight-bold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .user-info {
     display: flex;
+    flex-direction: column;
   }
-  .logo-text, .menu-label, .logout-label {
-    display: inline;
+
+  .user-name {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
   }
+
+  .user-role {
+    font-size: var(--font-size-xs);
+    color: var(--color-neutral-500);
+  }
+
+  .sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
+  }
+
   .menu-item {
-    justify-content: flex-start;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-md);
+    border: none;
+    background: none;
+    color: var(--color-neutral-700);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    text-align: left;
   }
+
+  .menu-item:hover, .menu-item.active {
+    background-color: var(--color-primary-subtle);
+    color: var(--color-primary);
+  }
+
   .logout-btn-sidebar {
-    justify-content: flex-start;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    padding: var(--space-3);
+    border: none;
+    background: none;
+    color: var(--color-danger);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    cursor: pointer;
+  }
+
+  .main-layout {
+    flex: 1;
+    padding: var(--space-6);
+  }
+
+  .content-body {
+    max-width: 800px;
   }
 }
 </style>
