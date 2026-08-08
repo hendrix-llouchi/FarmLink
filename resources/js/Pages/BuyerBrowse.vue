@@ -215,10 +215,12 @@
           <!-- Card Image & Price Overlay -->
           <div class="product-img-wrapper">
             <img 
-              v-if="product.image_path" 
+              v-if="product.image_path && !imgErrors[product.id]" 
               :src="product.image_path.startsWith('http') || product.image_path.startsWith('/') ? product.image_path : '/storage/' + product.image_path" 
               :alt="product.name" 
               class="product-image"
+              loading="lazy"
+              @error="imgErrors[product.id] = true"
             />
             <div v-else class="product-placeholder">🍅</div>
             <div class="price-badge-overlay">GH₵ {{ Number(product.price).toFixed(2) }}</div>
@@ -286,10 +288,12 @@
         <div class="modal-body">
           <div class="modal-img-container">
             <img 
-              v-if="selectedProduct.image_path" 
-              :src="selectedProduct.image_path.startsWith('http') ? selectedProduct.image_path : '/storage/' + selectedProduct.image_path" 
+              v-if="selectedProduct.image_path && !modalImgError" 
+              :src="selectedProduct.image_path.startsWith('http') || selectedProduct.image_path.startsWith('/') ? selectedProduct.image_path : '/storage/' + selectedProduct.image_path" 
               :alt="selectedProduct.name" 
               class="modal-image"
+              loading="eager"
+              @error="modalImgError = true"
             />
             <div v-else class="modal-placeholder">🍅</div>
           </div>
@@ -504,6 +508,8 @@ export default {
     const orderQuantity = ref(1);
     const errorMessage = ref('');
     const processing = ref(false);
+    const imgErrors = ref({});
+    const modalImgError = ref(false);
 
     // MoMo state variables
     const checkoutStep = ref(1);
@@ -569,6 +575,7 @@ export default {
       paymentPin.value = '';
       paymentProcessing.value = false;
       paymentSuccess.value = false;
+      modalImgError.value = false;
       document.body.style.overflow = '';
     };
 
@@ -660,7 +667,9 @@ export default {
       closeProductModal,
       startMomoPayment,
       placeOrder,
-      triggerAlert
+      triggerAlert,
+      imgErrors,
+      modalImgError
     };
   }
 }

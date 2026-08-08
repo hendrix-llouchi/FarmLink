@@ -190,7 +190,7 @@
               <div v-else class="listings-grid">
                 <AppCard v-for="product in localProducts" :key="product.id" class="product-card" paddingSize="sm">
                   <div class="product-img-box">
-                    <img v-if="product.image_path" :src="product.image_path.startsWith('data:') || product.image_path.startsWith('http') || product.image_path.startsWith('/') ? product.image_path : '/storage/' + product.image_path" :alt="product.name" class="product-image" />
+                    <img v-if="product.image_path && !imgErrors[product.id]" :src="product.image_path.startsWith('data:') || product.image_path.startsWith('http') || product.image_path.startsWith('/') ? product.image_path : '/storage/' + product.image_path" :alt="product.name" class="product-image" loading="lazy" @error="imgErrors[product.id] = true" />
                     <div v-else class="product-placeholder">🍅</div>
                     <div class="badge-overlay">
                       <AppBadge :variant="product.quantity > 0 ? 'success' : 'danger'" size="sm">
@@ -558,6 +558,7 @@ export default {
   setup(props) {
     const fileInput = ref(null);
     const imagePreview = ref(null);
+    const imgErrors = ref({});
     const addFormSection = ref(null);
 
     // Frontend Reactive copy of products to support mock edit/delete in prototype
@@ -693,7 +694,8 @@ export default {
       cancelEdit,
       deleteProduct,
       triggerAlert,
-      todayDate
+      todayDate,
+      imgErrors
     };
   }
 }

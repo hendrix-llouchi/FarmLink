@@ -118,10 +118,12 @@
               <div class="product-info-row">
                 <div class="product-img-box">
                   <img 
-                    v-if="order.product?.image_path" 
-                    :src="order.product.image_path.startsWith('http') ? order.product.image_path : '/storage/' + order.product.image_path" 
+                    v-if="order.product?.image_path && !imgErrors[order.id]" 
+                    :src="order.product.image_path.startsWith('http') || order.product.image_path.startsWith('/') ? order.product.image_path : '/storage/' + order.product.image_path" 
                     :alt="order.product.name" 
                     class="product-image"
+                    loading="lazy"
+                    @error="imgErrors[order.id] = true"
                   />
                   <div v-else class="product-placeholder">🥦</div>
                 </div>
@@ -251,6 +253,7 @@ export default {
   },
   setup() {
     const requestingId = ref(null);
+    const imgErrors = ref({});
 
     const formatDate = (dateString) => {
       if (!dateString) return '';
@@ -282,7 +285,8 @@ export default {
       formatDate,
       formatStatus,
       requestingId,
-      requestTransport
+      requestTransport,
+      imgErrors
     };
   }
 }
