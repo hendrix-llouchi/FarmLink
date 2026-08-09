@@ -357,7 +357,7 @@ class OrderController extends Controller
                     ]);
                 }
 
-                // Create the rating
+                // Create rating for the Farmer
                 Rating::create([
                     'order_id' => $order->id,
                     'rater_id' => auth()->id(),
@@ -368,10 +368,32 @@ class OrderController extends Controller
 
                 // Recalculate average_rating for the farmer
                 $farmer = $order->product->user;
-                $averageRating = Rating::where('ratee_id', $farmer->id)->avg('score') ?: 0.00;
-                $farmer->update([
-                    'average_rating' => $averageRating
-                ]);
+                if ($farmer) {
+                    $farmerAverage = Rating::where('ratee_id', $farmer->id)->avg('score') ?: 0.00;
+                    $farmer->update([
+                        'average_rating' => $farmerAverage
+                    ]);
+                }
+
+                // If a driver was assigned to deliver this order, also create rating for the Driver
+                if ($order->driver_id) {
+                    Rating::create([
+                        'order_id' => $order->id,
+                        'rater_id' => auth()->id(),
+                        'ratee_id' => $order->driver_id, // Rate the driver
+                        'score' => $request->score,
+                        'comment' => $request->comment,
+                    ]);
+
+                    // Recalculate average_rating for the driver
+                    $driver = \App\Models\User::find($order->driver_id);
+                    if ($driver) {
+                        $driverAverage = Rating::where('ratee_id', $driver->id)->avg('score') ?: 0.00;
+                        $driver->update([
+                            'average_rating' => $driverAverage
+                        ]);
+                    }
+                }
             });
         } catch (ValidationException $e) {
             throw $e;
