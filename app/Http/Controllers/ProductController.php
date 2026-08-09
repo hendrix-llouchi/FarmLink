@@ -77,7 +77,7 @@ class ProductController extends Controller
     {
         $request->validate([
             'name'              => ['required', 'string', 'max:255'],
-            'category'          => ['required', 'string', 'in:Vegetable,Leafy Green,Root/Tuber,Other'],
+            'category'          => ['required', 'string', 'in:Tomato,Vegetable,Leafy Green,Root/Tuber,Other,Roma Tomatoes,Beefsteak Tomatoes,Cherry Tomatoes,Plum Tomatoes,Local Red Tomatoes'],
             'quantity'          => ['required', 'integer', 'min:1'],
             'price'             => ['required', 'numeric', 'min:0.01'],
             'image'             => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
@@ -128,7 +128,7 @@ class ProductController extends Controller
 
         $request->validate([
             'name'              => ['required', 'string', 'max:255'],
-            'category'          => ['required', 'string', 'in:Vegetable,Leafy Green,Root/Tuber,Other'],
+            'category'          => ['required', 'string', 'in:Tomato,Vegetable,Leafy Green,Root/Tuber,Other,Roma Tomatoes,Beefsteak Tomatoes,Cherry Tomatoes,Plum Tomatoes,Local Red Tomatoes'],
             'quantity'          => ['required', 'integer', 'min:1'],
             'price'             => ['required', 'numeric', 'min:0.01'],
             'image'             => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],

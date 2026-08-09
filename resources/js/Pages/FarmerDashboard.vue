@@ -348,11 +348,11 @@
                 >
                   <option value="" disabled>Select tomato type</option>
                   <option value="Tomato">Tomato (General)</option>
-                  <option value="Tomato">Roma Tomatoes</option>
-                  <option value="Tomato">Beefsteak Tomatoes</option>
-                  <option value="Tomato">Cherry Tomatoes</option>
-                  <option value="Tomato">Plum Tomatoes</option>
-                  <option value="Tomato">Local Red Tomatoes</option>
+                  <option value="Roma Tomatoes">Roma Tomatoes</option>
+                  <option value="Beefsteak Tomatoes">Beefsteak Tomatoes</option>
+                  <option value="Cherry Tomatoes">Cherry Tomatoes</option>
+                  <option value="Plum Tomatoes">Plum Tomatoes</option>
+                  <option value="Local Red Tomatoes">Local Red Tomatoes</option>
                 </AppInput>
 
                 <!-- Quantity -->
