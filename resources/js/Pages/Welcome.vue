@@ -16,7 +16,7 @@
           <a href="#how-it-works" @click.prevent="scrollToSection('how-it-works')" class="nav-link">How It Works</a>
           <a href="#built-for" @click.prevent="scrollToSection('built-for')" class="nav-link">Built For You</a>
           <a href="#why-farmlink" @click.prevent="scrollToSection('why-farmlink')" class="nav-link">Why FarmLink</a>
-          <a href="#preview" @click.prevent="scrollToSection('preview')" class="nav-link">Platform</a>
+          <a href="#preview" @click.prevent="scrollToSection('preview')" class="nav-link">Platform Preview</a>
           <Link href="/login" class="nav-login-btn">Log In</Link>
           <Link href="/register" class="nav-register-btn">Get Started</Link>
         </nav>
@@ -55,9 +55,9 @@
       </transition>
     </header>
 
-    <!-- Main Content Area -->
+    <!-- Main Content Area (9 Sections) -->
     <main class="main-content">
-      <!-- Section 1 — Hero Section -->
+      <!-- 1. HERO SECTION -->
       <section class="hero-section">
         <div class="hero-inner hero-animate">
           <!-- Corridor Location Badge -->
@@ -94,7 +94,7 @@
             </Link>
           </div>
 
-          <!-- Trust Badges -->
+          <!-- Trust Badges (Glass Pills) -->
           <div class="hero-trust-badges">
             <div class="trust-badge">
               <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
@@ -118,32 +118,35 @@
         </div>
       </section>
 
-      <!-- Section 2 — Statistics / Social Proof Bar -->
+      <!-- 2. STATISTICS SECTION (Compact Trust Strip) -->
       <section class="stats-bar-section">
         <div class="stats-container">
           <div class="stat-item">
-            <div class="stat-value">Farmers</div>
-            <div class="stat-label">connected</div>
+            <div class="stat-value">250+</div>
+            <div class="stat-label">Farmers connected</div>
           </div>
           <div class="stat-divider"></div>
           <div class="stat-item">
-            <div class="stat-value">Verified</div>
-            <div class="stat-label">buyers</div>
+            <div class="stat-value">45+</div>
+            <div class="stat-label">Verified buyers</div>
           </div>
           <div class="stat-divider"></div>
           <div class="stat-item">
-            <div class="stat-value">Orders</div>
-            <div class="stat-label">completed</div>
+            <div class="stat-value">1,200+</div>
+            <div class="stat-label">Crates sold</div>
           </div>
           <div class="stat-divider"></div>
           <div class="stat-item">
-            <div class="stat-value">Reliable</div>
-            <div class="stat-label">delivery</div>
+            <div class="stat-value">98%</div>
+            <div class="stat-label">Reliable delivery</div>
           </div>
+        </div>
+        <div class="stats-disclaimer">
+          <span>*Pilot corridor prototype metrics — Daboase &amp; Beposo to Takoradi Market Circle</span>
         </div>
       </section>
 
-      <!-- Section 3 — The Problem We Solve -->
+      <!-- 3. PROBLEM SECTION -->
       <section id="problem" class="problem-section">
         <div class="section-container">
           <div class="section-header-text">
@@ -153,7 +156,7 @@
           </div>
 
           <div class="problem-cards-grid">
-            <!-- Card 1 -->
+            <!-- Problem 1 -->
             <div class="problem-card">
               <div class="problem-icon-wrapper danger-bg">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -167,7 +170,7 @@
               </p>
             </div>
 
-            <!-- Card 2 -->
+            <!-- Problem 2 -->
             <div class="problem-card">
               <div class="problem-icon-wrapper warning-bg">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -182,7 +185,7 @@
               </p>
             </div>
 
-            <!-- Card 3 -->
+            <!-- Problem 3 -->
             <div class="problem-card">
               <div class="problem-icon-wrapper accent-bg">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -201,7 +204,7 @@
         </div>
       </section>
 
-      <!-- Section 4 — The Supply Chain ("How Produce Moves") -->
+      <!-- 4. HOW PRODUCE MOVES SECTION -->
       <section id="how-it-works" class="supply-chain-section">
         <div class="section-container">
           <div class="section-header-text">
@@ -215,7 +218,7 @@
             <div class="chain-step-card">
               <div class="chain-step-header">
                 <span class="chain-step-number">01</span>
-                <div class="chain-icon-circle">
+                <div class="chain-icon-circle green-circle">
                   <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 2 2 4v4a4 4 0 0 1-4 4h-2a3 3 0 0 0-3 3v3z"/>
                     <path d="M9 22v-4H7a2 2 0 0 1-2-2V8"/>
@@ -299,7 +302,7 @@
         </div>
       </section>
 
-      <!-- Section 5 — Built for the Western Region (Distinct Role Cards) -->
+      <!-- 5. BUILT FOR THE WESTERN REGION SECTION -->
       <section id="built-for" class="who-its-for-section">
         <div class="section-container">
           <div class="section-header-text">
@@ -309,7 +312,7 @@
           </div>
 
           <div class="stakeholders-grid">
-            <!-- Farmers -->
+            <!-- Farmers (Forest Green Accent) -->
             <div class="role-card role-card-farmer">
               <div class="role-card-top">
                 <div class="role-icon-box farmer-icon">
@@ -331,7 +334,7 @@
               </p>
             </div>
 
-            <!-- Market Traders -->
+            <!-- Market Traders (Harvest Gold Accent) -->
             <div class="role-card role-card-trader">
               <div class="role-card-top">
                 <div class="role-icon-box trader-icon">
@@ -353,7 +356,7 @@
               </p>
             </div>
 
-            <!-- Aboboyaa Drivers -->
+            <!-- Aboboyaa Drivers (Soft Teal Accent) -->
             <div class="role-card role-card-driver">
               <div class="role-card-top">
                 <div class="role-icon-box driver-icon">
@@ -380,7 +383,7 @@
         </div>
       </section>
 
-      <!-- Section 6 — Why Farmers Choose FarmLink -->
+      <!-- 6. WHY FARMERS CHOOSE FARMLINK SECTION -->
       <section id="why-farmlink" class="why-section">
         <div class="section-container">
           <div class="section-header-text">
@@ -393,7 +396,7 @@
             <!-- Benefit 1 -->
             <div class="benefit-card">
               <div class="benefit-icon-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
                   <circle cx="9" cy="7" r="4"/>
                   <polyline points="16 11 18 13 22 9"/>
@@ -411,7 +414,7 @@
             <!-- Benefit 2 -->
             <div class="benefit-card">
               <div class="benefit-icon-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                   <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                 </svg>
@@ -428,7 +431,7 @@
             <!-- Benefit 3 -->
             <div class="benefit-card">
               <div class="benefit-icon-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
                   <line x1="8" y1="2" x2="8" y2="18"/>
                   <line x1="16" y1="6" x2="16" y2="22"/>
@@ -446,7 +449,7 @@
         </div>
       </section>
 
-      <!-- Section 7 — Platform Preview Section ("Everything You Need to Move Produce") -->
+      <!-- 7. PLATFORM PREVIEW SECTION (MOST IMPORTANT FOR HACKATHON) -->
       <section id="preview" class="platform-preview-section">
         <div class="section-container">
           <div class="section-header-text">
@@ -464,7 +467,7 @@
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 2 2 4v4a4 4 0 0 1-4 4h-2a3 3 0 0 0-3 3v3z"/>
                   </svg>
-                  <span>Farmer Dashboard</span>
+                  <span>Farmer Experience</span>
                 </div>
                 <h3 class="preview-role-heading">List &amp; Lock Harvest</h3>
               </div>
@@ -507,7 +510,7 @@
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
                   </svg>
-                  <span>Marketplace</span>
+                  <span>Trader Marketplace</span>
                 </div>
                 <h3 class="preview-role-heading">Browse &amp; Commit</h3>
               </div>
@@ -543,15 +546,15 @@
               </div>
             </div>
 
-            <!-- Driver Portal Card -->
+            <!-- Driver Logistics Card -->
             <div class="preview-card">
               <div class="preview-card-header">
                 <div class="preview-user-badge driver-user">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="1" y="3" width="15" height="13" rx="2"/>
-                    <polyline points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
                   </svg>
-                  <span>Driver Portal</span>
+                  <span>Driver Logistics</span>
                 </div>
                 <h3 class="preview-role-heading">Accept &amp; Deliver</h3>
               </div>
@@ -590,7 +593,7 @@
         </div>
       </section>
 
-      <!-- Section 8 — Final CTA Section -->
+      <!-- 8. FINAL CTA SECTION -->
       <section class="final-cta-section">
         <div class="section-container">
           <div class="integrated-cta-box">
@@ -608,7 +611,7 @@
       </section>
     </main>
 
-    <!-- Clean Responsive Footer -->
+    <!-- 9. CLEAN RESPONSIVE FOOTER -->
     <footer class="welcome-footer">
       <div class="footer-container">
         <div class="footer-top-row">
@@ -640,9 +643,9 @@
             <div class="footer-link-group">
               <span class="footer-group-title">Information</span>
               <a href="#" @click.prevent="triggerAlert('FarmLink Western Region Pilot: Daboase & Beposo to Takoradi Market Circle Corridor.')" class="footer-link">About Pilot</a>
-              <a href="#" @click.prevent="triggerAlert('Support & Contact: Western Region Corridor Desk — Takoradi Market Circle.')" class="footer-link">Contact</a>
-              <a href="#" @click.prevent="triggerAlert('Privacy Policy: All farmer and buyer transactions are securely processed.')" class="footer-link">Privacy Policy</a>
-              <a href="#" @click.prevent="triggerAlert('Terms of Service: Standard marketplace & escrow rules apply.')" class="footer-link">Terms</a>
+              <a href="#" @click.prevent="triggerAlert('Support & Contact: Western Region Corridor Desk — Takoradi Market Circle.')" class="footer-link">Contact Desk</a>
+              <a href="#" @click.prevent="triggerAlert('Privacy Policy: All transactions are processed securely via Mobile Money escrow.')" class="footer-link">Privacy Policy</a>
+              <a href="#" @click.prevent="triggerAlert('Terms of Service: Standard marketplace & escrow pilot terms apply.')" class="footer-link">Terms</a>
             </div>
           </div>
         </div>
@@ -704,7 +707,7 @@ export default {
   top: 0;
   z-index: 100;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.92);
+  background-color: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(233, 236, 239, 0.9);
@@ -750,12 +753,13 @@ export default {
 }
 
 .nav-link {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color-neutral-700);
   text-decoration: none;
   font-weight: 500;
   transition: color var(--transition-fast);
-  padding: 6px 8px;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
 }
 
 .nav-link:hover {
@@ -763,7 +767,7 @@ export default {
 }
 
 .nav-login-btn {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color-neutral-900);
   text-decoration: none;
   font-weight: 600;
@@ -778,7 +782,7 @@ export default {
 }
 
 .nav-register-btn {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color-white);
   text-decoration: none;
   font-weight: 700;
@@ -820,12 +824,11 @@ export default {
 }
 
 .mobile-nav-link {
-  font-size: 15px;
+  font-size: 16px;
   color: var(--color-neutral-900);
   text-decoration: none;
   font-weight: 500;
   padding: 12px 6px;
-  display: block;
   min-height: 44px;
   display: flex;
   align-items: center;
@@ -838,7 +841,7 @@ export default {
 }
 
 .mobile-nav-btn {
-  font-size: 15px;
+  font-size: 16px;
   color: var(--color-white);
   text-decoration: none;
   font-weight: 700;
@@ -852,11 +855,11 @@ export default {
   box-shadow: 0 4px 12px rgba(45, 106, 79, 0.25);
 }
 
-/* Animation */
+/* Mobile Menu Animation */
 .mobile-menu-enter-active,
 .mobile-menu-leave-active {
   transition: all 0.25s ease-in-out;
-  max-height: 320px;
+  max-height: 340px;
   opacity: 1;
   overflow: hidden;
 }
@@ -878,12 +881,12 @@ export default {
 .section-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 64px 24px;
+  padding: 72px 24px;
 }
 
 .section-header-text {
   text-align: center;
-  margin-bottom: 44px;
+  margin-bottom: 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -921,14 +924,14 @@ export default {
   color: var(--color-neutral-900);
   margin: 0 0 12px 0;
   letter-spacing: -0.5px;
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .section-subtitle {
   font-size: 16px;
   color: var(--color-neutral-500);
   margin: 0 auto;
-  max-width: 620px;
+  max-width: 640px;
   line-height: 1.6;
 }
 
@@ -937,12 +940,12 @@ export default {
    =================================================== */
 .hero-section {
   min-height: auto;
-  /* Warm Ghanaian agricultural field background with reduced green overlay (approx 42-46% opacity) */
-  background: linear-gradient(180deg, rgba(20, 50, 36, 0.42) 0%, rgba(35, 85, 62, 0.48) 100%), url('/images/welcome_hero_banner.png') center/cover no-repeat;
+  /* Ghanaian agricultural field background with ~38-44% overlay for vibrant photo visibility */
+  background: linear-gradient(180deg, rgba(15, 38, 27, 0.38) 0%, rgba(27, 67, 50, 0.44) 100%), url('/images/welcome_hero_banner.png') center/cover no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 56px 24px 44px;
+  padding: 60px 24px 48px;
   text-align: center;
   position: relative;
 }
@@ -972,9 +975,9 @@ export default {
 }
 
 .hero-pill-badge {
-  background: rgba(255, 255, 255, 0.22);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  color: var(--color-white);
+  background: rgba(255, 255, 255, 0.24);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: #FFFFFF;
   border-radius: 9999px;
   padding: 6px 18px;
   font-size: 12px;
@@ -994,7 +997,7 @@ export default {
   font-weight: 800;
   line-height: 1.15;
   color: #FFFFFF;
-  margin: 0 0 18px 0; /* 18px spacing to subheadline */
+  margin: 0 0 18px 0;
   letter-spacing: -1px;
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
 }
@@ -1003,7 +1006,7 @@ export default {
   font-size: 19px;
   line-height: 1.45;
   color: rgba(255, 255, 255, 0.96);
-  margin: 0 0 22px 0; /* 22px spacing to CTA group */
+  margin: 0 0 24px 0;
   max-width: 600px;
   font-weight: 500;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
@@ -1013,16 +1016,16 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px; /* 12px spacing between CTA and login link */
+  gap: 12px;
   justify-content: center;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .btn-hero-primary {
   background-color: var(--color-white);
   color: var(--color-primary-hover);
-  padding: 0 32px;
+  padding: 0 34px;
   height: 52px;
   min-height: 48px;
   border-radius: 10px;
@@ -1048,7 +1051,7 @@ export default {
 
 .btn-hero-secondary-link {
   color: #FFFFFF;
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 500;
   text-decoration: underline;
   text-underline-offset: 4px;
@@ -1065,13 +1068,13 @@ export default {
   color: var(--color-primary-lighter);
 }
 
-/* Trust Badges — Premium Glass Pills */
+/* Trust Badges — Glass Pills */
 .hero-trust-badges {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  margin-top: 14px; /* 14px spacing from login link */
+  margin-top: 14px;
   flex-wrap: wrap;
 }
 
@@ -1080,8 +1083,8 @@ export default {
   align-items: center;
   gap: 8px;
   padding: 8px 18px;
-  background: rgba(255, 255, 255, 0.18);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.38);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: 9999px;
@@ -1093,7 +1096,7 @@ export default {
 }
 
 .trust-badge:hover {
-  background: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.3);
   transform: translateY(-1px);
 }
 
@@ -1103,18 +1106,18 @@ export default {
 }
 
 /* ===================================================
-   2. STATISTICS / SOCIAL PROOF SECTION
+   2. STATISTICS SECTION (Compact Trust Strip)
    =================================================== */
 .stats-bar-section {
   background-color: var(--color-white);
   border-bottom: 1px solid var(--color-neutral-100);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  padding: 24px 20px;
 }
 
 .stats-container {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 24px 20px;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -1130,10 +1133,10 @@ export default {
 }
 
 .stat-value {
-  font-size: 20px;
+  font-size: 26px;
   font-weight: 800;
-  color: var(--color-primary-hover);
-  line-height: 1.2;
+  color: var(--color-primary);
+  line-height: 1.15;
 }
 
 .stat-label {
@@ -1142,17 +1145,24 @@ export default {
   color: var(--color-neutral-500);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 .stat-divider {
   width: 1px;
-  height: 36px;
+  height: 40px;
   background-color: var(--color-neutral-200);
 }
 
+.stats-disclaimer {
+  text-align: center;
+  margin-top: 14px;
+  font-size: 11.5px;
+  color: var(--color-neutral-500);
+}
+
 /* ===================================================
-   3. THE PROBLEM WE SOLVE
+   3. PROBLEM SECTION
    =================================================== */
 .problem-section {
   background-color: #F8F9FA;
@@ -1204,20 +1214,9 @@ export default {
   margin-bottom: 20px;
 }
 
-.danger-bg {
-  background-color: #FEE2E2;
-  color: #DC3545;
-}
-
-.warning-bg {
-  background-color: #FEF3C7;
-  color: #D97706;
-}
-
-.accent-bg {
-  background-color: #E0F2FE;
-  color: #0284C7;
-}
+.danger-bg { background-color: #FEE2E2; color: #DC3545; }
+.warning-bg { background-color: #FEF3C7; color: #D97706; }
+.accent-bg { background-color: #E0F2FE; color: #0284C7; }
 
 .problem-card-title {
   font-size: 19px;
@@ -1228,7 +1227,7 @@ export default {
 }
 
 .problem-card-body {
-  font-size: 14.5px;
+  font-size: 15px;
   color: var(--color-neutral-700);
   line-height: 1.6;
   margin: 0;
@@ -1297,20 +1296,9 @@ export default {
   justify-content: center;
 }
 
-.amber-circle {
-  background-color: var(--color-warning-light);
-  color: var(--color-secondary-dark);
-}
-
-.teal-circle {
-  background-color: var(--color-tertiary-subtle);
-  color: var(--color-tertiary-hover);
-}
-
-.green-circle {
-  background-color: #D1E7DD;
-  color: #0F5132;
-}
+.amber-circle { background-color: var(--color-warning-light); color: var(--color-secondary-dark); }
+.teal-circle { background-color: var(--color-tertiary-subtle); color: var(--color-tertiary-hover); }
+.green-circle { background-color: #D1E7DD; color: #0F5132; }
 
 .chain-step-title {
   font-size: 17px;
@@ -1321,7 +1309,7 @@ export default {
 }
 
 .chain-step-desc {
-  font-size: 13.5px;
+  font-size: 14px;
   color: var(--color-neutral-700);
   line-height: 1.5;
   margin: 0;
@@ -1357,7 +1345,7 @@ export default {
 .role-card {
   background-color: var(--color-white);
   border-radius: var(--radius-xl);
-  padding: 30px 24px;
+  padding: 32px 24px;
   display: flex;
   flex-direction: column;
   border: 1px solid var(--color-neutral-200);
@@ -1431,7 +1419,7 @@ export default {
 }
 
 .role-desc {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color-neutral-700);
   line-height: 1.6;
   margin: 0;
@@ -1448,14 +1436,14 @@ export default {
 .benefits-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 32px;
 }
 
 .benefit-card {
   background-color: #F8F9FA;
   border: 1px solid var(--color-neutral-200);
   border-radius: var(--radius-xl);
-  padding: 28px 24px;
+  padding: 32px 26px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -1470,9 +1458,9 @@ export default {
 }
 
 .benefit-icon-badge {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
   background-color: var(--color-primary-subtle);
   color: var(--color-primary);
   display: flex;
@@ -1481,23 +1469,23 @@ export default {
 }
 
 .benefit-title {
-  font-size: 19px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 800;
   color: var(--color-neutral-900);
   margin: 0 0 6px 0;
 }
 
 .benefit-quote {
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 700;
   color: var(--color-primary-hover);
   margin: 0 0 8px 0;
 }
 
 .benefit-body {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--color-neutral-700);
-  line-height: 1.55;
+  line-height: 1.6;
   margin: 0;
 }
 
@@ -1519,11 +1507,11 @@ export default {
   background-color: var(--color-white);
   border-radius: var(--radius-xl);
   border: 1px solid var(--color-neutral-200);
-  padding: 24px 20px;
+  padding: 26px 22px;
   box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -1554,7 +1542,7 @@ export default {
 .driver-user { background-color: var(--color-tertiary-subtle); color: var(--color-tertiary-hover); }
 
 .preview-role-heading {
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 800;
   color: var(--color-neutral-900);
   margin: 0;
@@ -1562,10 +1550,10 @@ export default {
 
 .mock-device-frame {
   background-color: #111827;
-  border-radius: 14px;
-  padding: 14px;
+  border-radius: 16px;
+  padding: 16px;
   color: #FFFFFF;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
 }
 
 .mock-screen-header {
@@ -1574,13 +1562,13 @@ export default {
   align-items: center;
   margin-bottom: 12px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .mock-status-pill {
   font-size: 10px;
   font-weight: 700;
-  padding: 2px 8px;
+  padding: 3px 8px;
   border-radius: 9999px;
   text-transform: uppercase;
 }
@@ -1591,30 +1579,30 @@ export default {
 
 .mock-time {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.65);
 }
 
 .mock-screen-body {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 9px;
 }
 
 .mock-product-row {
   display: flex;
   justify-content: space-between;
-  font-size: 12px;
+  font-size: 13px;
 }
 
-.mock-label { color: rgba(255, 255, 255, 0.6); }
+.mock-label { color: rgba(255, 255, 255, 0.65); }
 .mock-val { color: #FFFFFF; font-weight: 600; }
 .highlight-val { color: #52B788; font-weight: 700; }
 
 .mock-action-btn {
-  margin-top: 6px;
-  padding: 8px;
-  border-radius: 6px;
-  font-size: 11.5px;
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 12px;
   font-weight: 700;
   text-align: center;
 }
@@ -1627,7 +1615,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--color-neutral-500);
 }
@@ -1636,11 +1624,11 @@ export default {
 .flow-arrow { color: var(--color-primary); font-weight: 800; }
 
 /* ===================================================
-   8. FINAL CTA & FOOTER
+   8. FINAL CTA SECTION
    =================================================== */
 .final-cta-section {
   background-color: var(--color-white);
-  padding: 24px 0 64px;
+  padding: 24px 0 72px;
 }
 
 .integrated-cta-box {
@@ -1669,7 +1657,7 @@ export default {
 
 .integrated-cta-subtext {
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.92);
   line-height: 1.5;
   margin: 0;
 }
@@ -1677,7 +1665,7 @@ export default {
 .btn-integrated-cta {
   background-color: var(--color-white);
   color: var(--color-primary-hover);
-  padding: 0 32px;
+  padding: 0 34px;
   height: 52px;
   min-height: 48px;
   border-radius: 10px;
@@ -1698,7 +1686,9 @@ export default {
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
 }
 
-/* Footer */
+/* ===================================================
+   9. FOOTER
+   =================================================== */
 .welcome-footer {
   background-color: #143325;
   color: rgba(255, 255, 255, 0.8);
@@ -1737,8 +1727,8 @@ export default {
 }
 
 .footer-tagline {
-  font-size: 13.5px;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.72);
   line-height: 1.6;
   margin: 0;
 }
@@ -1765,12 +1755,12 @@ export default {
 }
 
 .footer-link {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 14.5px;
+  color: rgba(255, 255, 255, 0.72);
   text-decoration: none;
   transition: color var(--transition-fast);
-  padding: 2px 0;
-  min-height: 28px;
+  padding: 4px 0;
+  min-height: 32px;
   display: inline-flex;
   align-items: center;
 }
@@ -1783,7 +1773,7 @@ export default {
   padding-top: 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
-  font-size: 12.5px;
+  font-size: 13px;
   color: rgba(255, 255, 255, 0.55);
 }
 
@@ -1817,7 +1807,7 @@ export default {
   }
 
   .hero-section {
-    padding: 36px 16px 32px;
+    padding: 40px 16px 36px;
   }
 
   .hero-headline {
@@ -1827,7 +1817,7 @@ export default {
 
   .hero-subheadline {
     font-size: 15px;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
     max-width: 340px;
   }
 
@@ -1851,13 +1841,16 @@ export default {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
-    padding: 18px 16px;
+    padding: 16px 8px;
   }
+
+  .stat-value { font-size: 22px; }
+  .stat-label { font-size: 11.5px; }
 
   .stat-divider { display: none; }
 
   .section-container {
-    padding: 44px 16px;
+    padding: 48px 16px;
   }
 
   .section-title {
@@ -1869,7 +1862,7 @@ export default {
   .benefits-grid,
   .preview-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 18px;
   }
 
   .integrated-cta-box {
@@ -1898,7 +1891,7 @@ export default {
   }
 
   .hero-subheadline {
-    font-size: 14px;
+    font-size: 14.5px;
   }
 
   .app-logo-text {
