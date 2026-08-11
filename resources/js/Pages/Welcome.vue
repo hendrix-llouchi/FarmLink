@@ -159,11 +159,7 @@
             <!-- Problem 1 -->
             <div class="problem-card">
               <div class="problem-icon-wrapper danger-bg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"/>
-                  <polyline points="12 6 12 12 16 14"/>
-                  <path d="M12 2v2M12 20v2M2 12h2M20 12h2"/>
-                </svg>
+                <img src="/images/clock.png" alt="Produce Lost" width="24" height="24" />
               </div>
               <h3 class="problem-card-title">Produce Lost Every Tuesday</h3>
               <p class="problem-card-body">
@@ -174,12 +170,7 @@
             <!-- Problem 2 -->
             <div class="problem-card">
               <div class="problem-icon-wrapper warning-bg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/>
-                  <path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/>
-                  <path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/>
-                  <circle cx="18" cy="14" r="0.5"/>
-                </svg>
+                <img src="/images/wallet-filled-money-tool.png" alt="Distress Sale Trap" width="24" height="24" />
               </div>
               <h3 class="problem-card-title">The Distress Sale Trap</h3>
               <p class="problem-card-body">
@@ -190,13 +181,7 @@
             <!-- Problem 3 -->
             <div class="problem-card">
               <div class="problem-icon-wrapper accent-bg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="1" y="3" width="15" height="13" rx="2"/>
-                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
-                  <circle cx="5.5" cy="18.5" r="2.5"/>
-                  <circle cx="18.5" cy="18.5" r="2.5"/>
-                  <line x1="1" y1="9" x2="5" y2="9"/>
-                </svg>
+                <img src="/images/fast-delivery.png" alt="Transport Cost Disputes" width="24" height="24" />
               </div>
               <h3 class="problem-card-title">Transport Cost Disputes</h3>
               <p class="problem-card-body">
@@ -222,13 +207,7 @@
               <div class="chain-step-header">
                 <span class="chain-step-number">01</span>
                 <div class="chain-icon-circle green-circle">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 21h18"/>
-                    <path d="M4 21V10l8-6 8 6v11"/>
-                    <path d="M9 21v-8h6v8"/>
-                    <path d="M9 10h6"/>
-                    <circle cx="12" cy="7" r="1.5"/>
-                  </svg>
+                  <img src="/images/farmer.png" alt="Farm Gate" width="24" height="24" />
                 </div>
               </div>
               <h4 class="chain-step-title">Farm Gate</h4>
@@ -247,13 +226,7 @@
               <div class="chain-step-header">
                 <span class="chain-step-number">02</span>
                 <div class="chain-icon-circle amber-circle">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="6" width="20" height="12" rx="2"/>
-                    <circle cx="12" cy="12" r="2.5"/>
-                    <path d="M6 12h.01M18 12h.01"/>
-                    <path d="M4 18v2a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2"/>
-                    <path d="M4 6V4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2"/>
-                  </svg>
+                  <img src="/images/money-stack.png" alt="Escrow Commit" width="24" height="24" />
                 </div>
               </div>
               <h4 class="chain-step-title">Escrow Commit</h4>
@@ -272,13 +245,7 @@
               <div class="chain-step-header">
                 <span class="chain-step-number">03</span>
                 <div class="chain-icon-circle teal-circle">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="1" y="3" width="15" height="13" rx="2"/>
-                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
-                    <circle cx="5.5" cy="18.5" r="2.5"/>
-                    <circle cx="18.5" cy="18.5" r="2.5"/>
-                    <line x1="1" y1="9" x2="5" y2="9"/>
-                  </svg>
+                  <img src="/images/fast-delivery.png" alt="Aboboyaa Transit" width="24" height="24" />
                 </div>
               </div>
               <h4 class="chain-step-title">Aboboyaa Transit</h4>
@@ -297,12 +264,7 @@
               <div class="chain-step-header">
                 <span class="chain-step-number">04</span>
                 <div class="chain-icon-circle green-circle">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 9l1-5h16l1 5"/>
-                    <path d="M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/>
-                    <path d="M4 12v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8"/>
-                    <path d="M9 21v-7h6v7"/>
-                  </svg>
+                  <img src="/images/market.png" alt="Market Circle" width="24" height="24" />
                 </div>
               </div>
               <h4 class="chain-step-title">Market Circle</h4>
@@ -328,13 +290,7 @@
             <div class="role-card role-card-farmer">
               <div class="role-card-top">
                 <div class="role-icon-box farmer-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 21h18"/>
-                    <path d="M4 21V10l8-6 8 6v11"/>
-                    <path d="M9 21v-8h6v8"/>
-                    <path d="M9 10h6"/>
-                    <circle cx="12" cy="7" r="1.5"/>
-                  </svg>
+                  <img src="/images/farmer.png" alt="Farmers" width="28" height="28" />
                 </div>
                 <div class="role-header-info">
                   <span class="role-pill farmer-pill">Producer</span>
@@ -353,12 +309,7 @@
             <div class="role-card role-card-trader">
               <div class="role-card-top">
                 <div class="role-icon-box trader-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 9l1-5h16l1 5"/>
-                    <path d="M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/>
-                    <path d="M4 12v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8"/>
-                    <path d="M9 21v-7h6v7"/>
-                  </svg>
+                  <img src="/images/market.png" alt="Market Traders" width="28" height="28" />
                 </div>
                 <div class="role-header-info">
                   <span class="role-pill trader-pill">Buyer</span>
@@ -377,13 +328,7 @@
             <div class="role-card role-card-driver">
               <div class="role-card-top">
                 <div class="role-icon-box driver-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="1" y="3" width="15" height="13" rx="2"/>
-                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
-                    <circle cx="5.5" cy="18.5" r="2.5"/>
-                    <circle cx="18.5" cy="18.5" r="2.5"/>
-                    <line x1="1" y1="9" x2="5" y2="9"/>
-                  </svg>
+                  <img src="/images/fast-delivery.png" alt="Aboboyaa Drivers" width="28" height="28" />
                 </div>
                 <div class="role-header-info">
                   <span class="role-pill driver-pill">Logistics</span>
@@ -414,12 +359,7 @@
             <!-- Benefit 1 -->
             <div class="benefit-card">
               <div class="benefit-icon-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-                  <circle cx="9" cy="7" r="4"/>
-                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                </svg>
+                <img src="/images/group.png" alt="Guaranteed Buyers" width="28" height="28" />
               </div>
               <div class="benefit-content">
                 <h3 class="benefit-title">Guaranteed Buyers</h3>
@@ -433,12 +373,7 @@
             <!-- Benefit 2 -->
             <div class="benefit-card">
               <div class="benefit-icon-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="2" y="5" width="20" height="14" rx="2"/>
-                  <line x1="2" y1="10" x2="22" y2="10"/>
-                  <path d="M7 15h.01M11 15h2"/>
-                  <path d="M12 2v3"/>
-                </svg>
+                <img src="/images/credit-card.png" alt="Secure Payments" width="28" height="28" />
               </div>
               <div class="benefit-content">
                 <h3 class="benefit-title">Secure Payments</h3>
@@ -452,13 +387,7 @@
             <!-- Benefit 3 -->
             <div class="benefit-card">
               <div class="benefit-icon-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="1" y="3" width="15" height="13" rx="2"/>
-                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
-                  <circle cx="5.5" cy="18.5" r="2.5"/>
-                  <circle cx="18.5" cy="18.5" r="2.5"/>
-                  <line x1="1" y1="9" x2="5" y2="9"/>
-                </svg>
+                <img src="/images/fast-delivery.png" alt="Reliable Transport" width="28" height="28" />
               </div>
               <div class="benefit-content">
                 <h3 class="benefit-title">Reliable Transport</h3>
