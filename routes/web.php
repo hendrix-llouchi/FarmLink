@@ -76,6 +76,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/buyer/orders', [OrderController::class, 'store'])->name('buyer.orders.store');
         Route::get('/buyer/orders', [OrderController::class, 'index'])->name('buyer.orders.index');
         Route::post('/buyer/orders/{id}/rate', [OrderController::class, 'rateOrder'])->name('buyer.orders.rate');
+        Route::post('/buyer/orders/{id}/dispute', [OrderController::class, 'disputeOrder'])->name('buyer.orders.dispute');
     });
 
     // Driver Routes

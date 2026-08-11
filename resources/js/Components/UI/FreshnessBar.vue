@@ -22,6 +22,13 @@
         :style="{ width: fillPercent + '%', backgroundColor: fillColor }"
       ></div>
     </div>
+
+    <!-- Best Before plain-language line -->
+    <div v-if="harvestDate" class="best-before-line" :class="statusClass">
+      <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span v-if="daysRemaining > 0">Best before: {{ bestBeforeDate }} — {{ daysRemaining }} day{{ daysRemaining !== 1 ? 's' : '' }} left</span>
+      <span v-else>Past recommended sell date — sell immediately</span>
+    </div>
   </div>
 </template>
 
@@ -73,6 +80,18 @@ export default {
       if (this.percentElapsed <= 40) return 'status-fresh';
       if (this.percentElapsed <= 75) return 'status-soon';
       return 'status-expiry';
+    },
+    bestBeforeDate() {
+      if (!this.harvestDate) return null;
+      const harvest = new Date(this.harvestDate);
+      harvest.setHours(0, 0, 0, 0);
+      const bestBefore = new Date(harvest);
+      bestBefore.setDate(bestBefore.getDate() + this.shelfLifeDays);
+      return bestBefore.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    },
+    daysRemaining() {
+      if (!this.harvestDate) return 0;
+      return Math.max(0, this.shelfLifeDays - this.daysElapsed);
     }
   }
 }
@@ -139,5 +158,24 @@ export default {
   height: 100%;
   border-radius: var(--radius-pill);
   transition: width 0.4s ease, background-color 0.4s ease;
+}
+
+.best-before-line {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: var(--font-weight-medium);
+  margin-top: 2px;
+}
+
+.best-before-line.status-fresh {
+  color: var(--color-primary);
+}
+.best-before-line.status-soon {
+  color: #E65100;
+}
+.best-before-line.status-expiry {
+  color: var(--color-danger);
 }
 </style>

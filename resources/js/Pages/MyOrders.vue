@@ -257,6 +257,18 @@
             >
               Rate Order
             </button>
+
+            <!-- Dispute button — shown on delivered orders that haven't been disputed yet -->
+            <div v-if="order.disputed_at" class="dispute-filed-tag">
+              ⚠️ Issue Reported
+            </div>
+            <button
+              v-else
+              @click="openDisputeModal(order)"
+              class="report-issue-btn"
+            >
+              Report Issue
+            </button>
           </div>
 
           <!-- Bottom Meta: Order Timestamp -->
@@ -267,6 +279,50 @@
       </div>
     </div>
       </main>
+    </div>
+
+    <!-- Dispute Modal -->
+    <div v-if="isDisputeModalOpen" class="modal-overlay" @click.self="closeDisputeModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 class="modal-title">Report Issue — Order #{{ selectedDispute?.id }}</h2>
+          <button @click="closeDisputeModal" class="btn-close-modal" aria-label="Close modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-instructions">What issue did you experience with this order?</p>
+
+          <div class="form-group-custom">
+            <label class="form-input-label">Issue Type</label>
+            <div class="dispute-reason-options">
+              <label v-for="opt in disputeReasonOptions" :key="opt.value" class="dispute-option" :class="{ selected: disputeForm.reason === opt.value }">
+                <input type="radio" :value="opt.value" v-model="disputeForm.reason" class="hidden-radio" />
+                <span class="dispute-option-icon">{{ opt.icon }}</span>
+                <span>{{ opt.label }}</span>
+              </label>
+            </div>
+            <span v-if="disputeErrors.disputed_reason" class="error-validation-text">{{ disputeErrors.disputed_reason }}</span>
+          </div>
+
+          <div class="form-group-custom">
+            <label for="dispute-notes" class="form-input-label">Additional Notes (Optional)</label>
+            <textarea
+              id="dispute-notes"
+              v-model="disputeForm.notes"
+              placeholder="Describe what went wrong, e.g. crates arrived crushed, received 3 bags but ordered 5..."
+              class="form-textarea-input"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <p class="dispute-notice">The farmer will be notified immediately. FarmLink records this for accountability.</p>
+        </div>
+        <div class="modal-footer-actions">
+          <button @click="closeDisputeModal" class="btn-checkout-secondary" :disabled="isDisputeSubmitting">Cancel</button>
+          <button @click="submitDispute" class="btn-dispute-submit" :disabled="isDisputeSubmitting || !disputeForm.reason">
+            {{ isDisputeSubmitting ? 'Submitting...' : 'Submit Report' }}
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- Escrow Feedback / Rating Modal Dialog -->
@@ -493,6 +549,50 @@ export default {
       }
     };
 
+    // ── Dispute logic ────────────────────────────────────────────────────────
+    const isDisputeModalOpen = ref(false);
+    const selectedDispute = ref(null);
+    const isDisputeSubmitting = ref(false);
+    const disputeForm = reactive({ reason: '', notes: '' });
+    const disputeErrors = reactive({ disputed_reason: null });
+
+    const disputeReasonOptions = [
+      { value: 'damaged_produce',  icon: '🍅', label: 'Damaged / Spoiled Produce' },
+      { value: 'wrong_quantity',   icon: '⚖️', label: 'Wrong Quantity Delivered' },
+      { value: 'quality_mismatch', icon: '📋', label: 'Quality Doesn\'t Match Grade Listed' },
+      { value: 'late_delivery',    icon: '⏰', label: 'Delivery Was Too Late' },
+      { value: 'other',            icon: '❓', label: 'Other Issue' },
+    ];
+
+    const openDisputeModal = (order) => {
+      selectedDispute.value = order;
+      disputeForm.reason = '';
+      disputeForm.notes = '';
+      disputeErrors.disputed_reason = null;
+      isDisputeModalOpen.value = true;
+    };
+
+    const closeDisputeModal = () => {
+      isDisputeModalOpen.value = false;
+      selectedDispute.value = null;
+    };
+
+    const submitDispute = () => {
+      if (!disputeForm.reason) {
+        disputeErrors.disputed_reason = 'Please select an issue type.';
+        return;
+      }
+      isDisputeSubmitting.value = true;
+      router.post(`/buyer/orders/${selectedDispute.value.id}/dispute`, {
+        disputed_reason: disputeForm.reason,
+        disputed_notes: disputeForm.notes
+      }, {
+        onSuccess: () => { closeDisputeModal(); },
+        onError: (err) => { disputeErrors.disputed_reason = err.disputed_reason || err.order || null; },
+        onFinish: () => { isDisputeSubmitting.value = false; }
+      });
+    };
+
     return {
       formatDate,
       formatStatus,
@@ -508,10 +608,21 @@ export default {
       triggerDemoPrompt,
       expandedDriverOrderId,
       toggleDriverDetails,
-      imgErrors
+      imgErrors,
+      // Dispute
+      isDisputeModalOpen,
+      selectedDispute,
+      isDisputeSubmitting,
+      disputeForm,
+      disputeErrors,
+      disputeReasonOptions,
+      openDisputeModal,
+      closeDisputeModal,
+      submitDispute
     };
   }
 }
+
 </script>
 
 <style scoped>
@@ -1025,6 +1136,105 @@ export default {
 
 .rate-order-btn:hover {
   background-color: var(--color-primary-hover);
+}
+
+.order-actions-row {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.report-issue-btn {
+  flex: 1;
+  height: 38px;
+  border-radius: var(--radius-md);
+  background-color: transparent;
+  color: var(--color-danger);
+  border: 1.5px solid var(--color-danger);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.report-issue-btn:hover {
+  background-color: var(--color-danger);
+  color: var(--color-white);
+}
+
+.dispute-filed-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--font-size-xs);
+  color: #E65100;
+  background-color: #FFF3E0;
+  border: 1px solid #FFB74D;
+  border-radius: var(--radius-pill);
+  padding: 4px 10px;
+  font-weight: var(--font-weight-semibold);
+}
+
+.dispute-reason-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.dispute-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1.5px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.dispute-option.selected {
+  border-color: var(--color-danger);
+  background-color: #FFF3F3;
+  color: var(--color-danger);
+}
+
+.dispute-option-icon {
+  font-size: 16px;
+}
+
+.dispute-notice {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  background-color: var(--color-neutral-50);
+  border: 1px solid var(--color-neutral-100);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.btn-dispute-submit {
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-danger);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.btn-dispute-submit:hover:not(:disabled) {
+  background-color: #B71C1C;
+}
+
+.btn-dispute-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .rating-display-box {
