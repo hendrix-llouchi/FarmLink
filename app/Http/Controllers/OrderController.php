@@ -425,4 +425,70 @@ class OrderController extends Controller
         ]);
     }
 
+    /**
+     * Buyer raises a quality/delivery dispute on a delivered order.
+     */
+    public function disputeOrder(Request $request, $id)
+    {
+        $request->validate([
+            'disputed_reason' => ['required', 'string', 'in:damaged_produce,wrong_quantity,late_delivery,quality_mismatch,other'],
+            'disputed_notes'  => ['nullable', 'string', 'max:500'],
+        ]);
+
+        try {
+            DB::transaction(function () use ($request, $id) {
+                $order = Order::lockForUpdate()->findOrFail($id);
+
+                if ($order->buyer_id !== auth()->id()) {
+                    throw ValidationException::withMessages([
+                        'order' => ['You can only dispute orders you placed.']
+                    ]);
+                }
+
+                if ($order->status !== 'delivered') {
+                    throw ValidationException::withMessages([
+                        'order' => ['Only delivered orders can be disputed.']
+                    ]);
+                }
+
+                if ($order->disputed_at !== null) {
+                    throw ValidationException::withMessages([
+                        'order' => ['This order has already been disputed.']
+                    ]);
+                }
+
+                $order->update([
+                    'disputed_reason' => $request->disputed_reason,
+                    'disputed_notes'  => $request->disputed_notes,
+                    'disputed_at'     => now(),
+                ]);
+
+                $reasonLabels = [
+                    'damaged_produce'  => 'Damaged Produce',
+                    'wrong_quantity'   => 'Wrong Quantity',
+                    'late_delivery'    => 'Late Delivery',
+                    'quality_mismatch' => 'Quality Does Not Match Listing',
+                    'other'            => 'Other Issue',
+                ];
+                $label = $reasonLabels[$request->disputed_reason] ?? $request->disputed_reason;
+
+                // Notify farmer
+                Notification::create([
+                    'user_id' => $order->product->user_id,
+                    'message' => "⚠️ Buyer " . auth()->user()->name . " has raised a dispute on Order #" . $order->id . ": " . $label . ($request->disputed_notes ? ' — "' . $request->disputed_notes . '"' : '') . ". Please contact the buyer to resolve.",
+                    'type'    => 'order_update',
+                ]);
+            });
+        } catch (ValidationException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            throw ValidationException::withMessages([
+                'order' => ['Failed to submit dispute: ' . $e->getMessage()]
+            ]);
+        }
+
+        return redirect()->back()->with('message', 'Your dispute has been submitted. The farmer has been notified.');
+    }
+
 }
+

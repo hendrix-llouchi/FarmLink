@@ -26,6 +26,9 @@ class Order extends Model
         'estimated_transport_cost',
         'payment_status',
         'delivery_address',
+        'disputed_reason',
+        'disputed_notes',
+        'disputed_at',
     ];
 
     /**

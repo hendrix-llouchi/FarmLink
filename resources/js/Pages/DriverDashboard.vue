@@ -121,6 +121,13 @@
           <!-- SCREEN 1: JOBS TAB (Real Available Jobs & Active Deliveries)   -->
           <!-- ══════════════════════════════════════════════════════════════ -->
           <div v-if="activeTab === 'jobs'" class="tab-content-view">
+            <!-- Corridor Route Strip -->
+            <div class="corridor-context-strip">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" /><polygon points="16 8 20 8 23 11 23 16 16 16 16 8" /><circle cx="5.5" cy="18.5" r="2.5" /><circle cx="18.5" cy="18.5" r="2.5" /></svg>
+              <span>Active Route: <strong>Daboase / Beposo → Takoradi Market Circle</strong></span>
+              <span class="corridor-crop-tag">🍅 Tomatoes</span>
+            </div>
+
             <!-- Top Controls Row: Status Toggle + Rating Badge -->
             <div class="top-status-bar">
               <div class="status-control-box">
@@ -991,6 +998,30 @@ export default {
   width: 100%;
   max-width: 600px;
   padding: var(--space-4);
+}
+
+.corridor-context-strip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--color-tertiary);
+  background-color: var(--color-tertiary-light);
+  border: 1px solid var(--color-tertiary);
+  border-radius: var(--radius-md);
+  padding: 6px 12px;
+  margin-bottom: var(--space-3);
+  font-weight: var(--font-weight-medium);
+}
+
+.corridor-crop-tag {
+  margin-left: auto;
+  background-color: var(--color-white);
+  border-radius: var(--radius-pill);
+  padding: 1px 8px;
+  font-size: 10px;
+  color: var(--color-tertiary);
+  border: 1px solid var(--color-tertiary);
 }
 
 .top-status-bar {
