@@ -157,6 +157,10 @@
               </div>
             </div>
 
+            <div v-if="order.delivery_address" class="delivery-address-enrichment" style="margin-top: var(--space-2); font-size: var(--font-size-xs); color: var(--color-neutral-700); background-color: var(--color-neutral-50); padding: 4px 8px; border-radius: var(--radius-sm); border: 1px solid var(--color-neutral-100);">
+              📍 <strong>Drop-off Address:</strong> {{ order.delivery_address }}
+            </div>
+
             <!-- Payment Breakdown -->
             <div class="payment-breakdown-box">
               <span class="breakdown-title">Payment Breakdown</span>
