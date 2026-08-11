@@ -294,7 +294,7 @@
                   v-model="form.location"
                   type="text"
                   class="field-input"
-                  placeholder="e.g. Takoradi Market Circle or Tarkwa Station"
+                  placeholder="e.g. Daboase, Beposo, or Takoradi Market Circle"
                   :class="{ 'input-error': form.errors.location }"
                   required
                 />
