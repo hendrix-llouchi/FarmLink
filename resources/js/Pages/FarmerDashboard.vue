@@ -89,13 +89,6 @@
           </AppBadge>
         </div>
 
-        <!-- Corridor Context Strip -->
-        <div class="corridor-context-strip">
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-          <span>Pilot Corridor: <strong>Daboase / Beposo → Takoradi Market Circle</strong></span>
-          <span class="corridor-crop-tag">🍅 Tomatoes Only</span>
-        </div>
-
         <!-- Metrics Section (Stitch layout) -->
         <div class="metrics-grid">
           <!-- Total Sales Hero Card -->
@@ -975,30 +968,6 @@ export default {
 /* Flash alerts */
 .flash-alert-wrapper {
   margin-bottom: var(--space-4);
-}
-
-.corridor-context-strip {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  color: var(--color-primary);
-  background-color: var(--color-primary-lighter);
-  border: 1px solid var(--color-primary-light);
-  border-radius: var(--radius-md);
-  padding: 6px 12px;
-  margin-bottom: var(--space-4);
-  font-weight: var(--font-weight-medium);
-}
-
-.corridor-crop-tag {
-  margin-left: auto;
-  background-color: var(--color-white);
-  border-radius: var(--radius-pill);
-  padding: 1px 8px;
-  font-size: 10px;
-  color: var(--color-primary);
-  border: 1px solid var(--color-primary-light);
 }
 
 .flash-badge {

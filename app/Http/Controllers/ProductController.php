@@ -106,7 +106,7 @@ class ProductController extends Controller
             'quantity'          => $request->quantity,
             'price'             => $request->price,
             'image_path'        => $imagePath,
-            'harvest_date'      => $request->harvest_date,
+            'harvest_date'      => $request->harvest_date ?? now()->format('Y-m-d'),
             'quality_grade'     => $request->quality_grade ?? 'A',
             'unit'              => $request->unit ?? 'Crate',
             'minimum_order_qty' => $request->minimum_order_qty ?? 1,

@@ -131,7 +131,7 @@
                   id="profile-location"
                   label="Primary Location (Ghana Western Region)"
                   required
-                  placeholder="e.g. Takoradi Market Circle or Tarkwa"
+                  placeholder="e.g. Daboase, Beposo, or Takoradi Market Circle"
                   :error="profileForm.errors.location"
                 />
 
