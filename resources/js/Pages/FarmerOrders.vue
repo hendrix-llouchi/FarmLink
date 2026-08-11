@@ -170,7 +170,7 @@
                   Individual 🧍
                 </span>
 
-                <span class="buyer-location">📍 {{ order.buyer?.location || 'Takoradi' }}</span>
+                <span class="buyer-location">📍 Drop-off: {{ order.delivery_address || order.buyer?.location || 'Takoradi Market Circle' }}</span>
               </div>
               <div class="total-paid-meta">
                 <span class="total-label">Payout:</span>
