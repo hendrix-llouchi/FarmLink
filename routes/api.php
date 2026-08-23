@@ -18,4 +18,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/webhooks/momo', [\App\Http\Controllers\MomoWebhookController::class, 'handle'])->name('webhooks.momo');
+// MoMo webhook — throttled to 30 per minute to prevent spoofed/flooded callbacks
+Route::post('/webhooks/momo', [\App\Http\Controllers\MomoWebhookController::class, 'handle'])
+    ->middleware('throttle:30,1')
+    ->name('webhooks.momo');

@@ -37,13 +37,13 @@ Route::get('/', function () {
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:login');
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
 
     // Password Reset
     Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
-    Route::post('/forgot-password', [AuthController::class, 'sendResetCode'])->name('password.email');
+    Route::post('/forgot-password', [AuthController::class, 'sendResetCode'])->middleware('throttle:password-reset')->name('password.email');
     Route::get('/reset-password', [AuthController::class, 'showResetPassword'])->name('password.reset');
     Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 });
@@ -65,18 +65,26 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:farmer')->group(function () {
         Route::get('/farmer/dashboard', [ProductController::class, 'farmerDashboard'])->name('farmer.dashboard');
         Route::post('/farmer/products', [ProductController::class, 'store'])->name('products.store');
-        Route::post('/farmer/products/{id}/update', [ProductController::class, 'update'])->name('products.update');
-        Route::delete('/farmer/products/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+        Route::post('/farmer/products/{id}/update', [ProductController::class, 'update'])
+            ->middleware('owns.resource:products,user_id')
+            ->name('products.update');
+        Route::delete('/farmer/products/{id}', [ProductController::class, 'destroy'])
+            ->middleware('owns.resource:products,user_id')
+            ->name('products.destroy');
         Route::get('/farmer/orders', [OrderController::class, 'farmerOrders'])->name('farmer.orders.index');
     });
 
     // Buyer Routes
     Route::middleware('role:buyer')->group(function () {
         Route::get('/buyer/browse', [ProductController::class, 'buyerBrowse'])->name('buyer.browse');
-        Route::post('/buyer/orders', [OrderController::class, 'store'])->name('buyer.orders.store');
+        Route::post('/buyer/orders', [OrderController::class, 'store'])->middleware('throttle:checkout')->name('buyer.orders.store');
         Route::get('/buyer/orders', [OrderController::class, 'index'])->name('buyer.orders.index');
-        Route::post('/buyer/orders/{id}/rate', [OrderController::class, 'rateOrder'])->name('buyer.orders.rate');
-        Route::post('/buyer/orders/{id}/dispute', [OrderController::class, 'disputeOrder'])->name('buyer.orders.dispute');
+        Route::post('/buyer/orders/{id}/rate', [OrderController::class, 'rateOrder'])
+            ->middleware('owns.resource:orders,buyer_id')
+            ->name('buyer.orders.rate');
+        Route::post('/buyer/orders/{id}/dispute', [OrderController::class, 'disputeOrder'])
+            ->middleware('owns.resource:orders,buyer_id')
+            ->name('buyer.orders.dispute');
     });
 
     // Driver Routes
