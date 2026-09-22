@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
@@ -44,6 +45,7 @@ class SettingsController extends Controller
 
     /**
      * Update user password.
+     * Invalidates all other active sessions after a successful password change.
      */
     public function updatePassword(Request $request)
     {
@@ -64,6 +66,9 @@ class SettingsController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect()->back()->with('message', 'Password updated successfully!');
+        // Invalidate all other active sessions (e.g. stolen session on another device)
+        Auth::logoutOtherDevices($request->password);
+
+        return redirect()->back()->with('message', 'Password updated successfully! All other sessions have been signed out.');
     }
 }
