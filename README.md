@@ -1,4 +1,4 @@
-﻿# 🌾 FarmLink
+# 🌾 FarmLink
 
 > A localized farmer-to-buyer marketplace connecting smallholder **tomato farmers in Daboase & Beposo** with **market traders at Takoradi Market Circle**, built with Laravel 10 + Inertia.js + Vue 3.
 >
@@ -342,6 +342,15 @@ All reusable presentation components live in `resources/js/Components/UI/`:
 - **Image Delivery**: Product images are delivered with Cloudinary optimizations (format, quality, and responsive size accessors) in production
 
 > **NEVER** run `migrate:fresh`, `db:wipe`, or `truncate` against the production Render database. All schema changes must use additive, nullable migrations only.
+
+---
+
+## Terms of Service & Privacy Policy
+
+Official documentation for FarmLink's **Terms of Service** and **Privacy Policy** will be published soon:
+
+- **Terms of Service (Coming Soon)**: Outlining marketplace participation rules, pre-committed order flows, Mobile Money escrow protections, driver logistics guidelines, and dispute resolution for the Daboase & Beposo to Takoradi corridor.
+- **Privacy Policy (Coming Soon)**: Detailing user privacy practices, secure handling of user credentials and phone numbers, and data confidentiality standards across the platform.
 
 ---
 
