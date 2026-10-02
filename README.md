@@ -249,6 +249,7 @@ Visit [http://127.0.0.1:8000](http://127.0.0.1:8000)
 | Method | URI | Role | Action |
 |---|---|---|---|
 | GET | `/` | any | Role-based redirect (or Welcome page for guests) |
+| GET | `/terms` | any | View Terms & Conditions page |
 | GET/POST | `/login` | guest | Login |
 | GET/POST | `/register` | guest | Register |
 | GET/POST | `/forgot-password` | guest | Password reset request (6-digit code) |
@@ -347,9 +348,7 @@ All reusable presentation components live in `resources/js/Components/UI/`:
 
 ## Terms of Service & Privacy Policy
 
-Official documentation for FarmLink's **Terms of Service** and **Privacy Policy** will be published soon:
-
-- **Terms of Service (Coming Soon)**: Outlining marketplace participation rules, pre-committed order flows, Mobile Money escrow protections, driver logistics guidelines, and dispute resolution for the Daboase & Beposo to Takoradi corridor.
+- **Terms of Service & Conditions (Live)**: Comprehensive operating agreement outlining marketplace participation rules, pre-committed order flows, Mobile Money escrow protections, driver logistics guidelines, and dispute resolution for the Daboase & Beposo to Takoradi corridor. Live at [`/terms`](/terms).
 - **Privacy Policy (Coming Soon)**: Detailing user privacy practices, secure handling of user credentials and phone numbers, and data confidentiality standards across the platform.
 
 ---
