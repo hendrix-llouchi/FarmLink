@@ -1,6 +1,6 @@
 <template>
-  <div class="terms-page">
-    <Head title="Terms & Conditions — FarmLink" />
+  <div class="privacy-page">
+    <Head title="Privacy Policy — FarmLink" />
 
     <!-- 1. STICKY APP HEADER -->
     <header class="app-header">
@@ -17,6 +17,7 @@
         <!-- Navigation Links -->
         <div class="header-nav">
           <Link href="/" class="nav-link">Home</Link>
+          <Link href="/terms" class="nav-link">Terms</Link>
           
           <template v-if="$page.props.auth && $page.props.auth.user">
             <Link :href="dashboardRoute" class="nav-primary-btn">
@@ -38,15 +39,15 @@
     </header>
 
     <!-- 2. HERO HEADER SECTION -->
-    <section class="terms-hero">
+    <section class="privacy-hero">
       <div class="hero-inner">
         <div class="hero-badge-pill">
           <span class="badge-dot"></span>
-          <span>Western Region Pilot Corridor Agreement</span>
+          <span>Ghana Data Protection Act (Act 843) Compliant</span>
         </div>
-        <h1 class="hero-title">Terms &amp; Conditions</h1>
+        <h1 class="hero-title">Privacy Policy</h1>
         <p class="hero-subtitle">
-          Operational rules, escrow safeguards, and mutual commitments for farmers, buyers, and transporters across the Daboase–Beposo–Takoradi corridor.
+          How FarmLink safeguards personal credentials, Mobile Money transaction data, and produce logistics records across the Western Region corridor.
         </p>
         
         <div class="hero-meta-bar">
@@ -80,396 +81,72 @@
     </section>
 
     <!-- 3. MAIN CONTENT BODY -->
-    <main class="terms-main">
+    <main class="privacy-main">
       <div class="main-container">
 
         <!-- Quick Jump Navigation -->
         <nav class="quick-nav-bar" aria-label="Table of Contents">
           <span class="quick-nav-label">Jump to Section:</span>
           <div class="quick-nav-pills">
-            <a href="#overview" class="quick-pill">1. Overview</a>
-            <a href="#roles" class="quick-pill">2. Roles &amp; Accounts</a>
-            <a href="#produce" class="quick-pill">3. Produce &amp; Grading</a>
-            <a href="#escrow" class="quick-pill">4. Escrow &amp; Payments</a>
-            <a href="#transport" class="quick-pill">5. Transport Logistics</a>
-            <a href="#inspection" class="quick-pill">6. Inspection &amp; Payout</a>
-            <a href="#disputes" class="quick-pill">7. Disputes &amp; Refunds</a>
-            <a href="#conduct" class="quick-pill">8. Conduct &amp; Prohibitions</a>
-            <a href="#liability" class="quick-pill">9. Liability &amp; Disclaimers</a>
-            <a href="#law" class="quick-pill">10. Applicable Law</a>
+            <a href="#overview" class="quick-pill">1. Overview &amp; Scope</a>
+            <a href="#collection" class="quick-pill">2. Data We Collect</a>
+            <a href="#usage" class="quick-pill">3. How We Use Data</a>
+            <a href="#momo" class="quick-pill">4. Mobile Money Security</a>
+            <a href="#sharing" class="quick-pill">5. Information Sharing</a>
+            <a href="#security" class="quick-pill">6. Security Architecture</a>
+            <a href="#retention" class="quick-pill">7. Retention &amp; Storage</a>
+            <a href="#rights" class="quick-pill">8. Your Rights (Act 843)</a>
+            <a href="#cookies" class="quick-pill">9. Cookies &amp; Sessions</a>
+            <a href="#contact" class="quick-pill">10. Contact Desk</a>
           </div>
         </nav>
 
-        <!-- Terms Content Wrapper -->
-        <div class="terms-content">
+        <!-- Privacy Content Wrapper -->
+        <div class="privacy-content">
 
           <!-- Section 1 -->
-          <article id="overview" class="terms-section">
+          <article id="overview" class="privacy-section">
             <div class="section-icon-header">
               <div class="section-icon-badge">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="12" y1="16" x2="12" y2="12"/>
-                  <line x1="12" y1="8" x2="12.01" y2="8"/>
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                 </svg>
               </div>
               <div>
                 <span class="section-number">Section 1</span>
-                <h2 class="section-heading">Platform Overview &amp; Corridor Purpose</h2>
+                <h2 class="section-heading">Overview, Scope &amp; Legal Framework</h2>
               </div>
             </div>
             
             <div class="section-body">
               <p>
-                FarmLink is a digital agricultural marketplace and escrow facilitation platform engineered specifically for the <strong>Western Region of Ghana</strong>. The platform connects tomato-farming communities in <strong>Daboase and Beposo</strong> with wholesale market traders, chop bars, restaurants, and retail buyers situated around the <strong>Takoradi Market Circle</strong>.
+                FarmLink ("we", "our", or "the Platform") is a localized agricultural marketplace and escrow facilitation system designed to connect smallholder tomato farmers in <strong>Daboase and Beposo</strong> with wholesale market traders, chop bars, and retail buyers in the <strong>Takoradi Market Circle</strong> corridor.
               </p>
               <p>
-                The primary purpose of FarmLink is to eliminate exploitative distress sales by empowering smallholder farmers to pre-commit harvests before produce is cut, securing buyer commitments upfront through Mobile Money escrow, and organizing reliable transport via local Aboboyaa tricycle operators.
+                We are committed to processing and protecting your personal data in full compliance with the <strong>Data Protection Act, 2012 (Act 843)</strong> of the Republic of Ghana, the <strong>Electronic Transactions Act, 2008 (Act 772)</strong>, and applicable Bank of Ghana directives governing digital payment platforms.
               </p>
+              <p>
+                Our privacy ethos is straightforward: <em>we collect only the minimal data necessary to authenticate your account, secure your produce transactions, coordinate Aboboyaa delivery logistics, and disburse Mobile Money escrow payouts</em>.
+              </p>
+
               <div class="callout-box info-callout">
                 <div class="callout-title">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="16" x2="12" y2="12"/>
+                    <line x1="12" y1="8" x2="12.01" y2="8"/>
                   </svg>
-                  <span>Core Principle: Escrow-First Guarantee</span>
+                  <span>Our Data Protection Principles</span>
                 </div>
                 <p>
-                  No farmer is required to release produce, and no driver is expected to commence transit, until full buyer payment is locked inside the FarmLink Mobile Money Escrow vault.
+                  We process data lawfully, transparently, and fairly; restrict collection strictly to agricultural trade fulfillment; keep records accurate and updated; and never sell or monetize user information to external marketing brokers.
                 </p>
               </div>
             </div>
           </article>
 
           <!-- Section 2 -->
-          <article id="roles" class="terms-section">
-            <div class="section-icon-header">
-              <div class="section-icon-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                  <circle cx="9" cy="7" r="4"/>
-                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                </svg>
-              </div>
-              <div>
-                <span class="section-number">Section 2</span>
-                <h2 class="section-heading">User Roles, Registration &amp; Account Eligibility</h2>
-              </div>
-            </div>
-
-            <div class="section-body">
-              <p>Every participant on FarmLink operates under a verified role. You agree to provide authentic, up-to-date credentials upon registration:</p>
-
-              <div class="roles-grid">
-                <div class="role-card">
-                  <div class="role-card-header farmer-header">
-                    <span class="role-tag">Role: Farmer</span>
-                    <h3>Smallholder Producer</h3>
-                  </div>
-                  <p>
-                    Agricultural producers with active cultivation in Daboase, Beposo, or neighboring Western Region farming belts. Responsible for accurate harvest dates, honest produce grading, and fair pricing.
-                  </p>
-                </div>
-
-                <div class="role-card">
-                  <div class="role-card-header buyer-header">
-                    <span class="role-tag">Role: Buyer</span>
-                    <h3>Wholesale &amp; Retail Purchaser</h3>
-                  </div>
-                  <p>
-                    Market Circle wholesale traders, local restaurants, chop bars, or individual consumers committing funds to purchase fresh produce with designated delivery drop-offs.
-                  </p>
-                </div>
-
-                <div class="role-card">
-                  <div class="role-card-header driver-header">
-                    <span class="role-tag">Role: Driver</span>
-                    <h3>Aboboyaa Cargo Transporter</h3>
-                  </div>
-                  <p>
-                    Registered tricycle and mini-truck operators who accept delivery jobs, inspect cargo batches at farm gates, and transport produce safely to Takoradi drop-off stations.
-                  </p>
-                </div>
-              </div>
-
-              <h4 class="sub-heading">Phone-Number Authentication</h4>
-              <p>
-                Accounts are registered and authenticated using Ghanaian mobile phone numbers (MTN, Telecel, or AT). You are solely responsible for all activity conducted under your registered phone number and PIN authentication credentials.
-              </p>
-            </div>
-          </article>
-
-          <!-- Section 3 -->
-          <article id="produce" class="terms-section">
-            <div class="section-icon-header">
-              <div class="section-icon-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                  <line x1="3" y1="6" x2="21" y2="6"/>
-                  <path d="M16 10a4 4 0 0 1-8 0"/>
-                </svg>
-              </div>
-              <div>
-                <span class="section-number">Section 3</span>
-                <h2 class="section-heading">Produce Listings, Quality Grades &amp; Freshness Tracking</h2>
-              </div>
-            </div>
-
-            <div class="section-body">
-              <p>
-                To maintain transparency and eliminate quality disputes, all produce listings on FarmLink must conform to strict corridor grading benchmarks:
-              </p>
-
-              <div class="grades-spec-table">
-                <div class="spec-row">
-                  <div class="spec-cell grade-col"><span class="badge-grade grade-a">Grade A</span></div>
-                  <div class="spec-cell desc-col">
-                    <strong>Premium Wholesale:</strong> Firm, uniform shape, mature green to light breaker stage, suitable for multi-day market display and transit resilience.
-                  </div>
-                </div>
-                <div class="spec-row">
-                  <div class="spec-cell grade-col"><span class="badge-grade grade-b">Grade B</span></div>
-                  <div class="spec-cell desc-col">
-                    <strong>Standard Commercial:</strong> Good market condition, slight size variation or pink-ripe coloring, ideal for immediate retail or food service preparation.
-                  </div>
-                </div>
-                <div class="spec-row">
-                  <div class="spec-cell grade-col"><span class="badge-grade grade-c">Grade C</span></div>
-                  <div class="spec-cell desc-col">
-                    <strong>Processing / Fast Sale:</strong> Fully ripe, soft tomatoes designated for instant stew or sauce processing. Must be collected and consumed promptly.
-                  </div>
-                </div>
-              </div>
-
-              <h4 class="sub-heading">Freshness &amp; Harvest Date Integrity</h4>
-              <p>
-                Farmers must specify the true <em>Harvest Date</em> when creating listings. The platform calculates a dynamic <strong>Freshness Indicator</strong> (Green: 0–2 days; Yellow: 3–4 days; Red: 5+ days). Deliberately falsifying harvest dates to misrepresent aging stock constitutes a material breach and results in listing removal and account restriction.
-              </p>
-
-              <h4 class="sub-heading">Locked Pricing &amp; Units of Sale</h4>
-              <p>
-                Prices are quoted in Ghanaian Cedis (GH₵) per standard unit (Crate, Bag, or Kilogram). Once a buyer commits an order, the unit price is locked; farmers may not demand roadside price adjustments, and buyers may not retroactively request discounts upon arrival.
-              </p>
-            </div>
-          </article>
-
-          <!-- Section 4 -->
-          <article id="escrow" class="terms-section">
-            <div class="section-icon-header">
-              <div class="section-icon-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="2" y="5" width="20" height="14" rx="2"/>
-                  <line x1="2" y1="10" x2="22" y2="10"/>
-                </svg>
-              </div>
-              <div>
-                <span class="section-number">Section 4</span>
-                <h2 class="section-heading">Mobile Money Escrow &amp; Payment Safeguards</h2>
-              </div>
-            </div>
-
-            <div class="section-body">
-              <p>
-                FarmLink utilizes a programmatic escrow system powered by Mobile Money networks (MTN MoMo, Telecel Cash, and AT Money) to guarantee financial safety for both trade parties.
-              </p>
-
-              <ol class="styled-steps-list">
-                <li>
-                  <strong>Upfront Escrow Commitment:</strong> When placing an order, the buyer authorizes full payment comprising the produce subtotal and the upfront estimated transport fee.
-                </li>
-                <li>
-                  <strong>Escrow Locking (`escrow_held`):</strong> Funds are immediately deducted from the buyer's Mobile Money wallet and safely held in escrow. Funds are inaccessible to the seller and driver during transit.
-                </li>
-                <li>
-                  <strong>Automatic Split Disbursement:</strong> When the driver confirms delivery and the buyer inspects the produce, escrow unlocks programmatically:
-                  <ul class="sub-list">
-                    <li>Produce value is credited directly to the farmer's Mobile Money account.</li>
-                    <li>Transport fee is credited directly to the driver's Mobile Money account.</li>
-                  </ul>
-                </li>
-              </ol>
-
-              <div class="callout-box warning-callout">
-                <div class="callout-title">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
-                    <line x1="12" y1="9" x2="12" y2="13"/>
-                    <line x1="12" y1="17" x2="12.01" y2="17"/>
-                  </svg>
-                  <span>Strict Prohibition of Offline Cash Payments</span>
-                </div>
-                <p>
-                  Any agreement between buyer, farmer, or driver to conduct transactions outside the FarmLink escrow system forfeits all platform dispute rights, insurance considerations, and automated payout guarantees.
-                </p>
-              </div>
-            </div>
-          </article>
-
-          <!-- Section 5 -->
-          <article id="transport" class="terms-section">
-            <div class="section-icon-header">
-              <div class="section-icon-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="1" y="3" width="15" height="13" rx="2"/>
-                  <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
-                  <circle cx="5.5" cy="18.5" r="2.5"/>
-                  <circle cx="18.5" cy="18.5" r="2.5"/>
-                </svg>
-              </div>
-              <div>
-                <span class="section-number">Section 5</span>
-                <h2 class="section-heading">Transport Logistics, Fares &amp; Driver Responsibilities</h2>
-              </div>
-            </div>
-
-            <div class="section-body">
-              <p>
-                Farm-to-market dispatch along the corridor is performed by verified Aboboyaa tricycle operators governed by standardized logistics terms:
-              </p>
-
-              <h4 class="sub-heading">Standardized Fare Structure</h4>
-              <p>
-                To avoid roadside bargaining and unpredictable charges, transport fares are computed deterministically at order checkout using the formula:
-              </p>
-              <div class="formula-box">
-                <code>Estimated Transport Fare = GH₵ 40.00 (Corridor Base Fare) + (GH₵ 2.00 × Number of Units)</code>
-              </div>
-
-              <h4 class="sub-heading">Driver Acceptance &amp; Chain of Custody</h4>
-              <ul>
-                <li>Drivers may only accept jobs where payment status is confirmed as <code>escrow_held</code>.</li>
-                <li>Upon arrival at the farm gate, the driver inspects crate counts and marks the job as <strong>"Picked Up"</strong> (`in_transit`).</li>
-                <li>The driver assumes custodial responsibility for exercising reasonable transit precautions (e.g., tarp covering against sun exposure and heavy rain) until arrival at Takoradi.</li>
-              </ul>
-
-              <h4 class="sub-heading">Delivery Drop-Off Points</h4>
-              <p>
-                Unless an explicit custom delivery address is provided by the buyer during checkout, standard delivery terminates at the <strong>Takoradi Market Circle</strong> unloading bays.
-              </p>
-            </div>
-          </article>
-
-          <!-- Section 6 -->
-          <article id="inspection" class="terms-section">
-            <div class="section-icon-header">
-              <div class="section-icon-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                  <polyline points="22 4 12 14.01 9 11.01"/>
-                </svg>
-              </div>
-              <div>
-                <span class="section-number">Section 6</span>
-                <h2 class="section-heading">Produce Inspection &amp; Escrow Release Protocol</h2>
-              </div>
-            </div>
-
-            <div class="section-body">
-              <p>
-                Upon arrival of the Aboboyaa at the designated destination, the delivery confirmation and payout protocol commences:
-              </p>
-
-              <div class="protocol-grid">
-                <div class="protocol-card">
-                  <div class="protocol-number">Step 1</div>
-                  <h4>Physical Verification</h4>
-                  <p>The buyer or their authorized representative conducts immediate visual inspection of crates to verify grade conformity, quantity, and packaging integrity.</p>
-                </div>
-
-                <div class="protocol-card">
-                  <div class="protocol-number">Step 2</div>
-                  <h4>Delivery Confirmation</h4>
-                  <p>The driver marks the order as <strong>"Delivered"</strong> via the Driver Portal, triggering instant notifications to the buyer and farmer.</p>
-                </div>
-
-                <div class="protocol-card">
-                  <div class="protocol-number">Step 3</div>
-                  <h4>Escrow Release</h4>
-                  <p>Escrow status transitions to <code>released</code>. The farmer's dashboard updates available revenue, and transport payouts are queued for processing.</p>
-                </div>
-              </div>
-
-              <p class="inspection-note">
-                Buyers have a standard <strong>4-hour inspection window</strong> following physical delivery to log any critical dispute regarding missing crates or substantial spoilage.
-              </p>
-            </div>
-          </article>
-
-          <!-- Section 7 -->
-          <article id="disputes" class="terms-section">
-            <div class="section-icon-header">
-              <div class="section-icon-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"/>
-                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
-                  <line x1="12" y1="17" x2="12.01" y2="17"/>
-                </svg>
-              </div>
-              <div>
-                <span class="section-number">Section 7</span>
-                <h2 class="section-heading">Dispute Resolution, Cancellations &amp; Refund Terms</h2>
-              </div>
-            </div>
-
-            <div class="section-body">
-              <p>
-                While FarmLink's pre-commitment model prevents most trade friction, genuine logistical and quality failures are adjudicated according to clear rules:
-              </p>
-
-              <h4 class="sub-heading">1. Severe Quality Mismatch</h4>
-              <p>
-                If produce advertised as Grade A arrives largely overripe, crushed, or decayed through farmer misrepresentation, the buyer may trigger a dispute. Following verification by the Western Region Corridor Desk, escrow may be partially or completely refunded to the buyer's wallet.
-              </p>
-
-              <h4 class="sub-heading">2. Driver Transit Damage or Breakdown</h4>
-              <p>
-                If an Aboboyaa breaks down mid-transit, the driver is obligated to immediately alert the Corridor Desk. The desk coordinates an emergency backup tricycle or authorizes partial fare adjustment to protect produce freshness.
-              </p>
-
-              <h4 class="sub-heading">3. Order Cancellations</h4>
-              <ul>
-                <li><strong>Before Escrow Commitment:</strong> Orders may be cancelled without penalty at any time prior to payment authorization.</li>
-                <li><strong>While Pending Assignment:</strong> If no driver accepts the job within 24 hours of harvest, the buyer may request full escrow reversal without deductions.</li>
-                <li><strong>After Driver Pickup:</strong> Once cargo is <code>in_transit</code>, orders cannot be cancelled by either party.</li>
-              </ul>
-            </div>
-          </article>
-
-          <!-- Section 8 -->
-          <article id="conduct" class="terms-section">
-            <div class="section-icon-header">
-              <div class="section-icon-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                  <line x1="12" y1="8" x2="12" y2="12"/>
-                  <line x1="12" y1="16" x2="12.01" y2="16"/>
-                </svg>
-              </div>
-              <div>
-                <span class="section-number">Section 8</span>
-                <h2 class="section-heading">User Conduct &amp; Prohibited Activities</h2>
-              </div>
-            </div>
-
-            <div class="section-body">
-              <p>All members of the FarmLink corridor network must maintain professional commercial conduct. Prohibited acts include:</p>
-              
-              <ul class="prohibited-list">
-                <li><strong>False Listings:</strong> Creating fictitious produce listings without intent or harvest capacity to supply.</li>
-                <li><strong>Rating Manipulation:</strong> Submitting fake or coerced 1-star or 5-star ratings to artificially penalize or boost participants.</li>
-                <li><strong>Identity Impersonation:</strong> Using another individual's Mobile Money account or credentials without authorization.</li>
-                <li><strong>Roadside Price Extortion:</strong> Demanding supplementary payments above the locked checkout amount.</li>
-                <li><strong>Route Abandonment:</strong> Transporters accepting delivery jobs and abandoning cargo without notifying corridor coordinators.</li>
-              </ul>
-
-              <p>
-                Infractions lead to immediate suspension from the Western Region pilot corridor, forfeiture of platform rating standing, and report to local market authorities.
-              </p>
-            </div>
-          </article>
-
-          <!-- Section 9 -->
-          <article id="liability" class="terms-section">
+          <article id="collection" class="privacy-section">
             <div class="section-icon-header">
               <div class="section-icon-badge">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -481,55 +158,396 @@
                 </svg>
               </div>
               <div>
-                <span class="section-number">Section 9</span>
-                <h2 class="section-heading">Limitation of Liability &amp; Disclaimers</h2>
+                <span class="section-number">Section 2</span>
+                <h2 class="section-heading">Information We Collect</h2>
+              </div>
+            </div>
+
+            <div class="section-body">
+              <p>Depending on your role and participation on FarmLink, we collect the following categories of information:</p>
+
+              <div class="data-cards-grid">
+                <div class="data-card">
+                  <div class="data-card-header">
+                    <span class="data-tag account-tag">Account &amp; Identity</span>
+                    <h3>Profile Information</h3>
+                  </div>
+                  <ul>
+                    <li><strong>Full Name:</strong> To identify trade participants on invoices and dispatch notes.</li>
+                    <li><strong>Phone Number:</strong> Your primary account identifier (no email required) used for authentication, password recovery, and order SMS alerts.</li>
+                    <li><strong>Role:</strong> Selected platform capacity (<code>farmer</code>, <code>buyer</code>, or <code>driver</code>).</li>
+                    <li><strong>Corridor Location:</strong> Farming community (Daboase, Beposo) or delivery drop-off zone (Takoradi).</li>
+                    <li><strong>Business Profile:</strong> Business name and buyer category (Market Trader, Restaurant/Chop Bar, Individual).</li>
+                  </ul>
+                </div>
+
+                <div class="data-card">
+                  <div class="data-card-header">
+                    <span class="data-tag produce-tag">Produce &amp; Inventory</span>
+                    <h3>Marketplace Listings</h3>
+                  </div>
+                  <ul>
+                    <li><strong>Crop Specifications:</strong> Crop name (tomatoes), unit of sale (Crates, Bags, Kg), and quantity in stock.</li>
+                    <li><strong>Quality Grading:</strong> Assigned Grade (Grade A, B, or C) and Minimum Order Quantity.</li>
+                    <li><strong>Harvest Date:</strong> True harvest schedule used to compute dynamic freshness bars.</li>
+                    <li><strong>Pricing:</strong> Unit price in Ghanaian Cedis (GH₵) locked at order placement.</li>
+                  </ul>
+                </div>
+
+                <div class="data-card">
+                  <div class="data-card-header">
+                    <span class="data-tag logistics-tag">Orders &amp; Logistics</span>
+                    <h3>Escrow &amp; Dispatch Records</h3>
+                  </div>
+                  <ul>
+                    <li><strong>Order Records:</strong> Quantities ordered, product subtotal, and estimated transport cost.</li>
+                    <li><strong>Delivery Address:</strong> Takoradi Market Circle or buyer-specified custom delivery drop-off location.</li>
+                    <li><strong>Transit Stages:</strong> Pickup confirmations (<code>in_transit</code>) and final delivery timestamps (<code>delivered</code>).</li>
+                    <li><strong>Transporter Profile:</strong> Aboboyaa tricycle registration details, driver phone, and verified payout records.</li>
+                  </ul>
+                </div>
+
+                <div class="data-card">
+                  <div class="data-card-header">
+                    <span class="data-tag rating-tag">Reputation &amp; Security</span>
+                    <h3>Quality &amp; Technical Signals</h3>
+                  </div>
+                  <ul>
+                    <li><strong>Ratings &amp; Feedback:</strong> 1–5 star ratings and comments submitted upon delivery to establish mutual corridor trust.</li>
+                    <li><strong>Security Telemetry:</strong> Encrypted password hashes (bcrypt), session tokens, IP address, and rate-limiting counters.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Section 3 -->
+          <article id="usage" class="privacy-section">
+            <div class="section-icon-header">
+              <div class="section-icon-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                </svg>
+              </div>
+              <div>
+                <span class="section-number">Section 3</span>
+                <h2 class="section-heading">How We Use Your Information</h2>
+              </div>
+            </div>
+
+            <div class="section-body">
+              <p>Your data is processed strictly for the execution and enhancement of corridor trade:</p>
+
+              <ol class="styled-steps-list">
+                <li>
+                  <strong>Pre-Committed Order Fulfillment:</strong> Connecting tomato buyers with smallholder farmers prior to harvest, establishing transparent prices, and generating digital waybills.
+                </li>
+                <li>
+                  <strong>Escrow Management &amp; Payout Release:</strong> Locking buyer funds in escrow upon checkout and automatically calculating the split disbursement (produce payout to farmer, transport fare to driver) upon delivery confirmation.
+                </li>
+                <li>
+                  <strong>Logistics Coordination:</strong> Enabling Aboboyaa drivers to locate farm gates in Daboase/Beposo and complete drop-offs at Takoradi Market Circle or verified custom addresses.
+                </li>
+                <li>
+                  <strong>Direct Trade Communication:</strong> Surfacing verified phone numbers on active orders so farmers, buyers, and drivers can coordinate cargo loading, arrival timing, and crate handoffs.
+                </li>
+                <li>
+                  <strong>Platform Hardening &amp; Fraud Prevention:</strong> Implementing rate-limiting to prevent automated brute-force attacks, enforcing resource ownership guards to block unauthorized data access, and preventing duplicate ratings.
+                </li>
+              </ol>
+            </div>
+          </article>
+
+          <!-- Section 4 -->
+          <article id="momo" class="privacy-section">
+            <div class="section-icon-header">
+              <div class="section-icon-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="5" width="20" height="14" rx="2"/>
+                  <line x1="2" y1="10" x2="22" y2="10"/>
+                </svg>
+              </div>
+              <div>
+                <span class="section-number">Section 4</span>
+                <h2 class="section-heading">Mobile Money &amp; Financial Data Safeguards</h2>
               </div>
             </div>
 
             <div class="section-body">
               <p>
-                FarmLink provides a digital connection and escrow facility. While rigorous standards are enforced across the corridor:
+                FarmLink connects directly with Ghana's Mobile Money telecommunication networks (MTN MoMo, Telecel Cash, and AT Money) to execute automated escrow holds and payouts.
+              </p>
+
+              <div class="callout-box warning-callout">
+                <div class="callout-title">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                  <span>We NEVER Store or Request Your Mobile Money PIN</span>
+                </div>
+                <p>
+                  FarmLink will <strong>never</strong> ask for, intercept, log, or store your 4-digit Mobile Money PIN. All payment authorization occurs strictly on your telecommunication network's secure USSD prompt or official payment interface. Never disclose your PIN to any driver, farmer, or platform coordinator.
+                </p>
+              </div>
+
+              <h4 class="sub-heading">What We Process for Mobile Money</h4>
+              <ul>
+                <li><strong>Normalized Phone Number (MSISDN):</strong> E.g., `233244XXXXXX`, transmitted securely to the telecom API gateway to initiate payment prompts.</li>
+                <li><strong>Transaction Reference &amp; UUID:</strong> Unique payment identifiers used to verify callback webhooks and correlate escrow holds with specific orders.</li>
+                <li><strong>Payment Status Tokens:</strong> State flags (`unpaid`, `escrow_held`, `released`) reflecting transaction progress in our database.</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Section 5 -->
+          <article id="sharing" class="privacy-section">
+            <div class="section-icon-header">
+              <div class="section-icon-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                  <polyline points="16 6 12 2 8 6"/>
+                  <line x1="12" y1="2" x2="12" y2="15"/>
+                </svg>
+              </div>
+              <div>
+                <span class="section-number">Section 5</span>
+                <h2 class="section-heading">Information Sharing &amp; Third-Party Disclosures</h2>
+              </div>
+            </div>
+
+            <div class="section-body">
+              <p>
+                We do not sell, rent, license, or trade your personal information. Information is shared strictly under the following controlled operational parameters:
+              </p>
+
+              <h4 class="sub-heading">1. Transaction-Specific Sharing Between Trade Parties</h4>
+              <p>
+                When an order is created and locked in escrow:
               </p>
               <ul>
-                <li>
-                  <strong>Perishable Goods:</strong> Agricultural commodities are inherently subject to climatic fluctuations and natural perishability. The platform does not insure against crop damage prior to harvest or post-acceptance handling.
-                </li>
-                <li>
-                  <strong>Force Majeure:</strong> Delays caused by severe flooding, road closures along the Beposo–Takoradi route, or telecommunication network downtime are adjudicated through fair mediation rather than platform damages.
-                </li>
-                <li>
-                  <strong>Maximum Liability:</strong> In all circumstances, FarmLink's cumulative liability to any user for any order dispute shall not exceed the total transaction amount held in escrow for that specific transaction.
-                </li>
+                <li>The <strong>Farmer</strong> sees the buyer's name, buyer category, and contact phone number to confirm harvest readiness.</li>
+                <li>The <strong>Buyer</strong> sees the farmer's name, farm location, and phone number to verify produce origin and harvest dates.</li>
+                <li>The <strong>Driver</strong> who accepts the delivery job receives the farmer's location for pickup, the buyer's delivery destination, and direct contact numbers for both parties to coordinate loading and offloading.</li>
+              </ul>
+
+              <h4 class="sub-heading">2. Essential Technology Service Providers</h4>
+              <ul>
+                <li><strong>Mobile Money Gateways (MTN, Telecel, AT):</strong> For processing payment collection requests and webhook confirmations.</li>
+                <li><strong>Cloud Storage &amp; Image Delivery:</strong> Cloudinary delivers optimized, responsive product photos without capturing user identity data.</li>
+                <li><strong>Hosting Infrastructure:</strong> Production instances operate on Render with encrypted database connections and isolated container environments.</li>
+              </ul>
+
+              <h4 class="sub-heading">3. Legal Compliance</h4>
+              <p>
+                We may disclose personal data if compelled by court order, law enforcement inquiry, or statutory authority under the laws of the Republic of Ghana.
+              </p>
+            </div>
+          </article>
+
+          <!-- Section 6 -->
+          <article id="security" class="privacy-section">
+            <div class="section-icon-header">
+              <div class="section-icon-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+              </div>
+              <div>
+                <span class="section-number">Section 6</span>
+                <h2 class="section-heading">Security Architecture &amp; Data Safeguards</h2>
+              </div>
+            </div>
+
+            <div class="section-body">
+              <p>FarmLink incorporates multi-tiered defenses to protect user data from unauthorized access, breach, or disclosure:</p>
+
+              <div class="security-grid">
+                <div class="security-item">
+                  <div class="security-item-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4>Bcrypt Password Hashing</h4>
+                    <p>All passwords are irreversibly salted and hashed. Plaintext passwords are never recorded in database tables or server logs.</p>
+                  </div>
+                </div>
+
+                <div class="security-item">
+                  <div class="security-item-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4>Rate-Limiting Guards</h4>
+                    <p>Authentication, password reset, and checkout endpoints are protected by automated rate limiters to deflect brute-force credential stuffing.</p>
+                  </div>
+                </div>
+
+                <div class="security-item">
+                  <div class="security-item-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4>IDOR &amp; Ownership Verification</h4>
+                    <p>Backend middleware (<code>owns.resource</code>) verifies that users can only view, edit, or dispute records belonging to their own account.</p>
+                  </div>
+                </div>
+
+                <div class="security-item">
+                  <div class="security-item-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10"/>
+                      <line x1="2" y1="12" x2="22" y2="12"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4>HTTPS &amp; Secure Session Cookies</h4>
+                    <p>All web traffic is encrypted in transit via SSL/TLS. Session cookies are HTTP-only and protected against cross-site scripting (XSS).</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Section 7 -->
+          <article id="retention" class="privacy-section">
+            <div class="section-icon-header">
+              <div class="section-icon-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                  <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                  <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                </svg>
+              </div>
+              <div>
+                <span class="section-number">Section 7</span>
+                <h2 class="section-heading">Data Retention &amp; Storage Integrity</h2>
+              </div>
+            </div>
+
+            <div class="section-body">
+              <p>
+                We retain user records only as long as necessary to maintain active commercial relationships, comply with tax and audit obligations under Ghanaian commercial statutes, and preserve trade integrity across the Western Region corridor.
+              </p>
+              <ul>
+                <li><strong>Active Account Data:</strong> Retained while your profile remains registered. You can update your information at any time via <Link href="/settings">Account Settings</Link>.</li>
+                <li><strong>Transaction &amp; Escrow History:</strong> Maintained for a minimum of five (5) years in compliance with financial recordkeeping standards under Act 772 and Act 987.</li>
+                <li><strong>Zero Data Deletion Guardrails:</strong> Our database operations follow strict additive migration rules; historical order records and rating scores are preserved against accidental erasure.</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Section 8 -->
+          <article id="rights" class="privacy-section">
+            <div class="section-icon-header">
+              <div class="section-icon-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+              </div>
+              <div>
+                <span class="section-number">Section 8</span>
+                <h2 class="section-heading">Your Legal Rights Under Ghana's Data Protection Act (Act 843)</h2>
+              </div>
+            </div>
+
+            <div class="section-body">
+              <p>As a data subject under Act 843, you possess fundamental statutory rights concerning your personal information:</p>
+
+              <div class="rights-list">
+                <div class="right-item">
+                  <h4>Right to Access</h4>
+                  <p>You may request a copy of the personal information we maintain concerning your account, listed produce, and order logs.</p>
+                </div>
+                <div class="right-item">
+                  <h4>Right to Rectification</h4>
+                  <p>You can directly edit your name, phone number, location, and vehicle information at any time through the <Link href="/settings">Settings</Link> portal.</p>
+                </div>
+                <div class="right-item">
+                  <h4>Right to Erasure / Deactivation</h4>
+                  <p>You may request account deactivation and removal of your public marketplace profile by contacting the Western Region Corridor Desk.</p>
+                </div>
+                <div class="right-item">
+                  <h4>Right to Object</h4>
+                  <p>You have the right to object to the processing of your data for reasons outside direct order fulfillment and escrow release.</p>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Section 9 -->
+          <article id="cookies" class="privacy-section">
+            <div class="section-icon-header">
+              <div class="section-icon-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 2a10 10 0 0 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/>
+                  <path d="M8.5 8.5v.01"/>
+                  <path d="M16 15.5v.01"/>
+                  <path d="M12 18v.01"/>
+                </svg>
+              </div>
+              <div>
+                <span class="section-number">Section 9</span>
+                <h2 class="section-heading">Cookies &amp; Local Session Tracking</h2>
+              </div>
+            </div>
+
+            <div class="section-body">
+              <p>
+                FarmLink utilizes minimal, strictly necessary cookies to operate the web application. We do <strong>not</strong> deploy third-party advertising trackers, cross-site profiling pixels, or behavioural advertising networks.
+              </p>
+              <ul>
+                <li><strong>Session Cookie (`farmlink_session`):</strong> Maintains your authenticated user state as you navigate between produce listings, orders, and dashboards.</li>
+                <li><strong>CSRF Security Token (`XSRF-TOKEN`):</strong> Verifies that form submissions and checkout requests originate directly from your browser to prevent malicious cross-site request forgery.</li>
               </ul>
             </div>
           </article>
 
           <!-- Section 10 -->
-          <article id="law" class="terms-section">
+          <article id="contact" class="privacy-section">
             <div class="section-icon-header">
               <div class="section-icon-badge">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polygon points="12 2 2 7 12 12 22 7 12 2"/>
-                  <polyline points="2 17 12 22 22 17"/>
-                  <polyline points="2 12 12 17 22 12"/>
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                 </svg>
               </div>
               <div>
                 <span class="section-number">Section 10</span>
-                <h2 class="section-heading">Corridor Governance, Amendments &amp; Applicable Law</h2>
+                <h2 class="section-heading">Policy Updates &amp; Corridor Data Protection Desk</h2>
               </div>
             </div>
 
             <div class="section-body">
               <p>
-                These Terms are governed by and construed in accordance with the laws of the <strong>Republic of Ghana</strong>, including the Electronic Transactions Act (Act 772) and relevant digital financial regulations.
+                We may periodically update this Privacy Policy as FarmLink scales from tomatoes to other staple crops across the Western Region. Substantive updates will be announced via platform notification banners.
               </p>
               <p>
-                Any dispute arising from or related to these Terms that cannot be resolved amicably through the FarmLink Corridor Support Desk shall fall under the jurisdiction of the competent courts of the Western Region in <strong>Sekondi-Takoradi</strong>.
+                If you have questions regarding this Privacy Policy, your data rights under Act 843, or wish to report a privacy concern, please contact our data coordinators:
               </p>
-              <p>
-                FarmLink reserves the right to update these terms as the pilot expands from tomatoes to additional crops across the Western Region. Registered users will receive notification of substantive updates via platform alerts.
-              </p>
+              <div class="contact-details-box">
+                <div class="contact-detail-row">
+                  <strong>Desk Location:</strong>
+                  <span>FarmLink Western Region Corridor Desk, Takoradi Market Circle, Western Region, Ghana</span>
+                </div>
+                <div class="contact-detail-row">
+                  <strong>Corridor Belt:</strong>
+                  <span>Daboase, Beposo &amp; Takoradi Market Trading Hub</span>
+                </div>
+                <div class="contact-detail-row">
+                  <strong>Data Protection Officer:</strong>
+                  <span>Legal &amp; Compliance Team • FarmLink Agricultural Pilot</span>
+                </div>
+              </div>
             </div>
           </article>
 
@@ -540,19 +558,19 @@
           <div class="support-card-content">
             <div class="support-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
               </svg>
             </div>
             <div>
-              <h3 class="support-title">Questions about our Terms &amp; Conditions?</h3>
+              <h3 class="support-title">Have Questions About Your Privacy?</h3>
               <p class="support-desc">
-                Contact the <strong>Western Region Corridor Desk</strong> at Takoradi Market Circle or reach out via our support dispatch.
+                Review our comprehensive <Link href="/terms">Terms &amp; Conditions</Link> or visit the Western Region Corridor Desk at Takoradi Market Circle.
               </p>
             </div>
           </div>
           <div class="support-actions">
-            <Link href="/" class="btn-support-secondary">Back to Home</Link>
-            <Link v-if="!$page.props.auth?.user" href="/register" class="btn-support-primary">Join the Corridor</Link>
+            <Link href="/terms" class="btn-support-secondary">View Terms &amp; Conditions</Link>
+            <Link href="/" class="btn-support-primary">Back to Home</Link>
           </div>
         </div>
 
@@ -593,8 +611,8 @@
 
             <div class="footer-link-group">
               <span class="footer-group-title">Legal &amp; Policy</span>
-              <Link href="/terms" class="footer-link active-link">Terms &amp; Conditions</Link>
-              <Link href="/privacy" class="footer-link">Privacy Policy</Link>
+              <Link href="/terms" class="footer-link">Terms &amp; Conditions</Link>
+              <Link href="/privacy" class="footer-link active-link">Privacy Policy</Link>
             </div>
           </div>
         </div>
@@ -626,7 +644,7 @@ const dashboardRoute = computed(() => {
 @import "../../css/design-tokens.css";
 
 /* Wrapper */
-.terms-page {
+.privacy-page {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -733,7 +751,7 @@ const dashboardRoute = computed(() => {
 }
 
 /* Hero Section */
-.terms-hero {
+.privacy-hero {
   background: linear-gradient(180deg, var(--color-primary-subtle) 0%, var(--color-bg-page) 100%);
   border-bottom: 1px solid var(--color-border);
   padding: var(--space-12) var(--space-6) var(--space-10);
@@ -813,7 +831,7 @@ const dashboardRoute = computed(() => {
 }
 
 /* Main Container */
-.terms-main {
+.privacy-main {
   flex: 1;
   padding: var(--space-8) var(--space-6) var(--space-16);
 }
@@ -868,13 +886,13 @@ const dashboardRoute = computed(() => {
 }
 
 /* Sections */
-.terms-content {
+.privacy-content {
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
 }
 
-.terms-section {
+.privacy-section {
   background-color: var(--color-bg-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -974,26 +992,26 @@ const dashboardRoute = computed(() => {
   color: var(--color-neutral-700);
 }
 
-/* Roles Grid */
-.roles-grid {
+/* Data Cards Grid */
+.data-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: var(--space-4);
   margin: var(--space-5) 0;
 }
 
-.role-card {
+.data-card {
   background-color: var(--color-neutral-50);
   border: 1px solid var(--color-neutral-200);
   border-radius: var(--radius-md);
   padding: var(--space-4);
 }
 
-.role-card-header {
-  margin-bottom: var(--space-2);
+.data-card-header {
+  margin-bottom: var(--space-3);
 }
 
-.role-tag {
+.data-tag {
   display: inline-block;
   font-size: 11px;
   font-weight: var(--font-weight-bold);
@@ -1004,88 +1022,143 @@ const dashboardRoute = computed(() => {
   margin-bottom: 6px;
 }
 
-.farmer-header .role-tag {
+.account-tag {
   background-color: var(--color-primary-lighter);
   color: var(--color-primary-hover);
 }
 
-.buyer-header .role-tag {
+.produce-tag {
   background-color: var(--color-secondary-light);
   color: var(--color-secondary-dark);
 }
 
-.driver-header .role-tag {
+.logistics-tag {
   background-color: var(--color-tertiary-subtle);
   color: var(--color-tertiary-hover);
 }
 
-.role-card h3 {
+.rating-tag {
+  background-color: var(--color-neutral-200);
+  color: var(--color-neutral-700);
+}
+
+.data-card h3 {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
   color: var(--color-neutral-900);
   margin: 0;
 }
 
-.role-card p {
+.data-card ul {
+  padding-left: var(--space-4);
+  margin: 0;
   font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+}
+
+.data-card li {
+  margin-bottom: 6px;
+}
+
+/* Security Grid */
+.security-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-4);
+  margin: var(--space-4) 0;
+}
+
+.security-item {
+  background-color: var(--color-neutral-50);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.security-item-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary-subtle);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.security-item h4 {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin: 0 0 4px 0;
+}
+
+.security-item p {
+  font-size: var(--font-size-xs);
   color: var(--color-neutral-700);
   margin: 0;
   line-height: var(--line-height-base);
 }
 
-/* Quality Grades Table */
-.grades-spec-table {
-  display: flex;
-  flex-direction: column;
+/* Rights List */
+.rights-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4);
+  margin: var(--space-4) 0;
+}
+
+.right-item {
+  background-color: var(--color-neutral-50);
   border: 1px solid var(--color-neutral-200);
   border-radius: var(--radius-md);
-  overflow: hidden;
-  margin: var(--space-4) 0 var(--space-5);
+  padding: var(--space-4);
 }
 
-.spec-row {
-  display: flex;
-  align-items: center;
-  padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid var(--color-neutral-200);
-  background-color: var(--color-white);
-}
-
-.spec-row:last-child {
-  border-bottom: none;
-}
-
-.grade-col {
-  width: 90px;
-  flex-shrink: 0;
-}
-
-.badge-grade {
-  display: inline-block;
-  font-size: 11px;
+.right-item h4 {
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
-  padding: 3px 10px;
-  border-radius: var(--radius-pill);
+  color: var(--color-primary);
+  margin: 0 0 6px 0;
 }
 
-.grade-a {
-  background-color: var(--color-primary-lighter);
-  color: var(--color-primary-hover);
-}
-
-.grade-b {
-  background-color: var(--color-secondary-light);
-  color: var(--color-secondary-dark);
-}
-
-.grade-c {
-  background-color: var(--color-tertiary-subtle);
-  color: var(--color-tertiary-hover);
-}
-
-.desc-col {
+.right-item p {
   font-size: var(--font-size-sm);
   color: var(--color-neutral-700);
+  margin: 0;
+}
+
+.right-item a {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: underline;
+}
+
+/* Contact Details Box */
+.contact-details-box {
+  background-color: var(--color-neutral-50);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin-top: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contact-detail-row {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+}
+
+.contact-detail-row strong {
+  color: var(--color-neutral-900);
 }
 
 /* Styled Lists */
@@ -1097,85 +1170,6 @@ const dashboardRoute = computed(() => {
 .styled-steps-list li {
   margin-bottom: var(--space-3);
   font-size: var(--font-size-base);
-}
-
-.sub-list {
-  margin-top: 6px;
-  padding-left: var(--space-4);
-}
-
-.sub-list li {
-  font-size: var(--font-size-sm);
-  margin-bottom: 4px;
-}
-
-.formula-box {
-  background-color: var(--color-neutral-100);
-  border: 1px solid var(--color-neutral-300);
-  border-radius: var(--radius-md);
-  padding: 12px 16px;
-  font-family: monospace;
-  font-size: var(--font-size-sm);
-  color: var(--color-neutral-900);
-  margin: var(--space-3) 0 var(--space-4);
-  overflow-x: auto;
-}
-
-/* Protocol Grid */
-.protocol-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: var(--space-4);
-  margin: var(--space-4) 0;
-}
-
-.protocol-card {
-  background-color: var(--color-neutral-50);
-  border: 1px solid var(--color-neutral-200);
-  border-radius: var(--radius-md);
-  padding: var(--space-4);
-}
-
-.protocol-number {
-  display: inline-block;
-  font-size: 11px;
-  font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
-  background-color: var(--color-primary-subtle);
-  padding: 2px 8px;
-  border-radius: var(--radius-pill);
-  margin-bottom: 6px;
-}
-
-.protocol-card h4 {
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-neutral-900);
-  margin: 0 0 6px 0;
-}
-
-.protocol-card p {
-  font-size: var(--font-size-sm);
-  color: var(--color-neutral-700);
-  margin: 0;
-}
-
-.inspection-note {
-  font-size: var(--font-size-sm);
-  color: var(--color-neutral-700);
-  background-color: var(--color-neutral-50);
-  padding: 10px 14px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-neutral-200);
-}
-
-.prohibited-list {
-  padding-left: var(--space-5);
-  margin: var(--space-3) 0 var(--space-5);
-}
-
-.prohibited-list li {
-  margin-bottom: 8px;
 }
 
 /* Support Card */
@@ -1240,6 +1234,7 @@ const dashboardRoute = computed(() => {
   border-radius: var(--radius-md);
   text-decoration: none;
   transition: all 0.15s ease;
+  white-space: nowrap;
 }
 
 .btn-support-secondary:hover {
@@ -1257,6 +1252,7 @@ const dashboardRoute = computed(() => {
   text-decoration: none;
   transition: all 0.15s ease;
   box-shadow: 0 2px 8px rgba(45, 106, 79, 0.25);
+  white-space: nowrap;
 }
 
 .btn-support-primary:hover {
@@ -1365,7 +1361,7 @@ const dashboardRoute = computed(() => {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .terms-section {
+  .privacy-section {
     padding: var(--space-5);
   }
 
