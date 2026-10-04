@@ -667,7 +667,7 @@
               <span class="footer-group-title">Information</span>
               <a href="#" @click.prevent="triggerAlert('FarmLink Western Region Pilot: Daboase & Beposo to Takoradi Market Circle Corridor.')" class="footer-link">About Pilot</a>
               <a href="#" @click.prevent="triggerAlert('Support & Contact: Western Region Corridor Desk — Takoradi Market Circle.')" class="footer-link">Contact Desk</a>
-              <a href="#" @click.prevent="triggerAlert('Privacy Policy: All transactions are processed securely via Mobile Money escrow.')" class="footer-link">Privacy Policy</a>
+              <Link href="/privacy" class="footer-link">Privacy Policy</Link>
               <Link href="/terms" class="footer-link">Terms &amp; Conditions</Link>
             </div>
           </div>

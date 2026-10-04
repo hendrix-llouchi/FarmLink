@@ -43,6 +43,14 @@ Route::get('/terms-and-conditions', function () {
     return redirect()->route('terms');
 });
 
+Route::get('/privacy', function () {
+    return Inertia::render('Privacy');
+})->name('privacy');
+
+Route::get('/privacy-policy', function () {
+    return redirect()->route('privacy');
+});
+
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:login');
