@@ -335,7 +335,7 @@
               <ul>
                 <li><strong>Mobile Money Gateways (MTN, Telecel, AT):</strong> For processing payment collection requests and webhook confirmations.</li>
                 <li><strong>Cloud Storage &amp; Image Delivery:</strong> Cloudinary delivers optimized, responsive product photos without capturing user identity data.</li>
-                <li><strong>Hosting Infrastructure:</strong> Production instances operate on Render with encrypted database connections and isolated container environments.</li>
+                <li><strong>Hosting Infrastructure:</strong> Production instances operate on Railway with encrypted database connections and isolated container environments.</li>
               </ul>
 
               <h4 class="sub-heading">3. Legal Compliance</h4>
