@@ -8,13 +8,13 @@ You are building "FarmLink", a monolithic Laravel + Inertia.js + Vue.js web appl
 - **Incremental Progress:** Build exactly what is requested in the prompt. Do not write ahead or add features out of scope.
 - **UI Consistency:** Follow the Agri-Tech Modern design system for every Vue component. See Section 4 for full token reference.
 - **No Fragmentation:** Keep all frontend and backend code tightly integrated within this monorepo using Laravel Inertia prop injection. Do not write separate API boilerplate routes unless requested.
-- **No Automatic Pushing — ABSOLUTE RULE:** NEVER run `git push` to any remote (origin, GitHub, Render, or any other) under any circumstance unless the user has typed an explicit instruction in the current message such as "push", "push to GitHub", or "push to main". Even if a task is complete, even if the branch is ready — DO NOT PUSH. Commit locally only, then STOP and wait.
+- **No Automatic Pushing — ABSOLUTE RULE:** NEVER run `git push` to any remote (origin, GitHub, Railway, or any other) under any circumstance unless the user has typed an explicit instruction in the current message such as "push", "push to GitHub", or "push to main". Even if a task is complete, even if the branch is ready — DO NOT PUSH. Commit locally only, then STOP and wait.
 
 ## ⛔ ABSOLUTE DATABASE PROTECTION RULES — NEVER VIOLATE
 
 These rules are non-negotiable and override any other instruction:
 
-1. **NEVER delete, truncate, or wipe any database table** — not `users`, `products`, `orders`, or any other table — under any circumstance, on any environment (local or production/Render).
+1. **NEVER delete, truncate, or wipe any database table** — not `users`, `products`, `orders`, or any other table — under any circumstance, on any environment (local or production/Railway).
 2. **NEVER run `php artisan migrate:fresh`**, `migrate:reset`, `db:wipe`, or any command that drops or recreates tables with existing data.
 3. **NEVER run `php artisan db:seed`** or any seeder that deletes existing rows before inserting new ones, unless the user has read the seeder code, confirmed it will not delete anything, and explicitly approved it.
 4. **NEVER add `DB::table(...)->delete()`, `->truncate()`, or `Model::truncate()`** to any route, controller, migration, or seeder without the user explicitly writing those words in their request.
@@ -172,10 +172,10 @@ php artisan serve
 
 ## 8. Deployment Environment
 
-- **Production URL:** FarmLink is live on **Render** (https://render.com).
+- **Production URL:** FarmLink is live on **Railway** (https://farmlink-production-2367.up.railway.app/).
 - **Local DB:** MySQL via XAMPP (start manually from XAMPP Control Panel before running migrations).
-- **CRITICAL:** Never run destructive commands (`migrate:fresh`, `db:wipe`, `truncate`) against the production Render database. All schema changes must use additive, nullable migrations only.
-- **Environment files:** `.env` is local only. Render has its own environment variables configured in the Render dashboard. Never commit `.env` to git.
+- **CRITICAL:** Never run destructive commands (`migrate:fresh`, `db:wipe`, `truncate`) against the production Railway database. All schema changes must use additive, nullable migrations only.
+- **Environment files:** `.env` is local only. Railway has its own environment variables configured in the Railway dashboard. Never commit `.env` to git.
 
 ---
 
@@ -191,7 +191,7 @@ This is the required workflow every time code changes are made on a branch. Thes
 5. Even if the user says "push to main" or "push it", push ONLY the feature branch (`git push origin <branch-name>`) and output the GitHub PR comparison link.
 
 ### ⛔ Rule 1 — Never Push Without Explicit Permission
-- **NEVER run `git push`** to any remote (origin, GitHub, Render deploy hooks, or any other destination) unless the user has written an explicit instruction in the current message.
+- **NEVER run `git push`** to any remote (origin, GitHub, Railway deploy hooks, or any other destination) unless the user has written an explicit instruction in the current message.
 - Acceptable trigger phrases: "push", "push it", "push to GitHub", "push to main", "push the branch", "go ahead and push".
 - If the user says "commit" — commit only, do NOT push.
 - If the user says "save" or "done" — commit only, do NOT push.

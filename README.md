@@ -22,7 +22,7 @@ FarmLink connects **farmers**, **buyers**, and **drivers** in a single monolithi
 | Database | MySQL |
 | Auth | Laravel Session Auth (phone number identifier) |
 | Icons | Lucide / Tabler outline icons (inline SVG) |
-| Deployment | Render (production) + XAMPP MySQL (local) |
+| Deployment | Railway (production) + XAMPP MySQL (local) |
 
 ---
 
@@ -338,12 +338,12 @@ All reusable presentation components live in `resources/js/Components/UI/`:
 
 ## Deployment
 
-- **Production**: Live on [Render](https://render.com)
+- **Production**: Live on [Railway](https://farmlink-production-2367.up.railway.app/)
 - **Local DB**: MySQL via XAMPP (start manually before running migrations)
-- **Docker Entrypoint**: `php artisan migrate --force` runs automatically on Render container start via `docker-entrypoint.sh`
+- **Docker Entrypoint**: `php artisan migrate --force` runs automatically on Railway container start via `docker-entrypoint.sh`
 - **Image Delivery**: Product images are delivered with Cloudinary optimizations (format, quality, and responsive size accessors) in production
 
-> **NEVER** run `migrate:fresh`, `db:wipe`, or `truncate` against the production Render database. All schema changes must use additive, nullable migrations only.
+> **NEVER** run `migrate:fresh`, `db:wipe`, or `truncate` against the production Railway database. All schema changes must use additive, nullable migrations only.
 
 ---
 
