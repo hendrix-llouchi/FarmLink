@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Rating;
 use App\Models\Notification;
 use App\Services\MomoApiService;
+use App\Services\OrderWorkflowService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -17,10 +18,11 @@ class OrderController extends Controller
     /**
      * Display a listing of the buyer's orders.
      */
-    public function index()
+    public function index(OrderWorkflowService $workflow)
     {
+        $workflow->processDeadlines();
         $orders = Order::where('buyer_id', auth()->id())
-            ->with(['product.user', 'buyerRating', 'driver'])
+            ->with(['product.user', 'buyerRating', 'driver', 'verification', 'events.actor'])
             ->latest()
             ->get();
 
@@ -79,6 +81,7 @@ class OrderController extends Controller
                     'quantity_ordered'           => $request->quantity_ordered,
                     'total_price'               => $product->price * $request->quantity_ordered,
                     'status'                    => 'pending',
+                    'verification_status'       => 'pending',
                     'payment_status'            => 'unpaid',
                     'momo_reference'            => $referenceId,
                     'estimated_transport_cost'  => $estimatedTransportCost,
@@ -112,6 +115,7 @@ class OrderController extends Controller
                 ? 'Order initiated! (Simulator Mode: Trigger the webhook callback to confirm payment).'
                 : 'Payment request sent! Please check your phone for the MTN MoMo PIN prompt to authorize.';
 
+            app(OrderWorkflowService::class)->record($order, 'ordered');
             return redirect()->route('buyer.orders.index')->with('message', $flashMessage);
 
         } catch (ValidationException $e) {
@@ -137,23 +141,29 @@ class OrderController extends Controller
     /**
      * Display a listing of pending orders that need a driver.
      */
-    public function driverIndex()
+    public function driverIndex(OrderWorkflowService $workflow)
     {
+        $workflow->processDeadlines();
         $orders = Order::whereNull('driver_id')
             ->where('status', 'pending')
-            ->where('payment_status', '!=', 'unpaid')
+            ->where('payment_status', 'escrow_held')
             ->with(['buyer', 'product.user'])
             ->latest()
             ->get();
 
         $activeTrips = Order::where('driver_id', auth()->id())
             ->whereIn('status', ['processing', 'in_transit'])
-            ->with(['buyer', 'product.user'])
+            ->where(function ($query) {
+                $query->whereNull('workflow_status')->orWhere('workflow_status', '!=', 'cancelled');
+            })
+            ->with(['buyer', 'product.user', 'verification', 'events.actor'])
             ->latest()
             ->get();
 
         $completedTrips = Order::where('driver_id', auth()->id())
-            ->where('status', 'delivered')
+            ->where(function ($query) {
+                $query->where('status', 'delivered')->orWhere('workflow_status', 'cancelled');
+            })
             ->with(['buyer', 'product.user', 'ratings'])
             ->latest()
             ->get();
@@ -175,7 +185,7 @@ class OrderController extends Controller
                 // Lock the order for update to prevent concurrent assignment
                 $order = Order::lockForUpdate()->findOrFail($id);
 
-                if ($order->payment_status === 'unpaid') {
+                if ($order->payment_status !== 'escrow_held') {
                     throw ValidationException::withMessages([
                         'order' => ['This order has not been paid for by the buyer yet. Transport can only be accepted once payment is locked in escrow.']
                     ]);
@@ -190,7 +200,9 @@ class OrderController extends Controller
                 $order->update([
                     'driver_id' => auth()->id(),
                     'status' => 'processing',
+                    'dispatch_code' => str_pad((string) random_int(0, 9999), 4, '0', STR_PAD_LEFT),
                 ]);
+                app(OrderWorkflowService::class)->record($order, 'driver_assigned');
 
                 // Notify buyer
                 Notification::create([
@@ -218,7 +230,7 @@ class OrderController extends Controller
     }
 
     /**
-     * Mark a delivery as in transit (status set to in_transit).
+     * Reject dispatch unless the verified farmer handover has already occurred.
      */
     public function pickupDelivery(Request $request, $id)
     {
@@ -232,15 +244,19 @@ class OrderController extends Controller
                     ]);
                 }
 
-                if ($order->status !== 'processing') {
+                if ($order->payment_status !== 'escrow_held' || $order->status !== 'processing'
+                    || !in_array($order->verification_status, ['verified', 'verified_minor', 'flagged'], true)
+                    || !$order->handover_confirmed_at || !$order->verification()->exists()
+                    || ($order->verification_status === 'flagged' && !$order->flag_buyer_confirmed_at)) {
                     throw \Illuminate\Validation\ValidationException::withMessages([
-                        'status' => ['Only processing orders can be marked as in transit.']
+                        'status' => ['The driver checklist, required pickup photos, and farmer handover code are required before dispatch.']
                     ]);
                 }
 
                 $order->update([
                     'status' => 'in_transit',
                 ]);
+                app(OrderWorkflowService::class)->record($order, 'in_transit');
 
                 // Notify buyer
                 Notification::create([
@@ -261,12 +277,16 @@ class OrderController extends Controller
     }
 
     /**
-     * Mark a delivery as completed (status set to delivered).
+     * Record arrival with a mandatory photo; escrow remains held for buyer confirmation.
      */
     public function completeDelivery(Request $request, $id)
     {
+        $request->validate([
+            'delivery_photo' => ['required', 'image', 'max:4096'],
+        ]);
+
         try {
-            DB::transaction(function () use ($id) {
+            DB::transaction(function () use ($request, $id) {
                 $order = Order::lockForUpdate()->findOrFail($id);
 
                 if ($order->driver_id !== auth()->id()) {
@@ -275,39 +295,27 @@ class OrderController extends Controller
                     ]);
                 }
 
-                if (!in_array($order->status, ['processing', 'in_transit'])) {
+                if ($order->payment_status !== 'escrow_held' || $order->status !== 'in_transit' || $order->workflow_status === 'arrived'
+                    || !$order->handover_confirmed_at || !$order->verification()->exists()) {
                     throw ValidationException::withMessages([
-                        'status' => ['Only processing or in transit orders can be marked as delivered.']
+                        'status' => ['Only a verified order in transit can be marked as arrived.']
                     ]);
                 }
 
+                $deliveryPhotoPath = $request->file('delivery_photo')->store('verifications/delivery', 'public');
                 $order->update([
-                    'status'         => 'delivered',
-                    'payment_status' => 'released',
+                    'workflow_status' => 'arrived',
+                    'delivery_photo_path' => $deliveryPhotoPath,
+                    'arrived_at' => now(),
                 ]);
+                app(OrderWorkflowService::class)->record($order, 'arrived', ['delivery_photo' => $deliveryPhotoPath]);
 
                 // Notify buyer
                 Notification::create([
                     'user_id' => $order->buyer_id,
-                    'message' => "Your order for " . $order->quantity_ordered . " " . ($order->product->unit ?? 'item(s)') . " of " . $order->product->name . " has been delivered by driver " . auth()->user()->name . "! You can now rate this order.",
+                    'message' => "Order #{$order->id} has arrived. Check the delivery photo and confirm receipt to release escrow.",
                     'type'    => 'order_update',
                 ]);
-
-                // Notify farmer — Phase 2: explicit payout amount
-                Notification::create([
-                    'user_id' => $order->product->user_id,
-                    'message' => "Order #" . $order->id . " has been delivered by " . auth()->user()->name . ". ₵" . number_format($order->total_price, 2) . " has been released to your account.",
-                    'type'    => 'order_update',
-                ]);
-
-                // Notify driver — Phase 2: transport payout notification (only if driver assigned)
-                if ($order->driver_id) {
-                    Notification::create([
-                        'user_id' => $order->driver_id,
-                        'message' => "Delivery complete for Order #" . $order->id . ". Your transport payout of ₵" . number_format($order->estimated_transport_cost ?? 0, 2) . " has been released.",
-                        'type'    => 'transport_update',
-                    ]);
-                }
             });
         } catch (ValidationException $e) {
             throw $e;
@@ -317,7 +325,7 @@ class OrderController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('message', 'Delivery completed successfully!');
+        return redirect()->back()->with('message', 'Arrival saved. Escrow remains held until the buyer confirms receipt.');
     }
 
     /**
@@ -409,16 +417,20 @@ class OrderController extends Controller
     /**
      * Display a listing of the farmer's received orders.
      */
-    public function farmerOrders()
+    public function farmerOrders(OrderWorkflowService $workflow)
     {
+        $workflow->processDeadlines();
         $farmerId = auth()->id();
 
         $orders = Order::whereHas('product', function ($query) use ($farmerId) {
             $query->where('user_id', $farmerId);
         })
-        ->with(['buyer', 'product', 'driver', 'ratings'])
+        ->with(['buyer', 'product', 'driver', 'ratings', 'verification', 'events.actor'])
         ->latest()
         ->get();
+        $orders->each(function ($order) {
+            $order->setAttribute('farmer_dispatch_code', $order->dispatch_code);
+        });
 
         return Inertia::render('FarmerOrders', [
             'orders' => $orders
@@ -491,4 +503,3 @@ class OrderController extends Controller
     }
 
 }
-

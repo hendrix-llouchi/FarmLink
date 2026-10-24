@@ -29,6 +29,31 @@ class Order extends Model
         'disputed_reason',
         'disputed_notes',
         'disputed_at',
+        'verification_status',
+        'workflow_status',
+        'dispatch_code',
+        'adjusted_price',
+        'delivery_photo_path',
+        'arrived_at',
+        'buyer_confirmed_at',
+        'flag_decision',
+        'flag_decided_at',
+        'flag_driver_decision_at',
+        'flag_deadline_at',
+        'flag_buyer_confirmed_at',
+        'handover_confirmed_at',
+    ];
+
+    protected $hidden = ['dispatch_code'];
+
+    protected $casts = [
+        'arrived_at' => 'datetime',
+        'buyer_confirmed_at' => 'datetime',
+        'flag_decided_at' => 'datetime',
+        'flag_driver_decision_at' => 'datetime',
+        'flag_deadline_at' => 'datetime',
+        'flag_buyer_confirmed_at' => 'datetime',
+        'handover_confirmed_at' => 'datetime',
     ];
 
     /**
@@ -69,5 +94,15 @@ class Order extends Model
     public function buyerRating(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(Rating::class)->where('rater_id', $this->buyer_id);
+    }
+
+    public function verification(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Verification::class);
+    }
+
+    public function events(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(OrderEvent::class)->latest();
     }
 }

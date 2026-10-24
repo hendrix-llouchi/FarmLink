@@ -183,14 +183,14 @@
                     <span class="step-name">Farm Gate</span>
                   </div>
                   <div class="step-connector" :class="{ completed: order.status === 'in_transit' || order.status === 'delivered' }"></div>
-                  <div class="progress-step" :class="{ completed: order.status === 'delivered', active: order.status === 'in_transit' }">
+                  <div class="progress-step" :class="{ completed: order.workflow_status === 'arrived' || order.status === 'delivered', active: order.status === 'in_transit' && order.workflow_status !== 'arrived' }">
                     <div class="step-icon-circle">
                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
                     </div>
                     <span class="step-name">Transit</span>
                   </div>
-                  <div class="step-connector" :class="{ completed: order.status === 'delivered' }"></div>
-                  <div class="progress-step" :class="{ completed: order.status === 'delivered', pending: order.status !== 'delivered' }">
+                  <div class="step-connector" :class="{ completed: order.workflow_status === 'arrived' || order.status === 'delivered' }"></div>
+                  <div class="progress-step" :class="{ completed: order.status === 'delivered', active: order.workflow_status === 'arrived', pending: order.status !== 'delivered' && order.workflow_status !== 'arrived' }">
                     <div class="step-icon-circle">
                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
                     </div>
@@ -230,26 +230,55 @@
                   📦 {{ order.quantity_ordered }}x {{ order.product?.name || 'Produce' }}
                 </div>
 
-                <div class="trip-action-buttons">
-                  <button 
-                    class="btn-picked-up" 
-                    :class="{ 'picked-up': order.status === 'in_transit' || order.status === 'delivered' }"
-                    :disabled="processingId === order.id || order.status === 'in_transit' || order.status === 'delivered'" 
-                    @click.prevent="pickupJob(order.id)"
-                  >
-                    <span v-if="processingId === order.id && order.status !== 'in_transit'">Updating...</span>
-                    <span v-else-if="order.status === 'in_transit' || order.status === 'delivered'">Picked Up ✓</span>
-                    <span v-else>Picked Up</span>
-                  </button>
-                  <button
-                    class="btn-delivered"
-                    @click="completeJob(order.id)"
-                    :disabled="processingId === order.id || order.status !== 'in_transit'"
-                  >
-                    <span v-if="processingId === order.id && order.status === 'in_transit'">Updating...</span>
-                    <span v-else>Delivered</span>
+                <div v-if="order.status === 'processing' && order.verification_status !== 'flagged'" class="verification-panel">
+                  <h3>Farm-gate check</h3>
+                  <p>Check the load, take two photos, then ask the farmer to confirm the handover code.</p>
+                  <label>Actual quantity <input v-model.number="formFor(order).actual_quantity" type="number" min="0" inputmode="numeric"></label>
+                  <label>Actual grade
+                    <select v-model="formFor(order).actual_grade">
+                      <option value="A">Grade A — firm, clean, even size</option>
+                      <option value="B">Grade B — mixed size or small marks</option>
+                      <option value="C">Grade C — soft, marked or uneven</option>
+                    </select>
+                  </label>
+                  <label class="verification-check"><input v-model="formFor(order).freshness_match" type="checkbox"> Freshness matches the harvest date</label>
+                  <label class="verification-check"><input v-model="formFor(order).packaging_ok" type="checkbox"> Packaging is safe for the trip</label>
+                  <label class="verification-check"><input v-model="formFor(order).heavy_spoilage" type="checkbox"> Heavy spoilage is present</label>
+                  <label>Damage or spoilage note <input v-model="formFor(order).damage_note" type="text" maxlength="1000"></label>
+                  <label>Two pickup photos (wide load + close-up)
+                    <input type="file" accept="image/*" multiple @change="setPickupPhotos(order.id, $event)">
+                  </label>
+                  <button class="btn-picked-up" :disabled="processingId === order.id" @click="submitVerification(order)">
+                    {{ processingId === order.id ? 'Saving check…' : 'Save check and photos' }}
                   </button>
                 </div>
+
+                <div v-if="order.verification_status === 'flagged' && order.status === 'processing'" class="verification-panel flagged-panel">
+                  <h3>Load held — call buyer</h3>
+                  <p v-if="order.flag_deadline_at">Time left: {{ remainingSeconds(order.flag_deadline_at) }} seconds</p>
+                  <button class="btn-call-buyer-large" @click="callBuyer(order)">CALL BUYER</button>
+                  <p>Record the buyer’s choice after the call:</p>
+                  <div v-if="!order.flag_driver_decision_at" class="flag-decision-buttons">
+                    <button @click="recordFlagDecision(order.id, 'bring')">Bring it</button>
+                    <button @click="recordFlagDecision(order.id, 'reduce')">Bring it, reduce price</button>
+                    <button @click="recordFlagDecision(order.id, 'cancel')">Don’t bring it</button>
+                  </div>
+                  <p v-if="order.flag_decision && order.flag_decision !== 'cancel'">
+                    Waiting for buyer to confirm: {{ order.flag_decision === 'reduce' ? 'bring it at a reduced price' : 'bring it' }}.
+                  </p>
+                </div>
+
+                <div v-if="order.status === 'in_transit' && order.workflow_status !== 'arrived'" class="verification-panel">
+                  <label>Arrival photo at Market Circle
+                    <input :ref="el => setDeliveryInput(order.id, el)" type="file" accept="image/*">
+                  </label>
+                  <button class="btn-delivered" :disabled="processingId === order.id" @click="completeJob(order.id)">
+                    {{ processingId === order.id ? 'Saving arrival…' : 'Mark arrived with photo' }}
+                  </button>
+                </div>
+                <p v-if="order.workflow_status === 'arrived'" class="verification-panel">
+                  Arrival photo saved. The buyer must confirm receipt before escrow is released.
+                </p>
               </div>
             </section>
 
@@ -743,20 +772,87 @@ export default {
     const activeTab = ref('jobs');
     const isOnline = ref(true);
     const processingId = ref(null);
+    const verificationForms = reactive({});
+    const pickupPhotos = reactive({});
+    const deliveryInputs = reactive({});
+    const countdownNow = ref(Date.now());
     const historyQuery = ref('');
     const showEditModal = ref(false);
 
     let pollInterval = null;
+    let countdownInterval = null;
+
+    const formFor = (order) => {
+      if (!verificationForms[order.id]) {
+        verificationForms[order.id] = {
+          actual_quantity: order.quantity_ordered,
+          actual_grade: order.product?.quality_grade || 'A',
+          freshness_match: true,
+          packaging_ok: true,
+          heavy_spoilage: false,
+          damage_note: ''
+        };
+      }
+      return verificationForms[order.id];
+    };
+
+    const setPickupPhotos = (orderId, event) => {
+      pickupPhotos[orderId] = Array.from(event.target.files || []).slice(0, 2);
+    };
+
+    const setDeliveryInput = (orderId, element) => {
+      if (element) deliveryInputs[orderId] = element;
+    };
+
+    const compressImage = async (file) => {
+      const bitmap = await createImageBitmap(file);
+      const scale = Math.min(1, 1280 / Math.max(bitmap.width, bitmap.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(bitmap.width * scale);
+      canvas.height = Math.round(bitmap.height * scale);
+      canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+      bitmap.close();
+      const blob = await new Promise((resolve, reject) => {
+        canvas.toBlob(result => result ? resolve(result) : reject(new Error('Could not compress photo')), 'image/jpeg', 0.65);
+      });
+      return new File([blob], `${file.name.replace(/\.[^.]+$/, '')}.jpg`, { type: 'image/jpeg' });
+    };
+
+    const submitVerification = async (order) => {
+      const photos = pickupPhotos[order.id] || [];
+      if (photos.length < 2) {
+        alert('Choose at least two pickup photos: one wide load photo and one close-up.');
+        return;
+      }
+      processingId.value = order.id;
+      try {
+        const form = formFor(order);
+        router.post(`/driver/orders/${order.id}/verification`, {
+          ...form,
+          photos: await Promise.all(photos.map(compressImage))
+        }, {
+          forceFormData: true,
+          onFinish: () => { processingId.value = null; }
+        });
+      } catch (error) {
+        processingId.value = null;
+        alert(`Photo preparation failed: ${error.message}`);
+      }
+    };
 
     onMounted(() => {
       pollInterval = setInterval(() => {
         router.reload({ preserveScroll: true, only: ['orders', 'activeTrips', 'completedTrips'] });
       }, 5000);
+      countdownInterval = setInterval(() => { countdownNow.value = Date.now(); }, 1000);
     });
 
     onUnmounted(() => {
       if (pollInterval) clearInterval(pollInterval);
+      if (countdownInterval) clearInterval(countdownInterval);
     });
+
+    const remainingSeconds = (deadline) => Math.max(0, Math.ceil((new Date(deadline).getTime() - countdownNow.value) / 1000));
 
     // Reactive Driver & Vehicle Details
     const driverDetails = reactive({
@@ -856,12 +952,31 @@ export default {
     };
 
     const completeJob = (orderId) => {
+      const file = deliveryInputs[orderId]?.files?.[0];
+      if (!file) {
+        alert('Add a delivery photo before marking this order as arrived.');
+        return;
+      }
       processingId.value = orderId;
-      router.post(`/driver/orders/${orderId}/complete`, {}, {
-        onFinish: () => {
-          processingId.value = null;
-        }
+      compressImage(file).then(photo => {
+        router.post(`/driver/orders/${orderId}/complete`, { delivery_photo: photo }, {
+          forceFormData: true,
+          onFinish: () => { processingId.value = null; }
+        });
+      }).catch(error => {
+        processingId.value = null;
+        alert(`Photo preparation failed: ${error.message}`);
       });
+    };
+
+    const callBuyer = (order) => {
+      router.post(`/driver/orders/${order.id}/buyer-call`, {}, {
+        onSuccess: () => { window.location.href = `tel:${order.buyer?.phone_number || ''}`; }
+      });
+    };
+
+    const recordFlagDecision = (orderId, decision) => {
+      router.post(`/driver/orders/${orderId}/flag-decision`, { decision });
     };
 
     const pickupJob = (orderId) => {
@@ -892,7 +1007,14 @@ export default {
       formatDate,
       acceptJob,
       pickupJob,
-      completeJob
+      completeJob,
+      formFor,
+      remainingSeconds,
+      setPickupPhotos,
+      setDeliveryInput,
+      submitVerification,
+      callBuyer,
+      recordFlagDecision
     };
   }
 }
@@ -2192,5 +2314,81 @@ export default {
   .content-body {
     max-width: 800px;
   }
+}
+.verification-panel {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+}
+
+.verification-panel h3,
+.verification-panel p {
+  margin: 0;
+}
+
+.verification-panel label {
+  display: grid;
+  gap: var(--space-1);
+  font-weight: var(--font-weight-medium);
+}
+
+.verification-panel input:not([type="checkbox"]):not([type="file"]),
+.verification-panel select {
+  min-height: var(--input-height);
+  width: 100%;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-md);
+  background: var(--color-white);
+  font: inherit;
+}
+
+.verification-panel input[type="file"] {
+  width: 100%;
+  padding: var(--space-2) 0;
+}
+
+.verification-panel .verification-check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--input-height);
+}
+
+.verification-panel .verification-check input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--color-primary);
+}
+
+.flagged-panel {
+  border-color: var(--color-danger);
+  background: var(--color-danger-light);
+}
+
+.btn-call-buyer-large,
+.flag-decision-buttons button {
+  min-height: 52px;
+  border: 0;
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  background: var(--color-primary);
+  color: var(--color-white);
+  font: inherit;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+}
+
+.btn-call-buyer-large {
+  background: var(--color-danger);
+}
+
+.flag-decision-buttons {
+  display: grid;
+  gap: var(--space-2);
 }
 </style>

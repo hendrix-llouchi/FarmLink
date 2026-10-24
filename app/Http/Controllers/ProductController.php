@@ -46,7 +46,7 @@ class ProductController extends Controller
             ->join('products', 'orders.product_id', '=', 'products.id')
             ->where('products.user_id', $farmerId)
             ->where('orders.payment_status', 'released')
-            ->sum('orders.total_price');
+            ->sum(DB::raw('COALESCE(orders.adjusted_price, orders.total_price)'));
 
         // Fetch actual pending orders for the dashboard
         $pendingOrdersList = \App\Models\Order::whereHas('product', function ($query) use ($farmerId) {

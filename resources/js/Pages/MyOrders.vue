@@ -104,8 +104,8 @@
           <!-- Top Row: Order ID & Status Badge -->
           <div class="order-card-header">
             <span class="order-id">Order #{{ order.id }}</span>
-            <span class="status-badge" :class="order.status">
-              {{ formatStatus(order.status) }}
+            <span class="status-badge" :class="order.workflow_status || order.status">
+              {{ formatStatus(order.workflow_status || order.status) }}
             </span>
           </div>
 
@@ -138,6 +138,49 @@
             </div>
           </div>
 
+          <section v-if="order.verification" class="order-evidence-panel">
+            <h3>Farm-gate check: {{ order.verification.outcome.replace('_', ' ') }}</h3>
+            <p>{{ order.verification.actual_quantity }} checked, {{ order.verification.claimed_quantity }} ordered · Grade {{ order.verification.actual_grade }}</p>
+            <p v-if="order.verification.notes">{{ order.verification.notes }}</p>
+            <p v-if="order.adjusted_price !== null && order.adjusted_price !== undefined" class="adjusted-price">
+              Adjusted produce price: GH₵ {{ Number(order.adjusted_price).toFixed(2) }}
+            </p>
+            <div class="evidence-photo-row">
+              <div class="evidence-photo-group">
+                <strong>Farm pickup</strong>
+                <img v-for="(photo, index) in order.verification.pickup_photos || []" :key="photo" :src="'/storage/' + photo" :alt="index === 0 ? 'Pickup wide photo' : 'Pickup quality photo'">
+              </div>
+              <div v-if="order.delivery_photo_path" class="evidence-photo-group">
+                <strong>Market arrival</strong>
+                <img :src="'/storage/' + order.delivery_photo_path" alt="Delivery arrival photo">
+              </div>
+            </div>
+            <div v-if="order.verification_status === 'flagged' && order.flag_deadline_at" class="flag-buyer-action">
+              <p v-if="!order.flag_buyer_confirmed_at">
+                Driver choice: {{ flagDecisionLabel(order.flag_decision) }} · {{ remainingSeconds(order.flag_deadline_at) }} seconds left.
+              </p>
+              <button v-if="['bring', 'reduce'].includes(order.flag_decision) && !order.flag_buyer_confirmed_at" class="buyer-confirm-btn" @click="confirmFlag(order.id)">
+                Confirm the driver’s choice
+              </button>
+              <p v-else-if="order.flag_buyer_confirmed_at">You confirmed this decision. The farmer must still confirm handover.</p>
+              <p v-else>If the load is not as described, we will call you. If we can't reach you in 15 minutes, we will not bring a bad load — your money stays safe.</p>
+            </div>
+            <ol v-if="order.events?.length" class="order-event-list">
+              <li v-for="event in order.events" :key="event.id">
+                <span>{{ event.event.replace(/_/g, ' ') }}</span>
+                <time>{{ new Date(event.created_at).toLocaleString() }}</time>
+              </li>
+            </ol>
+          </section>
+
+          <section v-if="order.workflow_status === 'arrived'" class="order-evidence-panel arrival-confirmation">
+            <h3>Has your order arrived?</h3>
+            <p>Compare the farm photos with the arrival photo above. Escrow stays held until you confirm.</p>
+            <button class="buyer-confirm-btn" @click="confirmReceived(order.id)">Confirm received</button>
+            <p>To protect the driver’s payment, escrow releases automatically 24 hours after arrival if you do not respond.</p>
+          </section>
+          <p v-if="order.payment_status === 'refunded'" class="refund-note">Order cancelled. Your escrow payment has been refunded.</p>
+
           <!-- Enriched Order Detail Block (Phase C) -->
           <div class="order-enrichment-block">
             <div class="enrichment-row">
@@ -166,7 +209,7 @@
               <span class="breakdown-title">Payment Breakdown</span>
               <div class="breakdown-row">
                 <span>Product Cost:</span>
-                <span>₵ {{ Number(order.total_price).toFixed(2) }}</span>
+                <span>₵ {{ Number(order.adjusted_price ?? order.total_price).toFixed(2) }}</span>
               </div>
               <div class="breakdown-row">
                 <span>Transport Fee:</span>
@@ -174,7 +217,7 @@
               </div>
               <div class="breakdown-row total-escrow">
                 <span>Total in Escrow:</span>
-                <span>₵ {{ (Number(order.total_price) + Number(order.estimated_transport_cost || 0)).toFixed(2) }}</span>
+                <span>₵ {{ (Number(order.adjusted_price ?? order.total_price) + Number(order.estimated_transport_cost || 0)).toFixed(2) }}</span>
               </div>
             </div>
 
@@ -202,7 +245,7 @@
               <div style="display: flex; align-items: center; gap: var(--space-2);">
                 <span class="total-label">{{ order.payment_status === 'unpaid' ? 'Awaiting Payment:' : 'Total Paid:' }}</span>
                 <span class="total-value" :style="order.payment_status === 'unpaid' ? 'color: var(--color-danger);' : ''">
-                  GH₵ {{ Number(order.total_price).toFixed(2) }}
+                  GH₵ {{ Number(order.adjusted_price ?? order.total_price).toFixed(2) }}
                 </span>
               </div>
               <button 
@@ -434,21 +477,25 @@ export default {
     const imgErrors = ref({});
     const isSubmitting = ref(false);
     const expandedDriverOrderId = ref(null);
+    const countdownNow = ref(Date.now());
     const errors = reactive({
       score: null,
       comment: null
     });
 
     let pollInterval = null;
+    let countdownInterval = null;
 
     onMounted(() => {
       pollInterval = setInterval(() => {
         router.reload({ preserveScroll: true, only: ['orders'] });
       }, 5000);
+      countdownInterval = setInterval(() => { countdownNow.value = Date.now(); }, 1000);
     });
 
     onUnmounted(() => {
       if (pollInterval) clearInterval(pollInterval);
+      if (countdownInterval) clearInterval(countdownInterval);
     });
 
     const ratingForm = reactive({
@@ -472,6 +519,16 @@ export default {
       if (status === 'awaiting_pickup') return 'Awaiting Pickup';
       return status.charAt(0).toUpperCase() + status.slice(1);
     };
+
+    const remainingSeconds = (deadline) => Math.max(0, Math.ceil((new Date(deadline).getTime() - countdownNow.value) / 1000));
+    const flagDecisionLabel = (decision) => ({
+      bring: 'Bring it',
+      reduce: 'Bring it, reduce price',
+      cancel: 'Don’t bring it'
+    }[decision] || 'Waiting for the driver to call');
+
+    const confirmFlag = (orderId) => router.post(`/buyer/orders/${orderId}/flag-confirm`, {});
+    const confirmReceived = (orderId) => router.post(`/buyer/orders/${orderId}/confirm-received`, {});
 
     const openRateModal = (order) => {
       selectedOrder.value = order;
@@ -600,6 +657,10 @@ export default {
     return {
       formatDate,
       formatStatus,
+      remainingSeconds,
+      flagDecisionLabel,
+      confirmFlag,
+      confirmReceived,
       isModalOpen,
       selectedOrder,
       ratingForm,
@@ -1816,6 +1877,82 @@ export default {
   .orders-list {
     grid-template-columns: repeat(3, 1fr);
   }
+}
+
+.order-evidence-panel,
+.refund-note {
+  margin-top: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-neutral-50);
+}
+
+.order-evidence-panel h3,
+.order-evidence-panel p {
+  margin-top: 0;
+}
+
+.adjusted-price {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+.evidence-photo-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.evidence-photo-group {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+}
+
+.evidence-photo-group img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.flag-buyer-action {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-warning-light);
+}
+
+.buyer-confirm-btn {
+  width: 100%;
+  min-height: var(--input-height);
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-white);
+  font: inherit;
+  font-weight: var(--font-weight-bold);
+}
+
+.order-event-list {
+  display: grid;
+  gap: var(--space-2);
+  padding-left: var(--space-5);
+  color: var(--color-neutral-700);
+  font-size: var(--font-size-xs);
+}
+
+.order-event-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.refund-note {
+  color: var(--color-danger);
 }
 
 /* ─── Driver Details Section ─── */

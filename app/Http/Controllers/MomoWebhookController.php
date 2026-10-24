@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Services\OrderWorkflowService;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -38,6 +39,9 @@ class MomoWebhookController extends Controller
                     if ($order->payment_status !== 'escrow_held') {
                         $order->update([
                             'payment_status' => 'escrow_held',
+                        ]);
+                        app(OrderWorkflowService::class)->record($order, 'escrow_held', [
+                            'financial_transaction_id' => $financialTransactionId,
                         ]);
 
                         Log::info("Order #{$order->id} payment updated to escrow_held via MoMo Webhook. Transaction: {$financialTransactionId}");

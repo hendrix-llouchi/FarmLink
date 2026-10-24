@@ -391,6 +391,9 @@
                 <p class="escrow-caption-note">
                   Your product payment goes to the farmer. Transport is released to the driver on confirmed delivery. Transport cost is an estimate for this route.
                 </p>
+                <p class="escrow-rule-note">
+                  If the load is not as described, we will call you. If we can't reach you in 15 minutes, we will not bring a bad load — your money stays safe.
+                </p>
 
                 <div class="input-form-group">
                   <label class="form-input-label">Mobile Money Network</label>
@@ -2083,5 +2086,14 @@ export default {
   font-size: var(--font-size-xs);
   color: var(--color-neutral-500);
   margin: 0 0 var(--space-2) 0;
+}
+.escrow-rule-note {
+  margin-top: var(--space-2);
+  padding: var(--space-3);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-subtle);
+  color: var(--color-neutral-900);
+  font-size: var(--font-size-sm);
 }
 </style>
