@@ -99,8 +99,8 @@
       </div>
 
       <!-- High-Fidelity Orders Cards List -->
-      <div v-else class="orders-list">
-        <div v-for="order in orders" :key="order.id" class="order-card" :class="order.status">
+      <div v-else class="orders-list orders-list-trimmed">
+        <div v-for="order in orders" :key="order.id" class="order-card order-card-trimmed" :class="order.status">
           <!-- Top Row: Order ID & Status Badge -->
           <div class="order-card-header">
             <span class="order-id">Order #{{ order.id }}</span>
@@ -137,6 +137,30 @@
               </div>
             </div>
           </div>
+
+          <div class="trimmed-summary-line">
+            <span>{{ order.quantity_ordered }} {{ order.product?.unit || 'units' }}</span>
+            <strong>GH₵ {{ (Number(order.adjusted_price ?? order.total_price) + Number(order.estimated_transport_cost || 0)).toFixed(2) }}</strong>
+          </div>
+          <div class="trimmed-date">Ordered {{ formatDate(order.created_at) }}</div>
+          <div class="trimmed-contacts">
+            <a v-if="order.product?.user?.phone_number" :href="'tel:' + order.product.user.phone_number" class="contact-link"><span>Farmer: {{ order.product.user.name || 'Local Farmer' }}</span><span>{{ order.product.user.phone_number }}</span></a>
+            <span v-else class="contact-link">Farmer: {{ order.product?.user?.name || 'Local Farmer' }}</span>
+            <a v-if="order.driver?.phone_number" :href="'tel:' + order.driver.phone_number" class="contact-link"><span>Driver: {{ order.driver.name }}</span><span>{{ order.driver.phone_number }}</span></a>
+            <span v-else class="contact-link contact-muted">Driver not assigned</span>
+          </div>
+          <div class="trimmed-action-row">
+            <button v-if="order.workflow_status === 'arrived'" class="buyer-confirm-btn" @click="confirmReceived(order.id)">Confirm received</button>
+            <button v-else-if="order.verification_status === 'flagged' && ['bring', 'reduce'].includes(order.flag_decision) && !order.flag_buyer_confirmed_at" class="buyer-confirm-btn" @click="confirmFlag(order.id)">Confirm driver’s choice</button>
+            <button v-else-if="order.payment_status === 'unpaid'" class="simulate-momo-prompt-btn" @click="triggerDemoPrompt(order)">Complete payment</button>
+            <button v-else-if="order.status === 'delivered' && !order.disputed_at" class="report-issue-btn" @click="openDisputeModal(order)">Report a problem</button>
+            <button v-else-if="order.status === 'delivered' && !order.buyer_rating" class="rate-order-btn" @click="openRateModal(order)">Rate order</button>
+            <span v-else class="trimmed-action-hint">Open View details below.</span>
+          </div>
+
+          <details class="order-details">
+            <summary>View details</summary>
+            <div class="order-details-content">
 
           <section v-if="order.verification" class="order-evidence-panel">
             <h3>Farm-gate check: {{ order.verification.outcome.replace('_', ' ') }}</h3>
@@ -322,6 +346,8 @@
           <div class="order-timestamp">
             Ordered on {{ formatDate(order.created_at) }}
           </div>
+            </div>
+          </details>
         </div>
       </div>
     </div>
@@ -2048,5 +2074,53 @@ export default {
   font-size: var(--font-size-xs);
   color: var(--color-neutral-700);
   margin-top: 2px;
+}
+
+.orders-list-trimmed {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.order-card-trimmed {
+  padding: var(--space-5);
+  border: 1px solid var(--color-neutral-100);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.trimmed-card-head,
+.trimmed-summary-line,
+.trimmed-contacts,
+.trimmed-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.trimmed-product { display: flex; align-items: center; gap: var(--space-3); min-width: 0; }
+.trimmed-product .product-name { margin: var(--space-1) 0 0; }
+.trimmed-summary-line { margin-top: var(--space-4); font-size: var(--font-size-sm); color: var(--color-neutral-700); }
+.trimmed-summary-line strong { color: var(--color-neutral-900); font-size: var(--font-size-md); }
+.trimmed-date { margin-top: var(--space-2); color: var(--color-neutral-500); font-size: var(--font-size-xs); }
+.trimmed-contacts { align-items: stretch; margin-top: var(--space-4); flex-wrap: wrap; justify-content: flex-start; }
+.contact-link { display: inline-flex; flex-direction: column; gap: 2px; color: var(--color-primary); font-size: var(--font-size-xs); text-decoration: none; }
+.contact-link span:last-child { font-weight: var(--font-weight-semibold); }
+.contact-muted { color: var(--color-neutral-500); }
+.trimmed-action-row { justify-content: flex-start; margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--color-neutral-100); }
+.trimmed-action-hint { color: var(--color-neutral-500); font-size: var(--font-size-xs); }
+.order-details { margin-top: var(--space-4); border-top: 1px solid var(--color-neutral-100); padding-top: var(--space-3); }
+.order-details summary { cursor: pointer; color: var(--color-primary); font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); }
+.order-details-content { display: grid; gap: var(--space-4); padding-top: var(--space-4); }
+.order-details-content .order-card-footer { margin-top: 0; }
+.trimmed-party-details { display: grid; gap: var(--space-2); padding: var(--space-3); border-radius: var(--radius-md); background: var(--color-neutral-50); color: var(--color-neutral-700); font-size: var(--font-size-xs); }
+
+@media (max-width: 767px) {
+  .order-card-trimmed { padding: var(--space-4); }
+  .trimmed-card-head { align-items: flex-start; }
+  .trimmed-card-head .status-badge { flex-shrink: 0; }
+  .trimmed-contacts { display: grid; grid-template-columns: 1fr; }
+  .trimmed-action-row > button { width: 100%; }
 }
 </style>
