@@ -161,10 +161,11 @@
             <section v-if="activeTrips && activeTrips.length > 0" class="section-block active-section">
               <div class="section-header">
                 <h2 class="section-title">Active Delivery</h2>
-                <span class="active-pulse-badge">IN TRANSIT</span>
+                <span class="active-pulse-badge">{{ activeTrips.some(trip => trip.status === 'processing') ? 'AWAITING VERIFICATION' : 'IN TRANSIT' }}</span>
               </div>
 
               <div v-for="order in activeTrips" :key="order.id" class="active-trip-card">
+                <div class="active-job-label">Order #{{ order.id }} · {{ order.status === 'processing' ? 'Awaiting verification' : 'In transit' }}</div>
                 <div class="trip-status-row">
                   <div class="payout-col">
                     <span class="payout-label-sm">Transport Fee</span>
@@ -230,9 +231,13 @@
                   📦 {{ order.quantity_ordered }}x {{ order.product?.name || 'Produce' }}
                 </div>
 
-                <div v-if="order.status === 'processing' && order.verification_status !== 'flagged'" class="verification-panel">
+                <button v-if="order.status === 'processing' && (!order.verification_status || order.verification_status === 'pending')" class="btn-picked-up verify-load-action" @click="focusVerification(order.id)">
+                  Verify Load
+                </button>
+
+                <div :id="`verification-${order.id}`" v-if="order.status === 'processing' && (!order.verification_status || order.verification_status === 'pending')" class="verification-panel">
                   <h3>Farm-gate check</h3>
-                  <p>Check the load, take two photos, then ask the farmer to confirm the handover code.</p>
+                  <p>Check the load and take two pickup photos.</p>
                   <label>Actual quantity <input v-model.number="formFor(order).actual_quantity" type="number" min="0" inputmode="numeric"></label>
                   <label>Actual grade
                     <select v-model="formFor(order).actual_grade">
@@ -250,6 +255,17 @@
                   </label>
                   <button class="btn-picked-up" :disabled="processingId === order.id" @click="submitVerification(order)">
                     {{ processingId === order.id ? 'Saving check…' : 'Save check and photos' }}
+                  </button>
+                </div>
+
+                <div v-if="order.status === 'processing' && ['verified', 'verified_minor', 'flagged'].includes(order.verification_status) && (order.verification_status !== 'flagged' || order.flag_buyer_confirmed_at)" class="verification-panel">
+                  <h3>Confirm handover</h3>
+                  <p>Ask the farmer to read the 4-digit code, then enter it here.</p>
+                  <label>Handover code
+                    <input v-model="formFor(order).dispatch_code" inputmode="numeric" maxlength="4" autocomplete="one-time-code">
+                  </label>
+                  <button class="btn-picked-up" :disabled="processingId === order.id" @click="confirmHandover(order)">
+                    {{ processingId === order.id ? 'Confirming…' : 'Confirm handover' }}
                   </button>
                 </div>
 
@@ -790,7 +806,8 @@ export default {
           freshness_match: true,
           packaging_ok: true,
           heavy_spoilage: false,
-          damage_note: ''
+          damage_note: '',
+          dispatch_code: ''
         };
       }
       return verificationForms[order.id];
@@ -838,6 +855,19 @@ export default {
         processingId.value = null;
         alert(`Photo preparation failed: ${error.message}`);
       }
+    };
+
+    const confirmHandover = (order) => {
+      processingId.value = order.id;
+      router.post(`/driver/orders/${order.id}/handover`, {
+        dispatch_code: formFor(order).dispatch_code
+      }, {
+        onFinish: () => { processingId.value = null; }
+      });
+    };
+
+    const focusVerification = (orderId) => {
+      document.getElementById(`verification-${orderId}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     };
 
     onMounted(() => {
@@ -1013,6 +1043,8 @@ export default {
       setPickupPhotos,
       setDeliveryInput,
       submitVerification,
+      confirmHandover,
+      focusVerification,
       callBuyer,
       recordFlagDecision
     };
@@ -1401,6 +1433,20 @@ export default {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+}
+
+.active-trip-card + .active-trip-card {
+  border-top: 2px solid var(--color-neutral-100);
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+}
+
+.active-job-label {
+  color: var(--color-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .payout-label-sm {

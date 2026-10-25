@@ -185,7 +185,7 @@ class OrderController extends Controller
                 // Lock the order for update to prevent concurrent assignment
                 $order = Order::lockForUpdate()->findOrFail($id);
 
-                if ($order->payment_status !== 'escrow_held') {
+                if ($order->payment_status !== 'escrow_held' || $order->status !== 'pending') {
                     throw ValidationException::withMessages([
                         'order' => ['This order has not been paid for by the buyer yet. Transport can only be accepted once payment is locked in escrow.']
                     ]);
@@ -230,7 +230,7 @@ class OrderController extends Controller
     }
 
     /**
-     * Reject dispatch unless the verified farmer handover has already occurred.
+     * Reject dispatch unless the driver's verified handover has already occurred.
      */
     public function pickupDelivery(Request $request, $id)
     {
@@ -249,7 +249,7 @@ class OrderController extends Controller
                     || !$order->handover_confirmed_at || !$order->verification()->exists()
                     || ($order->verification_status === 'flagged' && !$order->flag_buyer_confirmed_at)) {
                     throw \Illuminate\Validation\ValidationException::withMessages([
-                        'status' => ['The driver checklist, required pickup photos, and farmer handover code are required before dispatch.']
+                        'status' => ['The driver checklist, required pickup photos, and driver-entered handover code are required before dispatch.']
                     ]);
                 }
 

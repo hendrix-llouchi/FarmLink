@@ -111,24 +111,29 @@ class VerificationController extends Controller
 
         return back()->with('message', $outcome === 'flagged'
             ? 'Major mismatch recorded. Keep the load at the farm gate and call the buyer.'
-            : 'Farm-gate check saved. The farmer must confirm the handover code before dispatch.');
+            : 'Farm-gate check saved. Ask the farmer to read the handover code to you.');
     }
 
     public function handover(Request $request, Order $order, OrderWorkflowService $workflow)
     {
-        $request->validate(['dispatch_code' => ['required', 'regex:/^[0-9]{4}$/']]);
+        throw ValidationException::withMessages(['order' => ['Only the assigned driver can confirm handover.']]);
+    }
 
-        DB::transaction(function () use ($request, $order, $workflow) {
+    public function driverHandover(Request $request, Order $order, OrderWorkflowService $workflow)
+    {
+        $data = $request->validate(['dispatch_code' => ['required', 'regex:/^[0-9]{4}$/']]);
+
+        DB::transaction(function () use ($request, $data, $order, $workflow) {
             $lockedOrder = Order::lockForUpdate()->findOrFail($order->id);
-            if ($lockedOrder->product->user_id !== $request->user()->id) {
-                throw ValidationException::withMessages(['order' => ['Only this order’s farmer can confirm handover.']]);
+            if ($lockedOrder->driver_id !== $request->user()->id) {
+                throw ValidationException::withMessages(['order' => ['Only the assigned driver can confirm handover.']]);
             }
             if ($lockedOrder->status !== 'processing' || $lockedOrder->payment_status !== 'escrow_held'
                 || !in_array($lockedOrder->verification_status, ['verified', 'verified_minor', 'flagged'], true)
                 || !$lockedOrder->verification()->exists()) {
                 throw ValidationException::withMessages(['order' => ['The driver must complete the farm-gate check first.']]);
             }
-            if (!hash_equals((string) $lockedOrder->dispatch_code, (string) $request->dispatch_code)) {
+            if (!hash_equals((string) $lockedOrder->dispatch_code, (string) $data['dispatch_code'])) {
                 throw ValidationException::withMessages(['dispatch_code' => ['That handover code is not correct.']]);
             }
             if ($lockedOrder->verification_status === 'flagged' && !$lockedOrder->flag_buyer_confirmed_at) {
@@ -136,7 +141,8 @@ class VerificationController extends Controller
             }
 
             $lockedOrder->update(['status' => 'in_transit', 'handover_confirmed_at' => now()]);
-            $workflow->record($lockedOrder, 'in_transit', ['verification_status' => $lockedOrder->verification_status]);
+            $workflow->record($lockedOrder, 'handover_confirmed', ['verification_status' => $lockedOrder->verification_status], $request->user());
+            $workflow->record($lockedOrder, 'in_transit', ['verification_status' => $lockedOrder->verification_status], $request->user());
             Notification::create([
                 'user_id' => $lockedOrder->buyer_id,
                 'message' => "Order #{$lockedOrder->id} has passed the farm-gate checks and is now in transit.",
@@ -226,7 +232,7 @@ class VerificationController extends Controller
             $workflow->record($lockedOrder, 'buyer_confirmed_flag_decision', ['decision' => $lockedOrder->flag_decision]);
         });
 
-        return back()->with('message', 'Your decision is confirmed. The farmer must still confirm the handover code.');
+        return back()->with('message', 'Your decision is confirmed. The driver must still enter the handover code.');
     }
 
     public function confirmReceived(Request $request, Order $order, OrderWorkflowService $workflow)

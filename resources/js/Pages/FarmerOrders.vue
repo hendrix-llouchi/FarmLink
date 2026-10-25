@@ -202,16 +202,9 @@
             </div>
 
             <div v-if="order.farmer_dispatch_code && order.status === 'processing' && order.workflow_status !== 'cancelled' && order.verification_status" class="handover-panel">
-              <h3>Confirm handover with the driver</h3>
-              <p>Read the four-digit code below to the driver only after you agree the load is ready.</p>
+              <h3>Handover code</h3>
+              <p>Read this code to the driver only after you agree the load is ready.</p>
               <strong class="dispatch-code">{{ order.farmer_dispatch_code }}</strong>
-              <label>
-                Enter the code to confirm handover
-                <input v-model="handoverCodes[order.id]" inputmode="numeric" maxlength="4" autocomplete="one-time-code">
-              </label>
-              <button class="request-transport-btn" :disabled="handoverSubmittingId === order.id" @click="confirmHandover(order.id)">
-                {{ handoverSubmittingId === order.id ? 'Confirming…' : 'Confirm handover' }}
-              </button>
             </div>
             <div v-if="order.verification_status === 'flagged' && order.workflow_status !== 'cancelled' && order.flag_deadline_at" class="handover-panel">
               <strong>Major mismatch — load must stay here</strong>
@@ -280,8 +273,6 @@ export default {
   },
   setup() {
     const requestingId = ref(null);
-    const handoverSubmittingId = ref(null);
-    const handoverCodes = reactive({});
     const imgErrors = ref({});
     let pollInterval = null;
 
@@ -322,23 +313,11 @@ export default {
       });
     };
 
-    const confirmHandover = (orderId) => {
-      handoverSubmittingId.value = orderId;
-      router.post(`/farmer/orders/${orderId}/handover`, {
-        dispatch_code: handoverCodes[orderId] || ''
-      }, {
-        onFinish: () => { handoverSubmittingId.value = null; }
-      });
-    };
-
     return {
       formatDate,
       formatStatus,
       requestingId,
       requestTransport,
-      handoverCodes,
-      handoverSubmittingId,
-      confirmHandover,
       imgErrors
     };
   }

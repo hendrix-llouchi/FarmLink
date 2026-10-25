@@ -114,6 +114,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/driver/orders/{id}/pickup', [OrderController::class, 'pickupDelivery'])->name('driver.orders.pickup');
         Route::post('/driver/orders/{id}/complete', [OrderController::class, 'completeDelivery'])->name('driver.orders.complete');
         Route::post('/driver/orders/{order}/verification', [VerificationController::class, 'store'])->name('driver.orders.verification');
+        Route::post('/driver/orders/{order}/handover', [VerificationController::class, 'driverHandover'])->name('driver.orders.handover');
         Route::post('/driver/orders/{order}/buyer-call', [VerificationController::class, 'logBuyerCall'])->name('driver.orders.buyer-call');
         Route::post('/driver/orders/{order}/flag-decision', [VerificationController::class, 'decideFlag'])->name('driver.orders.flag-decision');
     });
