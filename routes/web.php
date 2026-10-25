@@ -21,11 +21,14 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\VerificationController;
+use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
     if (auth()->check()) {
         $role = auth()->user()->role;
-        if ($role === 'farmer') {
+        if (auth()->user()->is_admin) {
+            return redirect()->route('admin.dashboard');
+        } elseif ($role === 'farmer') {
             return redirect()->route('farmer.dashboard');
         } elseif ($role === 'buyer') {
             return redirect()->route('buyer.browse');
@@ -67,6 +70,11 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+        Route::post('/users/{user}/suspension', [AdminController::class, 'suspend'])->name('users.suspension');
+    });
 
     // Settings Routes
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');

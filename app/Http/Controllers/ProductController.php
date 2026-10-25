@@ -210,6 +210,10 @@ class ProductController extends Controller
 
         // Phase 2: Compute days_since_harvest for each product
         $products = $query->latest()->get()->map(function ($product) {
+            $farmerOrders = \App\Models\Order::whereHas('product', fn ($q) => $q->where('user_id', $product->user_id));
+            $verifiedClean = (clone $farmerOrders)->whereIn('verification_status', ['verified', 'verified_minor'])->count();
+            $totalOrders = (clone $farmerOrders)->whereHas('verification')->count();
+            $product->user->setAttribute('verified_dispatch_rate', "{$verifiedClean} of {$totalOrders} orders verified clean");
             $product->days_since_harvest = $product->harvest_date
                 ? now()->startOfDay()->diffInDays(\Carbon\Carbon::parse($product->harvest_date)->startOfDay())
                 : null;
