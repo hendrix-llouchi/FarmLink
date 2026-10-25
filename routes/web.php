@@ -20,11 +20,15 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\VerificationController;
+use App\Http\Controllers\AdminController;
 
 Route::get('/', function () {
     if (auth()->check()) {
         $role = auth()->user()->role;
-        if ($role === 'farmer') {
+        if (auth()->user()->is_admin) {
+            return redirect()->route('admin.dashboard');
+        } elseif ($role === 'farmer') {
             return redirect()->route('farmer.dashboard');
         } elseif ($role === 'buyer') {
             return redirect()->route('buyer.browse');
@@ -67,6 +71,13 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+        Route::get('/orders/{order}', [AdminController::class, 'orderDetail'])->name('orders.show');
+        Route::post('/orders/{order}/dispute-resolution', [AdminController::class, 'resolveDispute'])->name('orders.dispute-resolution');
+        Route::post('/users/{user}/suspension', [AdminController::class, 'suspend'])->name('users.suspension');
+    });
+
     // Settings Routes
     Route::get('/settings', [SettingsController::class, 'index'])->name('settings.index');
     Route::post('/settings/profile', [SettingsController::class, 'updateProfile'])->name('settings.profile.update');
@@ -88,6 +99,7 @@ Route::middleware('auth')->group(function () {
             ->middleware('owns.resource:products,user_id')
             ->name('products.destroy');
         Route::get('/farmer/orders', [OrderController::class, 'farmerOrders'])->name('farmer.orders.index');
+        Route::post('/farmer/orders/{order}/handover', [VerificationController::class, 'handover'])->name('farmer.orders.handover');
     });
 
     // Buyer Routes
@@ -101,6 +113,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/buyer/orders/{id}/dispute', [OrderController::class, 'disputeOrder'])
             ->middleware('owns.resource:orders,buyer_id')
             ->name('buyer.orders.dispute');
+        Route::post('/buyer/orders/{order}/flag-confirm', [VerificationController::class, 'confirmFlag'])->name('buyer.orders.flag-confirm');
+        Route::post('/buyer/orders/{order}/confirm-received', [VerificationController::class, 'confirmReceived'])->name('buyer.orders.confirm-received');
     });
 
     // Driver Routes
@@ -109,5 +123,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/driver/orders/{id}/accept', [OrderController::class, 'acceptDelivery'])->name('driver.orders.accept');
         Route::post('/driver/orders/{id}/pickup', [OrderController::class, 'pickupDelivery'])->name('driver.orders.pickup');
         Route::post('/driver/orders/{id}/complete', [OrderController::class, 'completeDelivery'])->name('driver.orders.complete');
+        Route::post('/driver/orders/{order}/verification', [VerificationController::class, 'store'])->name('driver.orders.verification');
+        Route::post('/driver/orders/{order}/handover', [VerificationController::class, 'driverHandover'])->name('driver.orders.handover');
+        Route::post('/driver/orders/{order}/buyer-call', [VerificationController::class, 'logBuyerCall'])->name('driver.orders.buyer-call');
+        Route::post('/driver/orders/{order}/flag-decision', [VerificationController::class, 'decideFlag'])->name('driver.orders.flag-decision');
     });
 });

@@ -108,8 +108,8 @@
             <!-- Top Row: Order ID & Status Badge -->
             <div class="order-card-header">
               <span class="order-id">Order #{{ order.id }}</span>
-              <span class="status-badge" :class="order.status">
-                {{ formatStatus(order.status) }}
+              <span class="status-badge" :class="order.workflow_status || order.status">
+                {{ formatStatus(order.workflow_status || order.status) }}
               </span>
             </div>
 
@@ -174,7 +174,7 @@
               </div>
               <div class="total-paid-meta">
                 <span class="total-label">Payout:</span>
-                <span class="total-value">GH₵ {{ Number(order.total_price).toFixed(2) }}</span>
+                <span class="total-value">GH₵ {{ Number(order.adjusted_price ?? order.total_price).toFixed(2) }}</span>
               </div>
             </div>
 
@@ -199,6 +199,17 @@
               <div v-else class="searching-driver-box" style="display: flex; align-items: center; justify-content: center; gap: 8px; background-color: var(--color-primary-subtle); color: var(--color-primary); font-size: var(--font-size-xs); font-weight: bold; height: 36px; border-radius: var(--radius-md); border: 1px solid var(--color-primary-light); width: 100%;">
                 <span>🛺 Transport Arranged by FarmLink (Awaiting Aboboyaa Driver)</span>
               </div>
+            </div>
+
+            <div v-if="order.farmer_dispatch_code && order.status === 'processing' && order.workflow_status !== 'cancelled' && order.verification_status" class="handover-panel">
+              <h3>Handover code</h3>
+              <p>Read this code to the driver only after you agree the load is ready.</p>
+              <strong class="dispatch-code">{{ order.farmer_dispatch_code }}</strong>
+            </div>
+            <div v-if="order.verification_status === 'flagged' && order.workflow_status !== 'cancelled' && order.flag_deadline_at" class="handover-panel">
+              <strong>Major mismatch — load must stay here</strong>
+              <p v-if="order.flag_buyer_confirmed_at">Buyer confirmed the driver’s choice. Confirm the code above to dispatch.</p>
+              <p v-else>Waiting for buyer decision. The 15-minute window ends {{ new Date(order.flag_deadline_at).toLocaleTimeString() }}.</p>
             </div>
 
             <!-- Bottom Meta: Order Timestamp -->
@@ -247,7 +258,7 @@
 
 <script>
 import { Link, router } from '@inertiajs/vue3';
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, reactive, onMounted, onUnmounted } from 'vue';
 
 export default {
   name: 'FarmerOrders',
@@ -1110,5 +1121,38 @@ export default {
   .orders-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+}
+
+.handover-panel {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-warning);
+  border-radius: var(--radius-lg);
+  background: var(--color-warning-light);
+}
+
+.handover-panel h3,
+.handover-panel p {
+  margin: 0;
+}
+
+.dispatch-code {
+  color: var(--color-primary);
+  font-size: var(--font-size-3xl);
+  letter-spacing: 0.2em;
+}
+
+.handover-panel label {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.handover-panel input {
+  min-height: var(--input-height);
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--radius-md);
+  padding: 0 var(--space-3);
 }
 </style>

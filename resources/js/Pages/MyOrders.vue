@@ -99,13 +99,13 @@
       </div>
 
       <!-- High-Fidelity Orders Cards List -->
-      <div v-else class="orders-list">
-        <div v-for="order in orders" :key="order.id" class="order-card" :class="order.status">
+      <div v-else class="orders-list orders-list-trimmed">
+        <div v-for="order in orders" :key="order.id" class="order-card order-card-trimmed" :class="order.status">
           <!-- Top Row: Order ID & Status Badge -->
           <div class="order-card-header">
             <span class="order-id">Order #{{ order.id }}</span>
-            <span class="status-badge" :class="order.status">
-              {{ formatStatus(order.status) }}
+            <span class="status-badge" :class="order.workflow_status || order.status">
+              {{ formatStatus(order.workflow_status || order.status) }}
             </span>
           </div>
 
@@ -138,6 +138,73 @@
             </div>
           </div>
 
+          <div class="trimmed-summary-line">
+            <span>{{ order.quantity_ordered }} {{ order.product?.unit || 'units' }}</span>
+            <strong>GH₵ {{ (Number(order.adjusted_price ?? order.total_price) + Number(order.estimated_transport_cost || 0)).toFixed(2) }}</strong>
+          </div>
+          <div class="trimmed-date">Ordered {{ formatDate(order.created_at) }}</div>
+          <div class="trimmed-contacts">
+            <a v-if="order.product?.user?.phone_number" :href="'tel:' + order.product.user.phone_number" class="contact-link"><span>Farmer: {{ order.product.user.name || 'Local Farmer' }}</span><span>{{ order.product.user.phone_number }}</span></a>
+            <span v-else class="contact-link">Farmer: {{ order.product?.user?.name || 'Local Farmer' }}</span>
+            <a v-if="order.driver?.phone_number" :href="'tel:' + order.driver.phone_number" class="contact-link"><span>Driver: {{ order.driver.name }}</span><span>{{ order.driver.phone_number }}</span></a>
+            <span v-else class="contact-link contact-muted">Driver not assigned</span>
+          </div>
+          <div class="trimmed-action-row">
+            <button v-if="order.workflow_status === 'arrived'" class="buyer-confirm-btn" @click="confirmReceived(order.id)">Confirm received</button>
+            <button v-else-if="order.verification_status === 'flagged' && ['bring', 'reduce'].includes(order.flag_decision) && !order.flag_buyer_confirmed_at" class="buyer-confirm-btn" @click="confirmFlag(order.id)">Confirm driver’s choice</button>
+            <button v-else-if="order.payment_status === 'unpaid'" class="simulate-momo-prompt-btn" @click="triggerDemoPrompt(order)">Complete payment</button>
+            <button v-else-if="order.status === 'delivered' && !order.disputed_at" class="report-issue-btn" @click="openDisputeModal(order)">Report a problem</button>
+            <button v-else-if="order.status === 'delivered' && !order.buyer_rating" class="rate-order-btn" @click="openRateModal(order)">Rate order</button>
+            <span v-else class="trimmed-action-hint">Open View details below.</span>
+          </div>
+
+          <details class="order-details">
+            <summary>View details</summary>
+            <div class="order-details-content">
+
+          <section v-if="order.verification" class="order-evidence-panel">
+            <h3>Farm-gate check: {{ order.verification.outcome.replace('_', ' ') }}</h3>
+            <p>{{ order.verification.actual_quantity }} checked, {{ order.verification.claimed_quantity }} ordered · Grade {{ order.verification.actual_grade }}</p>
+            <p v-if="order.verification.notes">{{ order.verification.notes }}</p>
+            <p v-if="order.adjusted_price !== null && order.adjusted_price !== undefined" class="adjusted-price">
+              Adjusted produce price: GH₵ {{ Number(order.adjusted_price).toFixed(2) }}
+            </p>
+            <div class="evidence-photo-row">
+              <div class="evidence-photo-group">
+                <strong>Farm pickup</strong>
+                <img v-for="(photo, index) in order.verification.pickup_photos || []" :key="photo" :src="'/storage/' + photo" :alt="index === 0 ? 'Pickup wide photo' : 'Pickup quality photo'">
+              </div>
+              <div v-if="order.delivery_photo_path" class="evidence-photo-group">
+                <strong>Market arrival</strong>
+                <img :src="'/storage/' + order.delivery_photo_path" alt="Delivery arrival photo">
+              </div>
+            </div>
+            <div v-if="order.verification_status === 'flagged' && order.flag_deadline_at" class="flag-buyer-action">
+              <p v-if="!order.flag_buyer_confirmed_at">
+                Driver choice: {{ flagDecisionLabel(order.flag_decision) }} · {{ remainingSeconds(order.flag_deadline_at) }} seconds left.
+              </p>
+              <button v-if="['bring', 'reduce'].includes(order.flag_decision) && !order.flag_buyer_confirmed_at" class="buyer-confirm-btn" @click="confirmFlag(order.id)">
+                Confirm the driver’s choice
+              </button>
+              <p v-else-if="order.flag_buyer_confirmed_at">You confirmed this decision. The farmer must still confirm handover.</p>
+              <p v-else>If the load is not as described, we will call you. If we can't reach you in 15 minutes, we will not bring a bad load — your money stays safe.</p>
+            </div>
+            <ol v-if="order.events?.length" class="order-event-list">
+              <li v-for="event in order.events" :key="event.id">
+                <span>{{ event.event.replace(/_/g, ' ') }}</span>
+                <time>{{ new Date(event.created_at).toLocaleString() }}</time>
+              </li>
+            </ol>
+          </section>
+
+          <section v-if="order.workflow_status === 'arrived'" class="order-evidence-panel arrival-confirmation">
+            <h3>Has your order arrived?</h3>
+            <p>Compare the farm photos with the arrival photo above. Escrow stays held until you confirm.</p>
+            <button class="buyer-confirm-btn" @click="confirmReceived(order.id)">Confirm received</button>
+            <p>To protect the driver’s payment, escrow releases automatically 24 hours after arrival if you do not respond.</p>
+          </section>
+          <p v-if="order.payment_status === 'refunded'" class="refund-note">Order cancelled. Your escrow payment has been refunded.</p>
+
           <!-- Enriched Order Detail Block (Phase C) -->
           <div class="order-enrichment-block">
             <div class="enrichment-row">
@@ -166,7 +233,7 @@
               <span class="breakdown-title">Payment Breakdown</span>
               <div class="breakdown-row">
                 <span>Product Cost:</span>
-                <span>₵ {{ Number(order.total_price).toFixed(2) }}</span>
+                <span>₵ {{ Number(order.adjusted_price ?? order.total_price).toFixed(2) }}</span>
               </div>
               <div class="breakdown-row">
                 <span>Transport Fee:</span>
@@ -174,7 +241,7 @@
               </div>
               <div class="breakdown-row total-escrow">
                 <span>Total in Escrow:</span>
-                <span>₵ {{ (Number(order.total_price) + Number(order.estimated_transport_cost || 0)).toFixed(2) }}</span>
+                <span>₵ {{ (Number(order.adjusted_price ?? order.total_price) + Number(order.estimated_transport_cost || 0)).toFixed(2) }}</span>
               </div>
             </div>
 
@@ -202,7 +269,7 @@
               <div style="display: flex; align-items: center; gap: var(--space-2);">
                 <span class="total-label">{{ order.payment_status === 'unpaid' ? 'Awaiting Payment:' : 'Total Paid:' }}</span>
                 <span class="total-value" :style="order.payment_status === 'unpaid' ? 'color: var(--color-danger);' : ''">
-                  GH₵ {{ Number(order.total_price).toFixed(2) }}
+                  GH₵ {{ Number(order.adjusted_price ?? order.total_price).toFixed(2) }}
                 </span>
               </div>
               <button 
@@ -279,6 +346,8 @@
           <div class="order-timestamp">
             Ordered on {{ formatDate(order.created_at) }}
           </div>
+            </div>
+          </details>
         </div>
       </div>
     </div>
@@ -294,6 +363,11 @@
         </div>
         <div class="modal-body">
           <p class="modal-instructions">What issue did you experience with this order?</p>
+
+          <div class="form-group-custom">
+            <label for="dispute-photo" class="form-input-label">Photo evidence (required)</label>
+            <input id="dispute-photo" type="file" accept="image/*" @change="setDisputePhoto" />
+          </div>
 
           <div class="form-group-custom">
             <label class="form-input-label">Issue Type</label>
@@ -434,21 +508,25 @@ export default {
     const imgErrors = ref({});
     const isSubmitting = ref(false);
     const expandedDriverOrderId = ref(null);
+    const countdownNow = ref(Date.now());
     const errors = reactive({
       score: null,
       comment: null
     });
 
     let pollInterval = null;
+    let countdownInterval = null;
 
     onMounted(() => {
       pollInterval = setInterval(() => {
         router.reload({ preserveScroll: true, only: ['orders'] });
       }, 5000);
+      countdownInterval = setInterval(() => { countdownNow.value = Date.now(); }, 1000);
     });
 
     onUnmounted(() => {
       if (pollInterval) clearInterval(pollInterval);
+      if (countdownInterval) clearInterval(countdownInterval);
     });
 
     const ratingForm = reactive({
@@ -472,6 +550,16 @@ export default {
       if (status === 'awaiting_pickup') return 'Awaiting Pickup';
       return status.charAt(0).toUpperCase() + status.slice(1);
     };
+
+    const remainingSeconds = (deadline) => Math.max(0, Math.ceil((new Date(deadline).getTime() - countdownNow.value) / 1000));
+    const flagDecisionLabel = (decision) => ({
+      bring: 'Bring it',
+      reduce: 'Bring it, reduce price',
+      cancel: 'Don’t bring it'
+    }[decision] || 'Waiting for the driver to call');
+
+    const confirmFlag = (orderId) => router.post(`/buyer/orders/${orderId}/flag-confirm`, {});
+    const confirmReceived = (orderId) => router.post(`/buyer/orders/${orderId}/confirm-received`, {});
 
     const openRateModal = (order) => {
       selectedOrder.value = order;
@@ -557,7 +645,7 @@ export default {
     const isDisputeModalOpen = ref(false);
     const selectedDispute = ref(null);
     const isDisputeSubmitting = ref(false);
-    const disputeForm = reactive({ reason: '', notes: '' });
+    const disputeForm = reactive({ reason: '', notes: '', photo: null });
     const disputeErrors = reactive({ disputed_reason: null });
 
     const disputeReasonOptions = [
@@ -572,6 +660,7 @@ export default {
       selectedDispute.value = order;
       disputeForm.reason = '';
       disputeForm.notes = '';
+      disputeForm.photo = null;
       disputeErrors.disputed_reason = null;
       isDisputeModalOpen.value = true;
     };
@@ -586,20 +675,32 @@ export default {
         disputeErrors.disputed_reason = 'Please select an issue type.';
         return;
       }
+      if (!disputeForm.photo) {
+        disputeErrors.disputed_reason = 'Please add a photo showing the issue.';
+        return;
+      }
       isDisputeSubmitting.value = true;
       router.post(`/buyer/orders/${selectedDispute.value.id}/dispute`, {
         disputed_reason: disputeForm.reason,
-        disputed_notes: disputeForm.notes
+        disputed_notes: disputeForm.notes,
+        dispute_photo: disputeForm.photo
       }, {
+        forceFormData: true,
         onSuccess: () => { closeDisputeModal(); },
         onError: (err) => { disputeErrors.disputed_reason = err.disputed_reason || err.order || null; },
         onFinish: () => { isDisputeSubmitting.value = false; }
       });
     };
 
+    const setDisputePhoto = (event) => { disputeForm.photo = event.target.files?.[0] || null; };
+
     return {
       formatDate,
       formatStatus,
+      remainingSeconds,
+      flagDecisionLabel,
+      confirmFlag,
+      confirmReceived,
       isModalOpen,
       selectedOrder,
       ratingForm,
@@ -619,6 +720,7 @@ export default {
       isDisputeSubmitting,
       disputeForm,
       disputeErrors,
+      setDisputePhoto,
       disputeReasonOptions,
       openDisputeModal,
       closeDisputeModal,
@@ -1818,6 +1920,82 @@ export default {
   }
 }
 
+.order-evidence-panel,
+.refund-note {
+  margin-top: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-neutral-50);
+}
+
+.order-evidence-panel h3,
+.order-evidence-panel p {
+  margin-top: 0;
+}
+
+.adjusted-price {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+.evidence-photo-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.evidence-photo-group {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+}
+
+.evidence-photo-group img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.flag-buyer-action {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-warning-light);
+}
+
+.buyer-confirm-btn {
+  width: 100%;
+  min-height: var(--input-height);
+  padding: var(--space-2) var(--space-4);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-white);
+  font: inherit;
+  font-weight: var(--font-weight-bold);
+}
+
+.order-event-list {
+  display: grid;
+  gap: var(--space-2);
+  padding-left: var(--space-5);
+  color: var(--color-neutral-700);
+  font-size: var(--font-size-xs);
+}
+
+.order-event-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.refund-note {
+  color: var(--color-danger);
+}
+
 /* ─── Driver Details Section ─── */
 .driver-details-section {
   border-top: 1px solid var(--color-neutral-100);
@@ -1896,5 +2074,53 @@ export default {
   font-size: var(--font-size-xs);
   color: var(--color-neutral-700);
   margin-top: 2px;
+}
+
+.orders-list-trimmed {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.order-card-trimmed {
+  padding: var(--space-5);
+  border: 1px solid var(--color-neutral-100);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.trimmed-card-head,
+.trimmed-summary-line,
+.trimmed-contacts,
+.trimmed-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.trimmed-product { display: flex; align-items: center; gap: var(--space-3); min-width: 0; }
+.trimmed-product .product-name { margin: var(--space-1) 0 0; }
+.trimmed-summary-line { margin-top: var(--space-4); font-size: var(--font-size-sm); color: var(--color-neutral-700); }
+.trimmed-summary-line strong { color: var(--color-neutral-900); font-size: var(--font-size-md); }
+.trimmed-date { margin-top: var(--space-2); color: var(--color-neutral-500); font-size: var(--font-size-xs); }
+.trimmed-contacts { align-items: stretch; margin-top: var(--space-4); flex-wrap: wrap; justify-content: flex-start; }
+.contact-link { display: inline-flex; flex-direction: column; gap: 2px; color: var(--color-primary); font-size: var(--font-size-xs); text-decoration: none; }
+.contact-link span:last-child { font-weight: var(--font-weight-semibold); }
+.contact-muted { color: var(--color-neutral-500); }
+.trimmed-action-row { justify-content: flex-start; margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--color-neutral-100); }
+.trimmed-action-hint { color: var(--color-neutral-500); font-size: var(--font-size-xs); }
+.order-details { margin-top: var(--space-4); border-top: 1px solid var(--color-neutral-100); padding-top: var(--space-3); }
+.order-details summary { cursor: pointer; color: var(--color-primary); font-size: var(--font-size-sm); font-weight: var(--font-weight-semibold); }
+.order-details-content { display: grid; gap: var(--space-4); padding-top: var(--space-4); }
+.order-details-content .order-card-footer { margin-top: 0; }
+.trimmed-party-details { display: grid; gap: var(--space-2); padding: var(--space-3); border-radius: var(--radius-md); background: var(--color-neutral-50); color: var(--color-neutral-700); font-size: var(--font-size-xs); }
+
+@media (max-width: 767px) {
+  .order-card-trimmed { padding: var(--space-4); }
+  .trimmed-card-head { align-items: flex-start; }
+  .trimmed-card-head .status-badge { flex-shrink: 0; }
+  .trimmed-contacts { display: grid; grid-template-columns: 1fr; }
+  .trimmed-action-row > button { width: 100%; }
 }
 </style>

@@ -28,6 +28,8 @@ class User extends Authenticatable
         'reset_token_expires_at',
         'buyer_type',
         'business_name',
+        'is_admin',
+        'suspended_at',
     ];
 
     /**
@@ -47,6 +49,8 @@ class User extends Authenticatable
      */
     protected $casts = [
         'reset_token_expires_at'  => 'datetime',
+        'suspended_at' => 'datetime',
+        'is_admin' => 'boolean',
     ];
 
     /**

@@ -243,6 +243,7 @@
                 <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>
               </svg>
               <span>{{ product.user?.location || 'Takoradi' }} • Listed by {{ product.user?.name }}</span>
+                <span class="verified-dispatch-rate">{{ product.user?.verified_dispatch_rate || 'No verified dispatch history yet' }}</span>
             </div>
 
             <div class="tags-row-flex">
@@ -390,6 +391,9 @@
                 <!-- Caption Note -->
                 <p class="escrow-caption-note">
                   Your product payment goes to the farmer. Transport is released to the driver on confirmed delivery. Transport cost is an estimate for this route.
+                </p>
+                <p class="escrow-rule-note">
+                  If the load is not as described, we will call you. If we can't reach you in 15 minutes, we will not bring a bad load — your money stays safe.
                 </p>
 
                 <div class="input-form-group">
@@ -2083,5 +2087,14 @@ export default {
   font-size: var(--font-size-xs);
   color: var(--color-neutral-500);
   margin: 0 0 var(--space-2) 0;
+}
+.escrow-rule-note {
+  margin-top: var(--space-2);
+  padding: var(--space-3);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-subtle);
+  color: var(--color-neutral-900);
+  font-size: var(--font-size-sm);
 }
 </style>

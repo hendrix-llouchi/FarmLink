@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class LogisticsTest extends TestCase
@@ -162,21 +163,87 @@ class LogisticsTest extends TestCase
         $this->assertNull($this->order->driver_id);
     }
 
-    public function test_driver_can_complete_delivery_successfully()
+    public function test_driver_cannot_move_unverified_order_into_transit()
     {
-        // First driver accepts delivery, setting status to processing
         $this->order->update([
             'driver_id' => $this->driver->id,
             'status' => 'processing',
         ]);
 
         $response = $this->actingAs($this->driver)
+            ->post("/driver/orders/{$this->order->id}/pickup");
+
+        $response->assertSessionHasErrors('status');
+        $this->order->refresh();
+        $this->assertEquals('processing', $this->order->status);
+        $this->assertEquals('escrow_held', $this->order->payment_status);
+    }
+
+    public function test_driver_arrival_requires_a_photo_and_does_not_release_escrow()
+    {
+        $this->order->update([
+            'driver_id' => $this->driver->id,
+            'status' => 'in_transit',
+            'handover_confirmed_at' => now(),
+        ]);
+
+        $this->order->verification()->create([
+            'driver_id' => $this->driver->id,
+            'claimed_quantity' => $this->order->quantity_ordered,
+            'actual_quantity' => $this->order->quantity_ordered,
+            'claimed_grade' => null,
+            'actual_grade' => 'A',
+            'grade_match' => true,
+            'freshness_match' => true,
+            'damage_note' => null,
+            'heavy_spoilage' => false,
+            'packaging_ok' => true,
+            'pickup_photos' => ['pickup-wide.jpg', 'pickup-close.jpg'],
+            'outcome' => 'verified',
+        ]);
+
+        $response = $this->actingAs($this->driver)
             ->post("/driver/orders/{$this->order->id}/complete");
+
+        $response->assertSessionHasErrors('delivery_photo');
+        $this->order->refresh();
+        $this->assertEquals('in_transit', $this->order->status);
+        $this->assertEquals('escrow_held', $this->order->payment_status);
+    }
+
+    public function test_buyer_confirmation_is_required_to_release_escrow()
+    {
+        $this->order->update([
+            'driver_id' => $this->driver->id,
+            'status' => 'in_transit',
+            'workflow_status' => 'arrived',
+            'delivery_photo_path' => 'verifications/delivery/arrived.jpg',
+            'arrived_at' => now(),
+        ]);
+        $this->order->verification()->create([
+            'driver_id' => $this->driver->id,
+            'claimed_quantity' => $this->order->quantity_ordered,
+            'actual_quantity' => $this->order->quantity_ordered,
+            'claimed_grade' => null,
+            'actual_grade' => 'A',
+            'grade_match' => true,
+            'freshness_match' => true,
+            'damage_note' => null,
+            'heavy_spoilage' => false,
+            'packaging_ok' => true,
+            'pickup_photos' => ['pickup-wide.jpg', 'pickup-close.jpg'],
+            'outcome' => 'verified',
+        ]);
+
+        $response = $this->actingAs($this->buyer)
+            ->post("/buyer/orders/{$this->order->id}/confirm-received");
 
         $response->assertRedirect();
         $this->order->refresh();
         $this->assertEquals('delivered', $this->order->status);
+        $this->assertEquals('delivered', $this->order->workflow_status);
         $this->assertEquals('released', $this->order->payment_status);
+        $this->assertNotNull($this->order->buyer_confirmed_at);
     }
 
     public function test_non_assigned_driver_cannot_complete_delivery()
@@ -197,7 +264,9 @@ class LogisticsTest extends TestCase
         ]);
 
         $response = $this->actingAs($driver2)
-            ->post("/driver/orders/{$this->order->id}/complete");
+            ->post("/driver/orders/{$this->order->id}/complete", [
+                'delivery_photo' => UploadedFile::fake()->create('arrival.jpg', 1, 'image/jpeg'),
+            ]);
 
         $response->assertSessionHasErrors('order');
         
@@ -205,6 +274,3 @@ class LogisticsTest extends TestCase
         $this->assertEquals('processing', $this->order->status);
     }
 }
-
-
-
