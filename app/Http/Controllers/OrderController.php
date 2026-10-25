@@ -10,6 +10,7 @@ use App\Services\MomoApiService;
 use App\Services\OrderWorkflowService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
@@ -445,6 +446,7 @@ class OrderController extends Controller
         $request->validate([
             'disputed_reason' => ['required', 'string', 'in:damaged_produce,wrong_quantity,late_delivery,quality_mismatch,other'],
             'disputed_notes'  => ['nullable', 'string', 'max:500'],
+            'dispute_photo'   => ['required', 'image', 'max:4096'],
         ]);
 
         try {
@@ -469,11 +471,22 @@ class OrderController extends Controller
                     ]);
                 }
 
+                $confirmedAt = $order->buyer_confirmed_at;
+                if (!$confirmedAt || !Carbon::now('Africa/Accra')->isSameDay($confirmedAt->copy()->setTimezone('Africa/Accra'))) {
+                    throw ValidationException::withMessages(['order' => ['The dispute window is closed. Disputes must be raised on the same calendar day as buyer confirmation.']]);
+                }
+
+                $photoPath = $request->file('dispute_photo')->store('verifications/disputes', 'public');
+
                 $order->update([
                     'disputed_reason' => $request->disputed_reason,
                     'disputed_notes'  => $request->disputed_notes,
                     'disputed_at'     => now(),
+                    'dispute_photo_path' => $photoPath,
+                    'dispute_status' => 'open',
                 ]);
+
+                app(OrderWorkflowService::class)->record($order, 'dispute_raised', ['reason' => $request->disputed_reason, 'photo' => $photoPath]);
 
                 $reasonLabels = [
                     'damaged_produce'  => 'Damaged Produce',

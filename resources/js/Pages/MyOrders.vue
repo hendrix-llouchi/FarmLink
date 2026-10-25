@@ -339,6 +339,11 @@
           <p class="modal-instructions">What issue did you experience with this order?</p>
 
           <div class="form-group-custom">
+            <label for="dispute-photo" class="form-input-label">Photo evidence (required)</label>
+            <input id="dispute-photo" type="file" accept="image/*" @change="setDisputePhoto" />
+          </div>
+
+          <div class="form-group-custom">
             <label class="form-input-label">Issue Type</label>
             <div class="dispute-reason-options">
               <label v-for="opt in disputeReasonOptions" :key="opt.value" class="dispute-option" :class="{ selected: disputeForm.reason === opt.value }">
@@ -614,7 +619,7 @@ export default {
     const isDisputeModalOpen = ref(false);
     const selectedDispute = ref(null);
     const isDisputeSubmitting = ref(false);
-    const disputeForm = reactive({ reason: '', notes: '' });
+    const disputeForm = reactive({ reason: '', notes: '', photo: null });
     const disputeErrors = reactive({ disputed_reason: null });
 
     const disputeReasonOptions = [
@@ -629,6 +634,7 @@ export default {
       selectedDispute.value = order;
       disputeForm.reason = '';
       disputeForm.notes = '';
+      disputeForm.photo = null;
       disputeErrors.disputed_reason = null;
       isDisputeModalOpen.value = true;
     };
@@ -643,16 +649,24 @@ export default {
         disputeErrors.disputed_reason = 'Please select an issue type.';
         return;
       }
+      if (!disputeForm.photo) {
+        disputeErrors.disputed_reason = 'Please add a photo showing the issue.';
+        return;
+      }
       isDisputeSubmitting.value = true;
       router.post(`/buyer/orders/${selectedDispute.value.id}/dispute`, {
         disputed_reason: disputeForm.reason,
-        disputed_notes: disputeForm.notes
+        disputed_notes: disputeForm.notes,
+        dispute_photo: disputeForm.photo
       }, {
+        forceFormData: true,
         onSuccess: () => { closeDisputeModal(); },
         onError: (err) => { disputeErrors.disputed_reason = err.disputed_reason || err.order || null; },
         onFinish: () => { isDisputeSubmitting.value = false; }
       });
     };
+
+    const setDisputePhoto = (event) => { disputeForm.photo = event.target.files?.[0] || null; };
 
     return {
       formatDate,
@@ -680,6 +694,7 @@ export default {
       isDisputeSubmitting,
       disputeForm,
       disputeErrors,
+      setDisputePhoto,
       disputeReasonOptions,
       openDisputeModal,
       closeDisputeModal,

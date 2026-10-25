@@ -46,6 +46,18 @@ class AdminController extends Controller
         return Inertia::render('AdminOrderDetail', ['order' => $order]);
     }
 
+    public function resolveDispute(Request $request, Order $order, OrderWorkflowService $workflow)
+    {
+        $data = $request->validate([
+            'resolution' => ['required', 'in:refund_full,refund_partial,no_refund'],
+            'reason' => ['required', 'string', 'max:500'],
+        ]);
+        abort_unless($order->dispute_status === 'open', 422, 'This dispute is not open.');
+        $order->update(['dispute_status' => 'resolved', 'dispute_resolution' => $data['resolution'], 'dispute_resolution_reason' => $data['reason'], 'dispute_resolved_at' => now()]);
+        $workflow->record($order, 'dispute_resolved', ['resolution' => $data['resolution'], 'reason' => $data['reason']], auth()->user());
+        return back()->with('message', 'Dispute resolution logged.');
+    }
+
     public function suspend(Request $request, User $user, OrderWorkflowService $workflow)
     {
         $data = $request->validate(['reason' => ['required', 'string', 'max:500'], 'suspended' => ['required', 'boolean']]);

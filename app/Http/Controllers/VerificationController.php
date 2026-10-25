@@ -193,6 +193,7 @@ class VerificationController extends Controller
 
             if ($data['decision'] === 'cancel') {
                 $lockedOrder->update(['flag_decided_at' => now()]);
+                $workflow->record($lockedOrder, 'verification_trip_cancelled', ['reason' => 'Driver travelled to farm; flagged load was cancelled.', 'settlement_status' => 'pending']);
                 $workflow->refund($lockedOrder, 'Buyer declined the flagged load');
             } else {
                 Notification::create([

@@ -29,6 +29,11 @@ class Order extends Model
         'disputed_reason',
         'disputed_notes',
         'disputed_at',
+        'dispute_photo_path',
+        'dispute_status',
+        'dispute_resolution',
+        'dispute_resolution_reason',
+        'dispute_resolved_at',
         'verification_status',
         'workflow_status',
         'dispatch_code',
@@ -54,6 +59,7 @@ class Order extends Model
         'flag_deadline_at' => 'datetime',
         'flag_buyer_confirmed_at' => 'datetime',
         'handover_confirmed_at' => 'datetime',
+        'dispute_resolved_at' => 'datetime',
     ];
 
     /**
