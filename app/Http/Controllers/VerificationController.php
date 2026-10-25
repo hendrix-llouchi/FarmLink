@@ -25,6 +25,10 @@ class VerificationController extends Controller
             'photos.*' => ['required', 'image', 'max:4096'],
         ]);
 
+        $damageNote = trim((string) ($data['damage_note'] ?? ''));
+        $noDamageNotes = ['', 'no', 'none', 'nothing', 'n/a', 'na', 'no damage', 'nil'];
+        $data['damage_note'] = in_array(strtolower($damageNote), $noDamageNotes, true) ? null : $damageNote;
+
         if ($order->driver_id !== $request->user()->id || $order->status !== 'processing' || $order->payment_status !== 'escrow_held') {
             throw ValidationException::withMessages(['order' => ['Only the assigned driver can verify an order at the farm gate.']]);
         }

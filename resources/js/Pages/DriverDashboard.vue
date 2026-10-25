@@ -249,7 +249,7 @@
                   <label class="verification-check"><input v-model="formFor(order).freshness_match" type="checkbox"> Freshness matches the harvest date</label>
                   <label class="verification-check"><input v-model="formFor(order).packaging_ok" type="checkbox"> Packaging is safe for the trip</label>
                   <label class="verification-check"><input v-model="formFor(order).heavy_spoilage" type="checkbox"> Heavy spoilage is present</label>
-                  <label>Damage or spoilage note <input v-model="formFor(order).damage_note" type="text" maxlength="1000"></label>
+                  <label>Damage or spoilage note <input v-model="formFor(order).damage_note" type="text" maxlength="1000"><small class="field-hint">Leave blank if there is no damage.</small></label>
                   <label>Two pickup photos (wide load + close-up)
                     <input type="file" accept="image/*" multiple @change="setPickupPhotos(order.id, $event)">
                   </label>
@@ -2404,6 +2404,8 @@ export default {
   gap: var(--space-2);
   min-height: var(--input-height);
 }
+
+.field-hint { display: block; margin-top: 4px; color: var(--color-neutral-500); font-size: var(--font-size-xs); font-weight: var(--font-weight-regular); }
 
 .verification-panel .verification-check input {
   width: 22px;
