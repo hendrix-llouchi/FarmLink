@@ -40,6 +40,12 @@ class AdminController extends Controller
         return Inertia::render('AdminDashboard', compact('orders', 'users', 'stats'));
     }
 
+    public function orderDetail(Order $order)
+    {
+        $order->load(['product.user', 'buyer', 'driver', 'verification', 'events.actor']);
+        return Inertia::render('AdminOrderDetail', ['order' => $order]);
+    }
+
     public function suspend(Request $request, User $user, OrderWorkflowService $workflow)
     {
         $data = $request->validate(['reason' => ['required', 'string', 'max:500'], 'suspended' => ['required', 'boolean']]);

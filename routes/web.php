@@ -73,6 +73,7 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+        Route::get('/orders/{order}', [AdminController::class, 'orderDetail'])->name('orders.show');
         Route::post('/users/{user}/suspension', [AdminController::class, 'suspend'])->name('users.suspension');
     });
 
